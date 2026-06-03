@@ -75,11 +75,11 @@ nav {
 #map { width: 100%; height: 100%; }
 
 /* Leaflet popup aanpassingen */
-.leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); border: none; background: #1a1a2e; color: #f0f0f0; }
-.leaflet-popup-tip { background: #1a1a2e; }
+.leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); border: none; background: #fff; }
+.leaflet-popup-tip { background: #fff; }
 .leaflet-popup-content { margin: 12px 16px; font-family: var(--font-body); }
-.map-popup-name { font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; color: #f0f0f0; margin-bottom: 4px; }
-.map-popup-meta { font-size: 0.75rem; color: #a0a0b0; margin-bottom: 8px; }
+.map-popup-name { font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; color: var(--text); margin-bottom: 4px; }
+.map-popup-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
 .map-popup-badge { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 99px; margin-bottom: 8px; }
 .map-popup-badge.groen { background: var(--green-light); color: var(--green-dark); }
 .map-popup-badge.rood { background: #FEE2E2; color: #991B1B; }
@@ -350,7 +350,7 @@ let kaart = null;
 // ── KAART INITIALISEREN ─────────────────────────────────────────
 function initKaart() {
   kaart = L.map('map', { zoomControl: true, attributionControl: false }).setView([52.387, 4.646], 12);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19, subdomains: 'abcd',
   }).addTo(kaart);
   // Kleine attributie
