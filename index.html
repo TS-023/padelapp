@@ -19,8 +19,6 @@
   --text: #111811;
   --muted: #6B7F6B;
   --muted-light: #A8BBA8;
-  --amber: #F59E0B;
-  --red: #EF4444;
   --font-display: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
 }
@@ -44,27 +42,19 @@ nav {
 .btn-primary { font-family: var(--font-body); font-size: 0.83rem; font-weight: 500; background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; transition: background 0.15s; }
 .btn-primary:hover { background: var(--green-dark); }
 
-/* HERO SEARCH */
-.search-hero {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 2rem 2rem 1.75rem;
-}
+/* SEARCH HERO */
+.search-hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 2rem 2rem 1.75rem; }
 .search-hero-inner { max-width: 860px; margin: 0 auto; }
-.search-hero h1 {
-  font-family: var(--font-display); font-weight: 800;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  letter-spacing: -1px; margin-bottom: 1.25rem; line-height: 1.1;
-}
+.search-hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.4rem); letter-spacing: -1px; margin-bottom: 1.25rem; line-height: 1.1; }
 .search-hero h1 em { font-style: normal; color: var(--green); }
 
 /* SEARCH BOX */
 .search-box {
-  display: flex; gap: 0;
+  display: flex;
   background: var(--white);
   border: 2px solid var(--border);
   border-radius: 14px;
-  overflow: hidden;
+  overflow: visible;
   transition: border-color 0.2s;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
@@ -76,68 +66,46 @@ nav {
   flex: 1;
   border-right: 1px solid var(--border);
   min-width: 0;
-  cursor: pointer;
+  position: relative;
   transition: background 0.15s;
 }
-.search-field:last-of-type { border-right: none; }
 .search-field:hover { background: var(--bg); }
 
 .search-field label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--muted);
-  margin-bottom: 3px;
+  font-size: 0.68rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--muted); margin-bottom: 3px;
   display: flex; align-items: center; gap: 4px;
+  white-space: nowrap;
 }
 
 .search-field input,
 .search-field select {
-  font-family: var(--font-body);
-  font-size: 0.92rem;
-  font-weight: 500;
-  border: none; outline: none;
-  background: transparent;
-  color: var(--text);
-  width: 100%;
-  appearance: none; -webkit-appearance: none;
-  cursor: pointer;
+  font-family: var(--font-body); font-size: 0.92rem; font-weight: 500;
+  border: none; outline: none; background: transparent;
+  color: var(--text); width: 100%;
+  appearance: none; -webkit-appearance: none; cursor: pointer;
 }
 .search-field select option { color: var(--text); }
 
 .search-btn {
-  background: var(--green);
-  color: #fff;
-  border: none;
-  padding: 0 24px;
-  cursor: pointer;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.9rem;
+  background: var(--green); color: #fff; border: none;
+  padding: 0 24px; cursor: pointer;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.9rem;
   display: flex; align-items: center; gap: 8px;
-  transition: background 0.15s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  transition: background 0.15s; white-space: nowrap; flex-shrink: 0;
+  border-radius: 0 12px 12px 0;
 }
 .search-btn:hover { background: var(--green-dark); }
-.search-btn svg { transition: transform 0.2s; }
-.search-btn:hover svg { transform: scale(1.1); }
 
 /* RESULTS BAR */
-.results-bar {
-  max-width: 860px; margin: 1.25rem auto 0.75rem; padding: 0 2rem;
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-}
+.results-bar { max-width: 860px; margin: 1.25rem auto 0.75rem; padding: 0 2rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .results-count { font-size: 0.85rem; color: var(--muted); }
 .results-count strong { color: var(--text); font-weight: 600; }
 
 .sort-select {
-  margin-left: auto;
-  padding: 6px 28px 6px 12px;
-  border-radius: 99px;
-  border: 1.5px solid var(--border);
-  background: var(--white);
+  margin-left: auto; padding: 6px 28px 6px 12px; border-radius: 99px;
+  border: 1.5px solid var(--border); background: var(--white);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7F6B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 10px center;
   color: var(--text); font-family: var(--font-body); font-size: 0.82rem;
@@ -145,58 +113,31 @@ nav {
 }
 
 .filter-chip {
-  padding: 5px 12px; border-radius: 99px;
-  border: 1.5px solid var(--green-mid);
-  background: var(--green-light);
-  color: var(--green-dark);
-  font-size: 0.75rem; font-weight: 500;
-  display: flex; align-items: center; gap: 5px;
-  cursor: pointer;
+  padding: 4px 11px; border-radius: 99px;
+  border: 1.5px solid var(--green-mid); background: var(--green-light);
+  color: var(--green-dark); font-size: 0.73rem; font-weight: 500;
 }
-.filter-chip:hover { border-color: var(--green); }
 
 /* CLUBS */
 .clubs-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 4rem; display: flex; flex-direction: column; gap: 12px; }
 
-.club-card {
-  background: var(--white);
-  border: 1.5px solid var(--border);
-  border-radius: 16px; overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
+.club-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
 .club-card:hover { border-color: var(--green-mid); box-shadow: 0 2px 16px rgba(29,185,84,0.07); }
 
-.club-head {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-}
-
-.club-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
-  flex-shrink: 0;
-}
-
+.club-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.club-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; flex-shrink: 0; }
 .club-info { flex: 1; min-width: 0; }
 .club-name { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 3px; }
 .club-meta { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .club-meta-item { display: flex; align-items: center; gap: 3px; }
-
 .club-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
 
-.distance-badge {
-  font-size: 0.72rem; font-weight: 600;
-  background: var(--bg); color: var(--muted);
-  padding: 3px 9px; border-radius: 99px;
-  border: 1px solid var(--border);
-}
+.distance-badge { font-size: 0.72rem; font-weight: 600; background: var(--bg); color: var(--muted); padding: 3px 9px; border-radius: 99px; border: 1px solid var(--border); }
 
 .badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
-.badge.vrij { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
-.badge.weinig { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
-.badge.vol { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+.badge.groen { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
+.badge.oranje { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+.badge.rood { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
 
 .site-link { font-size: 0.73rem; color: var(--muted-light); text-decoration: none; display: flex; align-items: center; gap: 3px; transition: color 0.15s; }
 .site-link:hover { color: var(--green); }
@@ -204,19 +145,23 @@ nav {
 /* SLOTS */
 .slots-wrap { padding: 14px 18px; display: flex; gap: 7px; flex-wrap: wrap; }
 
-.slot {
-  border-radius: 10px; padding: 9px 11px; min-width: 82px;
-  text-align: center; border: 1.5px solid transparent; transition: all 0.15s;
-}
+.slot { border-radius: 10px; padding: 9px 11px; min-width: 82px; text-align: center; border: 1.5px solid transparent; transition: all 0.15s; }
+
+/* Vrij = lichtgroen */
 .slot.vrij { background: var(--green-light); border-color: var(--green-mid); cursor: pointer; }
 .slot.vrij:hover { background: var(--green-mid); border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(29,185,84,0.15); }
-.slot.vol { background: var(--bg); border-color: var(--border); opacity: 0.55; }
-.slot.vol .slot-time { color: var(--muted); }
-.slot.searched { border: 2px solid var(--green) !important; box-shadow: 0 0 0 2px rgba(29,185,84,0.15); }
+
+/* Bezet = grijs */
+.slot.bezet { background: #F0F0F0; border-color: #DCDCDC; cursor: default; }
+
+/* Gezochte tijd = groene rand, overschrijft andere stijlen */
+.slot.gezocht { border: 2px solid var(--green) !important; box-shadow: 0 0 0 2px rgba(29,185,84,0.2) !important; }
+.slot.bezet.gezocht { opacity: 1; }
 
 .slot-time { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; display: block; color: var(--text); }
-.slot.vol .slot-time { color: var(--muted); }
+.slot.bezet .slot-time { color: #999; }
 .slot-sub { font-size: 0.67rem; color: var(--muted); display: block; margin-top: 1px; }
+.slot.bezet .slot-sub { color: #AAA; }
 .slot-price { font-size: 0.72rem; font-weight: 600; display: block; margin-top: 4px; color: var(--green-dark); }
 .book-pill { display: inline-block; margin-top: 5px; font-size: 0.67rem; font-weight: 600; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 99px; text-decoration: none; }
 .book-pill:hover { background: var(--green-dark); }
@@ -226,25 +171,26 @@ nav {
 .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.empty-state { text-align: center; padding: 3rem 2rem; color: var(--muted); }
-.empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
-.empty-state p { font-size: 0.9rem; line-height: 1.6; }
+.no-results { max-width: 860px; margin: 2rem auto; padding: 2rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
 
-/* NO RESULTS */
-.no-results { max-width: 860px; margin: 2rem auto; padding: 0 2rem; text-align: center; color: var(--muted); }
+/* SUGGESTIONS DROPDOWN */
+.loc-suggestions { display: none; position: absolute; top: calc(100% + 2px); left: -2px; right: -2px; background: var(--white); border: 1.5px solid var(--green); border-top: none; border-radius: 0 0 10px 10px; z-index: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; }
+.loc-suggestion-item { padding: 9px 14px; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid var(--border); }
+.loc-suggestion-item:last-child { border-bottom: none; }
+.loc-suggestion-item:hover { background: var(--green-light); }
 
 footer { border-top: 1px solid var(--border); background: var(--white); padding: 1.25rem 2rem; text-align: center; font-size: 0.77rem; color: var(--muted); }
 footer a { color: var(--muted); text-decoration: none; }
 footer a:hover { color: var(--green); }
 
-@media (max-width: 680px) {
-  .search-box { flex-direction: column; border-radius: 12px; }
+@media (max-width: 700px) {
+  .search-box { flex-direction: column; border-radius: 12px; overflow: hidden; }
   .search-field { border-right: none; border-bottom: 1px solid var(--border); }
-  .search-field:last-of-type { border-bottom: none; }
-  .search-btn { padding: 14px; justify-content: center; border-radius: 0; }
+  .search-btn { padding: 14px; justify-content: center; border-radius: 0 0 12px 12px; }
   nav { padding: 0 1rem; }
   .search-hero, .results-bar, .clubs-wrap { padding-left: 1rem; padding-right: 1rem; }
   .club-head { flex-wrap: wrap; }
+  .club-right { flex-direction: row; flex-wrap: wrap; justify-content: flex-end; }
 }
 </style>
 </head>
@@ -266,32 +212,30 @@ footer a:hover { color: var(--green); }
 <div class="search-hero">
   <div class="search-hero-inner">
     <h1>Vind een vrije padelcourt<br><em>in jouw omgeving</em></h1>
-
     <div class="search-box">
 
       <!-- LOCATIE -->
-      <div class="search-field" style="max-width:210px; position:relative;">
+      <div class="search-field" style="max-width:210px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
           Locatie
         </label>
         <div style="display:flex;align-items:center;gap:4px;">
           <input type="text" id="s-locatie" placeholder="Stad of adres..." value="Haarlem"
-            style="font-family:var(--font-body);font-size:0.92rem;font-weight:500;border:none;outline:none;background:transparent;color:var(--text);width:100%;"
-            oninput="onLocatieInput()" onkeydown="if(event.key==='Enter'){hideSuggestions();doSearch();}"
+            autocomplete="off"
+            oninput="onLocatieInput()"
+            onkeydown="if(event.key==='Enter'){hideSuggestions();doSearch();}"
           >
-          <button onclick="useGPS()" title="Gebruik mijn locatie"
-            style="background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0;padding:2px;display:flex;align-items:center;"
-            id="gps-btn">
+          <button id="gps-btn" onclick="useGPS()" title="Gebruik mijn locatie"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0;padding:2px;display:flex;align-items:center;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
           </button>
         </div>
-        <!-- Suggestions dropdown -->
-        <div id="loc-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);border:1.5px solid var(--green);border-top:none;border-radius:0 0 10px 10px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>
+        <div id="loc-suggestions" class="loc-suggestions"></div>
       </div>
 
       <!-- DATUM -->
-      <div class="search-field" style="max-width:160px">
+      <div class="search-field" style="max-width:160px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
           Datum
@@ -299,49 +243,34 @@ footer a:hover { color: var(--green); }
         <input type="date" id="s-datum">
       </div>
 
-      <!-- TIJD -->
-      <div class="search-field" style="max-width:130px">
+      <!-- STARTTIJD -->
+      <div class="search-field" style="max-width:130px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           Starttijd
         </label>
         <select id="s-tijd">
           <option value="">Elke tijd</option>
-          <option value="07:00">07:00</option>
-          <option value="07:30">07:30</option>
-          <option value="08:00">08:00</option>
-          <option value="08:30">08:30</option>
-          <option value="09:00">09:00</option>
-          <option value="09:30">09:30</option>
-          <option value="10:00">10:00</option>
-          <option value="10:30">10:30</option>
-          <option value="11:00">11:00</option>
-          <option value="11:30">11:30</option>
-          <option value="12:00">12:00</option>
-          <option value="12:30">12:30</option>
-          <option value="13:00">13:00</option>
-          <option value="13:30">13:30</option>
-          <option value="14:00">14:00</option>
-          <option value="14:30">14:30</option>
-          <option value="15:00">15:00</option>
-          <option value="15:30">15:30</option>
-          <option value="16:00">16:00</option>
-          <option value="16:30">16:30</option>
-          <option value="17:00">17:00</option>
-          <option value="17:30">17:30</option>
-          <option value="18:00">18:00</option>
-          <option value="18:30">18:30</option>
-          <option value="19:00">19:00</option>
-          <option value="19:30">19:30</option>
-          <option value="20:00">20:00</option>
-          <option value="20:30">20:30</option>
-          <option value="21:00">21:00</option>
-          <option value="21:30">21:30</option>
+          <option value="07:00">07:00</option><option value="07:30">07:30</option>
+          <option value="08:00">08:00</option><option value="08:30">08:30</option>
+          <option value="09:00">09:00</option><option value="09:30">09:30</option>
+          <option value="10:00">10:00</option><option value="10:30">10:30</option>
+          <option value="11:00">11:00</option><option value="11:30">11:30</option>
+          <option value="12:00">12:00</option><option value="12:30">12:30</option>
+          <option value="13:00">13:00</option><option value="13:30">13:30</option>
+          <option value="14:00">14:00</option><option value="14:30">14:30</option>
+          <option value="15:00">15:00</option><option value="15:30">15:30</option>
+          <option value="16:00">16:00</option><option value="16:30">16:30</option>
+          <option value="17:00">17:00</option><option value="17:30">17:30</option>
+          <option value="18:00">18:00</option><option value="18:30">18:30</option>
+          <option value="19:00">19:00</option><option value="19:30">19:30</option>
+          <option value="20:00">20:00</option><option value="20:30">20:30</option>
+          <option value="21:00">21:00</option><option value="21:30">21:30</option>
         </select>
       </div>
 
       <!-- DUUR -->
-      <div class="search-field" style="max-width:120px">
+      <div class="search-field" style="max-width:120px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg>
           Duur
@@ -355,7 +284,7 @@ footer a:hover { color: var(--green); }
       </div>
 
       <!-- AFSTAND -->
-      <div class="search-field" style="max-width:140px">
+      <div class="search-field" style="max-width:140px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
           Afstand
@@ -380,8 +309,8 @@ footer a:hover { color: var(--green); }
   <span class="results-count" id="results-count"></span>
   <div id="active-filters" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
   <select class="sort-select" id="sort-select" onchange="sortAndRender()">
-    <option value="vrij">Vrij + dichtstbij (standaard)</option>
-    <option value="afstand">Dichtstbijzijnde eerst</option>
+    <option value="beschikbaar">Beschikbaar + dichtstbij</option>
+    <option value="afstand">Dichtstbijzijnde</option>
     <option value="naam">Naam A–Z</option>
   </select>
 </div>
@@ -390,248 +319,258 @@ footer a:hover { color: var(--green); }
 
 <footer>
   PadelSpot &nbsp;·&nbsp; Altijd de beste baan &nbsp;·&nbsp;
-  <a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Contact</a> &nbsp;·&nbsp;
+  <a href="#">Privacy</a> &nbsp;·&nbsp;
+  <a href="#">Contact</a> &nbsp;·&nbsp;
   <a href="#">Club aanmelden</a>
 </footer>
 
 <script>
-// ── DATA ────────────────────────────────────────────────────────
+// ── DATA ─────────────────────────────────────────────────────────
 const ALL_CLUBS = [
-  { id:"ph",   name:"Padel Haarlem",               stad:"haarlem",    adres:"Sportlaan 12",          km:1.2, banen:4, kleur:"#1DB954", bg:"#E8F9EE", site:"https://padelhaarlem.nl" },
-  { id:"hpt",  name:"Haarlem Padel & Tennis",       stad:"haarlem",    adres:"Waarderhaven 3",        km:2.8, banen:6, kleur:"#0284C7", bg:"#E0F2FE", site:"https://haarlempadel.nl" },
-  { id:"ps",   name:"Padelpark Schalkwijk",          stad:"haarlem",    adres:"Schalkwijkerstraat 55", km:3.4, banen:3, kleur:"#F59E0B", bg:"#FEF3C7", site:"https://padelpark-haarlem.nl" },
-  { id:"spn",  name:"Sport & Padelclub Noord",       stad:"haarlem",    adres:"Europaweg 88",          km:4.1, banen:4, kleur:"#EF4444", bg:"#FEE2E2", site:"https://sportclubhaarlem.nl" },
-  { id:"rdh",  name:"Racketclub De Hout",            stad:"haarlem",    adres:"Bosch en Vaartlaan 20", km:2.1, banen:5, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://racketclub-dehout.nl" },
-  { id:"phe",  name:"Padelclub Heemstede",           stad:"heemstede",  adres:"Cruquiusweg 10",        km:5.3, banen:3, kleur:"#DB2777", bg:"#FCE7F3", site:"https://padelheemstede.nl" },
-  { id:"bev",  name:"Padel Beverwijk",               stad:"beverwijk",  adres:"Breestraat 40",         km:14.2,banen:4, kleur:"#059669", bg:"#D1FAE5", site:"https://padelbeverwijk.nl" },
-  { id:"hfd",  name:"Hoofddorp Padel Center",        stad:"hoofddorp",  adres:"Hoofdweg 200",          km:11.8,banen:6, kleur:"#D97706", bg:"#FEF3C7", site:"https://hoofddorppadel.nl" },
-  { id:"ams1", name:"Padel Amsterdam West",          stad:"amsterdam",  adres:"Lelylaan 88",           km:19.4,banen:8, kleur:"#DC2626", bg:"#FEE2E2", site:"https://padelamsterdam.nl" },
-  { id:"ams2", name:"Amsterdam Padel Club Noord",    stad:"amsterdam",  adres:"Buiksloterweg 12",      km:22.1,banen:5, kleur:"#2563EB", bg:"#DBEAFE", site:"https://apcnoord.nl" },
-  { id:"alk",  name:"Padel Alkmaar",                 stad:"alkmaar",    adres:"Geestersingel 4",       km:28.6,banen:4, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://padelalkmaar.nl" },
-  { id:"znd",  name:"Zandvoort Beach Padel",         stad:"haarlem",    adres:"Burg. van Fenemaplein 1",km:9.8,banen:3, kleur:"#F97316", bg:"#FFEDD5", site:"https://zandvoortpadel.nl" },
+  { id:"ph",   name:"Padel Haarlem",            adres:"Sportlaan 12",           km:1.2,  banen:4, kleur:"#1DB954", bg:"#E8F9EE", site:"https://padelhaarlem.nl" },
+  { id:"rdh",  name:"Racketclub De Hout",        adres:"Bosch en Vaartlaan 20",  km:2.1,  banen:5, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://racketclub-dehout.nl" },
+  { id:"hpt",  name:"Haarlem Padel & Tennis",    adres:"Waarderhaven 3",         km:2.8,  banen:6, kleur:"#0284C7", bg:"#E0F2FE", site:"https://haarlempadel.nl" },
+  { id:"ps",   name:"Padelpark Schalkwijk",       adres:"Schalkwijkerstraat 55",  km:3.4,  banen:3, kleur:"#F59E0B", bg:"#FEF3C7", site:"https://padelpark-haarlem.nl" },
+  { id:"spn",  name:"Sport & Padelclub Noord",    adres:"Europaweg 88",           km:4.1,  banen:4, kleur:"#EF4444", bg:"#FEE2E2", site:"https://sportclubhaarlem.nl" },
+  { id:"phe",  name:"Padelclub Heemstede",        adres:"Cruquiusweg 10",         km:5.3,  banen:3, kleur:"#DB2777", bg:"#FCE7F3", site:"https://padelheemstede.nl" },
+  { id:"znd",  name:"Zandvoort Beach Padel",      adres:"Burg. v. Fenemaplein 1", km:9.8,  banen:3, kleur:"#F97316", bg:"#FFEDD5", site:"https://zandvoortpadel.nl" },
+  { id:"hfd",  name:"Hoofddorp Padel Center",     adres:"Hoofdweg 200",           km:11.8, banen:6, kleur:"#D97706", bg:"#FEF3C7", site:"https://hoofddorppadel.nl" },
+  { id:"bev",  name:"Padel Beverwijk",            adres:"Breestraat 40",          km:14.2, banen:4, kleur:"#059669", bg:"#D1FAE5", site:"https://padelbeverwijk.nl" },
+  { id:"ams1", name:"Padel Amsterdam West",       adres:"Lelylaan 88",            km:19.4, banen:8, kleur:"#DC2626", bg:"#FEE2E2", site:"https://padelamsterdam.nl" },
+  { id:"ams2", name:"Amsterdam Padel Club Noord", adres:"Buiksloterweg 12",       km:22.1, banen:5, kleur:"#2563EB", bg:"#DBEAFE", site:"https://apcnoord.nl" },
+  { id:"alk",  name:"Padel Alkmaar",              adres:"Geestersingel 4",        km:28.6, banen:4, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://padelalkmaar.nl" },
 ];
 
-const TIJDEN = ["07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00"];
+const TIJDEN = [
+  "07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30",
+  "11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30",
+  "15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30",
+  "19:00","19:30","20:00","20:30","21:00","21:30","22:00"
+];
+
+const STEDEN = [
+  "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
+  "Zandvoort","Bloemendaal","Velsen-Zuid","Velserbroek","Spaarndam",
+  "Halfweg","Zwanenburg","Badhoevedorp","Diemen","Zaandam","Purmerend"
+];
 
 let currentClubs = [];
-let slotsData = {};
-let loadingSet = new Set();
-let searchParams = {};
+let slotsData    = {};
+let loadingSet   = new Set();
+let searchParams = { duur: 60 };
 
-// ── SEED RANDOM ─────────────────────────────────────────────────
+// ── HULPFUNCTIES ──────────────────────────────────────────────────
+function tijdToMins(t) {
+  const parts = t.split(":");
+  return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+}
+
 function seedRand(seed) {
   let s = seed;
-  return () => { s = (s*9301+49297)%233280; return s/233280; };
+  return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
 }
 
 function generateSlots(clubId, dateStr) {
-  const dateSeed = dateStr ? dateStr.replace(/-/g,"") : "20260603";
-  const rand = seedRand(clubId.split("").reduce((a,c)=>a+c.charCodeAt(0),0) + parseInt(dateSeed)%9999);
-  const club = ALL_CLUBS.find(c=>c.id===clubId);
+  const dateSeed = dateStr ? dateStr.replace(/-/g, "") : "20260603";
+  const rand = seedRand(
+    clubId.split("").reduce((a, c) => a + c.charCodeAt(0), 0) + parseInt(dateSeed) % 9999
+  );
+  const club = ALL_CLUBS.find(c => c.id === clubId);
   return TIJDEN.map(tijd => {
-    const baan = Math.floor(rand()*club.banen)+1;
-    const vrij = rand() > 0.50;
-    const basePrijs = [10,11,12,12,13,14,15][Math.floor(rand()*7)];
+    const baan      = Math.floor(rand() * club.banen) + 1;
+    const vrij      = rand() > 0.50;
+    const basePrijs = [10, 11, 12, 12, 13, 14, 15][Math.floor(rand() * 7)];
     return { tijd, baan, vrij, basePrijs };
   });
 }
 
-// ── SEARCH ──────────────────────────────────────────────────────
+// Controleer of de gezochte tijd + duur aaneengesloten vrij is
+function isAaneengesloten(slots, startTijd, duurMins) {
+  const aantalSlots = duurMins / 30;
+  const startMins   = tijdToMins(startTijd);
+  for (let i = 0; i < aantalSlots; i++) {
+    const nodig = startMins + i * 30;
+    const slot  = slots.find(s => tijdToMins(s.tijd) === nodig);
+    if (!slot || !slot.vrij) return false;
+  }
+  return true;
+}
+
+// ── ZOEKEN ────────────────────────────────────────────────────────
 function doSearch() {
-  const stad    = document.getElementById("s-locatie").value.toLowerCase().trim();
+  hideSuggestions();
+  const locatie = document.getElementById("s-locatie").value.trim();
   const datum   = document.getElementById("s-datum").value;
   const tijd    = document.getElementById("s-tijd").value;
   const duur    = parseInt(document.getElementById("s-duur").value);
   const afstand = parseInt(document.getElementById("s-afstand").value);
 
-  searchParams = { stad, datum, tijd, duur, afstand };
+  searchParams = { locatie, datum, tijd, duur, afstand };
 
-  // Filter clubs by distance
   currentClubs = ALL_CLUBS.filter(c => c.km <= afstand);
 
-  // Show results bar
+  // Resultaten-balk tonen
   document.getElementById("results-bar").style.display = "flex";
 
-  // Active filter chips
+  // Filter-chips
   const af = document.getElementById("active-filters");
   af.innerHTML = "";
-  addChip(af, "📍 " + document.getElementById("s-locatie").value);
+  addChip(af, "📍 " + locatie);
   if (datum) addChip(af, "📅 " + formatDate(datum));
-  if (tijd) addChip(af, "🕐 " + tijd);
+  if (tijd)  addChip(af, "🕐 " + tijd);
   addChip(af, "⏱ " + duur + " min");
   addChip(af, "📏 < " + afstand + " km");
 
-  // Reset and fetch
-  slotsData = {};
-  loadingSet = new Set();
-  renderAll();
+  // Skeletten bouwen en daarna data ophalen
+  buildSkeletons();
+  slotsData  = {};
+  loadingSet = new Set(currentClubs.map(c => c.id));
   currentClubs.forEach(c => fetchClub(c, datum));
 }
 
 function addChip(container, text) {
-  const chip = document.createElement("div");
-  chip.className = "filter-chip";
-  chip.textContent = text;
-  container.appendChild(chip);
+  const el = document.createElement("div");
+  el.className = "filter-chip";
+  el.textContent = text;
+  container.appendChild(el);
 }
 
 function formatDate(d) {
   if (!d) return "";
-  const [y,m,day] = d.split("-");
+  const parts  = d.split("-");
   const months = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
-  return day + " " + months[parseInt(m)-1];
+  return parts[2] + " " + months[parseInt(parts[1]) - 1];
 }
 
+// ── OPHALEN ───────────────────────────────────────────────────────
 async function fetchClub(club, datum) {
-  loadingSet.add(club.id);
-  renderClub(club);
-  await new Promise(r => setTimeout(r, 400 + Math.random()*900));
+  await new Promise(r => setTimeout(r, 300 + Math.random() * 900));
   slotsData[club.id] = generateSlots(club.id, datum);
   loadingSet.delete(club.id);
+  // Hersorteren en opnieuw renderen zodra data er is
   smartSort();
-  updateResultsCount();
+  updateCount();
 }
 
-// ── SORT ────────────────────────────────────────────────────────
+// ── SORTEREN ──────────────────────────────────────────────────────
 function smartSort() {
-  const searchTijd = searchParams.tijd;
-  const duur = searchParams.duur || 60;
-  currentClubs.sort((a,b) => {
-    // If time searched: clubs with exact slot available come first
-    if (searchTijd) {
-      const aOk = hasConsecFreeSlots(slotsData[a.id]||[], searchTijd, duur) ? 0 : 1;
-      const bOk = hasConsecFreeSlots(slotsData[b.id]||[], searchTijd, duur) ? 0 : 1;
+  const { tijd, duur = 60 } = searchParams;
+  currentClubs.sort((a, b) => {
+    if (tijd) {
+      const aOk = slotsData[a.id] ? (isAaneengesloten(slotsData[a.id], tijd, duur) ? 0 : 1) : 2;
+      const bOk = slotsData[b.id] ? (isAaneengesloten(slotsData[b.id], tijd, duur) ? 0 : 1) : 2;
       if (aOk !== bOk) return aOk - bOk;
     }
-    // Then by distance
     return a.km - b.km;
   });
   renderAll();
 }
 
 function sortAndRender() {
-  const sort = document.getElementById("sort-select").value;
-  if (sort === "afstand") currentClubs.sort((a,b) => a.km - b.km);
-  else if (sort === "vrij") smartSort();
-  else if (sort === "naam") currentClubs.sort((a,b) => a.name.localeCompare(b.name));
-  renderAll();
+  const keuze = document.getElementById("sort-select").value;
+  if (keuze === "beschikbaar") smartSort();
+  else if (keuze === "afstand") { currentClubs.sort((a, b) => a.km - b.km); renderAll(); }
+  else if (keuze === "naam")    { currentClubs.sort((a, b) => a.name.localeCompare(b.name)); renderAll(); }
 }
 
-// ── RENDER ──────────────────────────────────────────────────────
-function updateResultsCount() {
+// ── RENDEREN ──────────────────────────────────────────────────────
+function updateCount() {
   let totalVrij = 0;
   currentClubs.forEach(c => {
-    (slotsData[c.id]||[]).forEach(s => { if(s.vrij) totalVrij++; });
+    (slotsData[c.id] || []).forEach(s => { if (s.vrij) totalVrij++; });
   });
   document.getElementById("results-count").innerHTML =
     `<strong>${currentClubs.length} clubs</strong> gevonden &nbsp;·&nbsp; <strong style="color:var(--green)">${totalVrij} vrije slots</strong>`;
 }
 
-function renderAll() {
+// Bouw de lege kaart-skeletten meteen zodat de volgorde stabiel is tijdens het laden
+function buildSkeletons() {
   const wrap = document.getElementById("clubs-wrap");
   wrap.innerHTML = "";
   if (currentClubs.length === 0) {
-    wrap.innerHTML = `<div class="no-results"><div class="empty-icon">🎾</div><p>Geen clubs gevonden binnen deze afstand.<br>Probeer een groter zoekgebied.</p></div>`;
+    wrap.innerHTML = `<div class="no-results">🎾 Geen clubs gevonden binnen deze afstand. Probeer een groter bereik.</div>`;
     return;
   }
   currentClubs.forEach(c => {
     const card = document.createElement("div");
     card.className = "club-card";
-    card.id = "club-"+c.id;
-    card.innerHTML = buildCardHTML(c);
+    card.id = "club-" + c.id;
+    card.innerHTML = maakKaartHTML(c);
     wrap.appendChild(card);
   });
-  updateResultsCount();
 }
 
-function renderClub(club) {
-  const card = document.getElementById("club-"+club.id);
-  if (!card) return;
-  card.innerHTML = buildCardHTML(club);
+function renderAll() {
+  const wrap = document.getElementById("clubs-wrap");
+  // Herorden de kaarten in de DOM op basis van currentClubs volgorde
+  currentClubs.forEach(c => {
+    const card = document.getElementById("club-" + c.id);
+    if (card) {
+      card.innerHTML = maakKaartHTML(c);
+      wrap.appendChild(card); // verplaatst naar einde = nieuwe volgorde
+    }
+  });
 }
 
-function tijdToMins(t) { const [h,m] = t.split(":").map(Number); return h*60+m; }
-
-function hasConsecFreeSlots(slots, startTijd, duurMins) {
-  // Check if all required consecutive slots starting at startTijd are free
-  const slotsNeeded = duurMins / 30;
-  const startMins = tijdToMins(startTijd);
-  for (let i = 0; i < slotsNeeded; i++) {
-    const needed = startMins + i*30;
-    const slot = slots.find(s => tijdToMins(s.tijd) === needed);
-    if (!slot || !slot.vrij) return false;
-  }
-  return true;
-}
-
-function buildCardHTML(club) {
-  const isLoading = loadingSet.has(club.id);
-  const slots = slotsData[club.id] || [];
-  const searchTijd = searchParams.tijd;
-  const duur = searchParams.duur || 60;
+function maakKaartHTML(club) {
+  const isLaden     = loadingSet.has(club.id);
+  const slots       = slotsData[club.id] || [];
+  const { tijd, duur = 60 } = searchParams;
   const prijsFactor = duur / 60;
+  const initials    = club.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
 
-  // If specific time searched: show window around it, sort exact match first
-  let displaySlots = slots;
-  let highlighted = null;
-  if (searchTijd && slots.length > 0) {
-    const searchMins = tijdToMins(searchTijd);
-    displaySlots = slots.filter(s => {
-      const diff = tijdToMins(s.tijd) - searchMins;
-      return diff >= 0 && diff <= 120; // only show from search time onwards
-    });
-    highlighted = searchTijd;
-    // Sort: exact match first, then chronological
-    displaySlots.sort((a,b) => {
-      const aExact = a.tijd === searchTijd ? 0 : 1;
-      const bExact = b.tijd === searchTijd ? 0 : 1;
-      if (aExact !== bExact) return aExact - bExact;
-      return tijdToMins(a.tijd) - tijdToMins(b.tijd);
-    });
-  }
-
-  // Check if the exact searched time+duur is available
-  const exactAvailable = searchTijd ? hasConsecFreeSlots(slots, searchTijd, duur) : null;
-
-  const vrijSlots = displaySlots.filter(s=>s.vrij);
-  const initials = club.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
-
+  // Badge bepalen
   let badgeHtml = "";
-  if (!isLoading && slots.length > 0) {
-    if (exactAvailable === true) {
-      badgeHtml = `<span class="badge vrij">✓ Beschikbaar</span>`;
-    } else if (exactAvailable === false) {
-      badgeHtml = `<span class="badge vol">Niet beschikbaar</span>`;
-    } else if (vrijSlots.length > 4) {
-      badgeHtml = `<span class="badge vrij">${vrijSlots.length} vrij</span>`;
-    } else if (vrijSlots.length > 0) {
-      badgeHtml = `<span class="badge weinig">${vrijSlots.length} vrij</span>`;
+  if (!isLaden && slots.length > 0) {
+    if (tijd) {
+      const ok = isAaneengesloten(slots, tijd, duur);
+      badgeHtml = ok
+        ? `<span class="badge groen">✓ Beschikbaar</span>`
+        : `<span class="badge rood">Niet beschikbaar</span>`;
     } else {
-      badgeHtml = `<span class="badge vol">Vol</span>`;
+      const aantalVrij = slots.filter(s => s.vrij).length;
+      if      (aantalVrij > 4) badgeHtml = `<span class="badge groen">${aantalVrij} vrij</span>`;
+      else if (aantalVrij > 0) badgeHtml = `<span class="badge oranje">${aantalVrij} vrij</span>`;
+      else                     badgeHtml = `<span class="badge rood">Vol</span>`;
     }
   }
 
+  // Slots bepalen om te tonen
+  let displaySlots = slots;
+  if (tijd && slots.length > 0) {
+    const zoekMins = tijdToMins(tijd);
+    displaySlots = slots.filter(s => {
+      const diff = tijdToMins(s.tijd) - zoekMins;
+      return diff >= 0 && diff <= 120;
+    });
+  }
+
+  // Body HTML
   let bodyHtml = "";
-  if (isLoading) {
+  if (isLaden) {
     bodyHtml = `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen...</div>`;
-  } else if (slots.length === 0) {
-    bodyHtml = `<div class="loading-wrap"><div class="spinner"></div>Laden...</div>`;
+  } else if (displaySlots.length === 0 && tijd) {
+    bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted);">
+      Geen slots rondom ${tijd} —
+      <button onclick="clearTijdFilter()" style="background:none;border:none;color:var(--green);cursor:pointer;font-size:0.82rem;text-decoration:underline;">toon alle tijden</button>
+    </div>`;
   } else if (displaySlots.length === 0) {
-    bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted)">Geen slots gevonden rondom ${searchTijd} — <button onclick="clearTimeFilter()" style="background:none;border:none;color:var(--green);cursor:pointer;font-size:0.82rem;text-decoration:underline;">toon alle tijden</button></div>`;
+    bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted);">Geen slots beschikbaar.</div>`;
   } else {
     bodyHtml = `<div class="slots-wrap">
       ${displaySlots.map(s => {
-        const isSearched = highlighted && s.tijd === highlighted;
+        const isGezocht  = tijd && s.tijd === tijd;
+        const kanBoeken  = s.vrij && isAaneengesloten(slots, s.tijd, duur);
         const totalPrijs = Math.round(s.basePrijs * prijsFactor);
-        const canBook = s.vrij && hasConsecFreeSlots(slots, s.tijd, duur);
-        const slotClass = canBook ? "vrij" : "vol";
-        const searchedClass = isSearched ? " searched" : "";
-        return `<div class="slot ${slotClass}${searchedClass}">
+        const klasse     = kanBoeken ? "vrij" : "bezet";
+        const gezochtKl  = isGezocht ? " gezocht" : "";
+        return `<div class="slot ${klasse}${gezochtKl}">
           <span class="slot-time">${s.tijd}</span>
           <span class="slot-sub">Baan ${s.baan}</span>
-          ${canBook
+          ${kanBoeken
             ? `<span class="slot-price">€${totalPrijs}</span><a href="${club.site}" target="_blank" class="book-pill">Boek →</a>`
-            : `<span class="slot-sub" style="margin-top:3px">bezet</span>`}
+            : `<span class="slot-sub" style="margin-top:3px;">bezet</span>`
+          }
         </div>`;
       }).join("")}
     </div>`;
@@ -639,7 +578,7 @@ function buildCardHTML(club) {
 
   return `
     <div class="club-head">
-      <div class="club-icon" style="background:${club.bg};color:${club.kleur}">${initials}</div>
+      <div class="club-icon" style="background:${club.bg};color:${club.kleur};">${initials}</div>
       <div class="club-info">
         <div class="club-name">${club.name}</div>
         <div class="club-meta">
@@ -662,34 +601,25 @@ function buildCardHTML(club) {
         </a>
       </div>
     </div>
-    <div class="club-body">${bodyHtml}</div>
+    <div>${bodyHtml}</div>
   `;
 }
 
-function clearTimeFilter() {
+function clearTijdFilter() {
   document.getElementById("s-tijd").value = "";
   searchParams.tijd = "";
-  currentClubs.forEach(c => renderClub(c));
+  renderAll();
 }
 
-// ── LOCATIE / GPS ───────────────────────────────────────────────
-const SUGGESTIONS = [
-  "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
-  "Zandvoort","Bloemendaal","Velsen-Zuid","Velserbroek","Spaarndam",
-  "Halfweg","Zwanenburg","Badhoevedorp","Diemen","Zaandam","Purmerend"
-];
-
+// ── LOCATIE AUTOCOMPLETE ──────────────────────────────────────────
 function onLocatieInput() {
   const val = document.getElementById("s-locatie").value.toLowerCase();
   const box = document.getElementById("loc-suggestions");
-  if (val.length < 1) { box.style.display = "none"; return; }
-  const matches = SUGGESTIONS.filter(s => s.toLowerCase().startsWith(val));
-  if (!matches.length) { box.style.display = "none"; return; }
-  box.innerHTML = matches.slice(0,5).map(m =>
-    `<div onclick="pickSuggestion('${m}')"
-      style="padding:9px 14px;font-size:0.85rem;cursor:pointer;border-bottom:1px solid var(--border);"
-      onmouseover="this.style.background='var(--green-light)'"
-      onmouseout="this.style.background=''">${m}</div>`
+  if (val.length < 1) { hideSuggestions(); return; }
+  const matches = STEDEN.filter(s => s.toLowerCase().startsWith(val)).slice(0, 5);
+  if (!matches.length) { hideSuggestions(); return; }
+  box.innerHTML = matches.map(m =>
+    `<div class="loc-suggestion-item" onclick="pickSuggestion('${m}')">${m}</div>`
   ).join("");
   box.style.display = "block";
 }
@@ -704,87 +634,16 @@ function hideSuggestions() {
 }
 
 document.addEventListener("click", e => {
-  if (!e.target.closest("#loc-suggestions") && e.target.id !== "s-locatie") hideSuggestions();
+  if (!e.target.closest(".search-field")) hideSuggestions();
 });
 
+// ── GPS ───────────────────────────────────────────────────────────
 function useGPS() {
-  const btn = document.getElementById("gps-btn");
+  const btn   = document.getElementById("gps-btn");
   const input = document.getElementById("s-locatie");
   if (!navigator.geolocation) { alert("GPS wordt niet ondersteund door je browser."); return; }
-  btn.style.color = "var(--green)";
-  input.value = "Locatie ophalen...";
-  input.style.color = "var(--muted)";
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      // Reverse geocode via nominatim
-      fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`)
-        .then(r => r.json())
-        .then(data => {
-          const place = data.address.city || data.address.town || data.address.village || data.address.suburb || "Jouw locatie";
-          input.value = place;
-          input.style.color = "var(--text)";
-          btn.style.color = "var(--green)";
-          // Store coords for distance sorting
-          window.userLat = pos.coords.latitude;
-          window.userLon = pos.coords.longitude;
-          doSearch();
-        })
-        .catch(() => {
-          input.value = "Haarlem";
-          input.style.color = "var(--text)";
-          btn.style.color = "var(--muted)";
-        });
-    },
-    () => {
-      input.value = "Haarlem";
-      input.style.color = "var(--text)";
-      btn.style.color = "var(--muted)";
-      alert("Kon je locatie niet ophalen. Vul een stad in.");
-    }
-  );
-}
-
-// ── LOCATIE / GPS ───────────────────────────────────────────────
-const SUGGESTIONS = [
-  "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
-  "Zandvoort","Bloemendaal","Velsen-Zuid","Velserbroek","Spaarndam",
-  "Halfweg","Zwanenburg","Badhoevedorp","Diemen","Zaandam","Purmerend"
-];
-
-function onLocatieInput() {
-  const val = document.getElementById("s-locatie").value.toLowerCase();
-  const box = document.getElementById("loc-suggestions");
-  if (val.length < 1) { box.style.display = "none"; return; }
-  const matches = SUGGESTIONS.filter(s => s.toLowerCase().startsWith(val));
-  if (!matches.length) { box.style.display = "none"; return; }
-  box.innerHTML = matches.slice(0,5).map(m =>
-    `<div onclick="pickSuggestion('${m}')"
-      style="padding:9px 14px;font-size:0.85rem;cursor:pointer;border-bottom:1px solid var(--border);"
-      onmouseover="this.style.background='var(--green-light)'"
-      onmouseout="this.style.background=''">${m}</div>`
-  ).join("");
-  box.style.display = "block";
-}
-
-function pickSuggestion(val) {
-  document.getElementById("s-locatie").value = val;
-  hideSuggestions();
-}
-
-function hideSuggestions() {
-  document.getElementById("loc-suggestions").style.display = "none";
-}
-
-document.addEventListener("click", e => {
-  if (!e.target.closest("#loc-suggestions") && e.target.id !== "s-locatie") hideSuggestions();
-});
-
-function useGPS() {
-  const btn = document.getElementById("gps-btn");
-  const input = document.getElementById("s-locatie");
-  if (!navigator.geolocation) { alert("GPS wordt niet ondersteund door je browser."); return; }
-  btn.style.color = "var(--green)";
-  input.value = "Locatie ophalen...";
+  btn.style.color  = "var(--green)";
+  input.value      = "Locatie ophalen...";
   input.style.color = "var(--muted)";
   navigator.geolocation.getCurrentPosition(
     pos => {
@@ -792,36 +651,33 @@ function useGPS() {
         .then(r => r.json())
         .then(data => {
           const place = data.address.city || data.address.town || data.address.village || data.address.suburb || "Jouw locatie";
-          input.value = place;
+          input.value       = place;
           input.style.color = "var(--text)";
-          btn.style.color = "var(--green)";
+          btn.style.color   = "var(--green)";
           doSearch();
         })
         .catch(() => {
-          input.value = "Haarlem";
+          input.value       = "Haarlem";
           input.style.color = "var(--text)";
-          btn.style.color = "var(--muted)";
+          btn.style.color   = "var(--muted)";
         });
     },
     () => {
-      input.value = "Haarlem";
+      input.value       = "Haarlem";
       input.style.color = "var(--text)";
-      btn.style.color = "var(--muted)";
+      btn.style.color   = "var(--muted)";
       alert("Kon je locatie niet ophalen. Vul een stad in.");
     }
   );
 }
 
-// ── INIT ────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────
 function init() {
-  // Set today's date as default
   const today = new Date();
   const y = today.getFullYear();
-  const m = String(today.getMonth()+1).padStart(2,"0");
-  const d = String(today.getDate()).padStart(2,"0");
+  const m = String(today.getMonth() + 1).padStart(2, "0");
+  const d = String(today.getDate()).padStart(2, "0");
   document.getElementById("s-datum").value = `${y}-${m}-${d}`;
-
-  // Auto search on load
   doSearch();
 }
 
