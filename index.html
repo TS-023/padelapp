@@ -299,32 +299,7 @@ function isAaneengesloten(slots, startTijd, duurMins) {
 }
 
 // ── PLAYTOMIC API ─────────────────────────────────────────────────
-async function fetchPlaytomic(tenantId, datum) {
-  const startMin = `${datum}T00:00:00`;
-  const startMax = `${datum}T23:59:59`;
-  const url = `https://api.playtomic.io/v1/availability?sport_id=PADEL&start_min=${encodeURIComponent(startMin)}&start_max=${encodeURIComponent(startMax)}&tenant_id=${tenantId}`;
-
-  const resp = await fetch(url, {
-    headers: { "Accept": "application/json" }
-  });
-
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  const data = await resp.json();
-
-  // Verwerk Playtomic response naar onze slot-structuur
-  const slots = [];
-  if (Array.isArray(data)) {
-    data.forEach(item => {
-      if (item.start_time) {
-        const tijd = item.start_time.substring(11, 16);
-        const duurMin = item.duration ? Math.round(item.duration / 60) : 60;
-        const prijs = item.price ? Math.round(item.price / 100) : null;
-        slots.push({ tijd, duur: duurMin, vrij: true, prijs });
-      }
-    });
-  }
-  return slots;
-}
+// Data wordt opgehaald via eigen backend /api/availability
 
 // ── ZOEKEN ────────────────────────────────────────────────────────
 async function doSearch() {
@@ -338,7 +313,6 @@ async function doSearch() {
   zoekParams = { locatie, datum, tijd, duur, afstand };
 
   document.getElementById("results-bar").style.display = "flex";
-  document.getElementById("cors-banner").style.display = "none";
 
   const af = document.getElementById("active-filters");
   af.innerHTML = "";
@@ -348,39 +322,24 @@ async function doSearch() {
   addChip(af, "⏱ " + duur + " min");
   addChip(af, "📏 < " + afstand + " km");
 
-  // Filter op afstand, bouw skeletons
-  clubData = CLUBS.filter(c => c.km <= afstand).map(c => ({
-    ...c, slots: [], bron: c.playtomic_id ? "laden" : "link"
-  }));
-
-  buildSkeletons();
+  // Laadscherm
+  document.getElementById("clubs-wrap").innerHTML =
+    `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen bij alle clubs...</div>`;
   document.getElementById("results-count").innerHTML = "Laden...";
 
-  // Haal Playtomic data op voor clubs die het ondersteunen
-  const playtomic = clubData.filter(c => c.playtomic_id);
-  let corsError = false;
+  try {
+    const resp = await fetch(`/api/availability?datum=${datum}`);
+    if (!resp.ok) throw new Error("Server fout");
+    const data = await resp.json();
 
-  await Promise.all(playtomic.map(async club => {
-    try {
-      const slots = await fetchPlaytomic(club.playtomic_id, datum);
-      club.slots = slots;
-      club.bron  = "playtomic";
-    } catch(e) {
-      console.warn(`${club.name} Playtomic fout:`, e.message);
-      club.bron  = "fout";
-      club.slots = [];
-      if (e.message.includes("Failed to fetch") || e.message.includes("NetworkError")) {
-        corsError = true;
-      }
-    }
-  }));
-
-  if (corsError) {
-    document.getElementById("cors-banner").style.display = "block";
+    // Filter op afstand
+    clubData = data.filter(c => c.km <= afstand);
+    smartSort();
+    updateCount();
+  } catch(e) {
+    document.getElementById("clubs-wrap").innerHTML =
+      `<div class="no-results">⚠️ Kon de server niet bereiken: ${e.message}</div>`;
   }
-
-  smartSort();
-  updateCount();
 }
 
 function addChip(container, text) {
