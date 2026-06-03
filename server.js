@@ -105,6 +105,30 @@ app.get("/api/availability", async (req, res) => {
   res.json(results);
 });
 
+// ── DEBUG: ruwe Playtomic data zien ──────────────────────────────
+// Ga naar /api/debug?datum=2026-06-03 om de ruwe response te zien
+app.get("/api/debug", async (req, res) => {
+  const datum = req.query.datum || new Date().toISOString().slice(0, 10);
+  const tenantId = "dd28050e-35c4-4bd0-ab58-b2f88111846d";
+  const url =
+    `https://api.playtomic.io/v1/availability` +
+    `?sport_id=PADEL` +
+    `&start_min=${encodeURIComponent(datum + "T00:00:00")}` +
+    `&start_max=${encodeURIComponent(datum + "T23:59:59")}` +
+    `&tenant_id=${tenantId}`;
+
+  try {
+    const resp = await fetch(url, {
+      headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" }
+    });
+    const text = await resp.text();
+    res.setHeader("Content-Type", "application/json");
+    res.send(text);
+  } catch(e) {
+    res.json({ fout: e.message });
+  }
+});
+
 // ── START ─────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`PadelSpot draait op poort ${PORT}`));
