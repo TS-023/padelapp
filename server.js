@@ -64,17 +64,30 @@ async function fetchPlaytomic(tenantId, datum) {
 
   const slots = [];
   if (Array.isArray(data)) {
-    data.forEach(item => {
-      if (item.start_time) {
-        slots.push({
-          tijd:  item.start_time.substring(11, 16),
-          duur:  item.duration ? Math.round(item.duration / 60) : 60,
-          vrij:  true,
-          prijs: item.price ? Math.round(item.price / 100) : null,
+    data.forEach(baan => {
+      // Elke baan heeft een resource_id en een slots array
+      if (Array.isArray(baan.slots)) {
+        baan.slots.forEach(slot => {
+          if (slot.start_time && slot.duration === 60) {
+            // Alleen 60-minuten slots (voorkom dubbelen van 90/120 min)
+            const tijd = slot.start_time.substring(0, 5); // "14:00:00" -> "14:00"
+            const prijsStr = slot.price || "";
+            const prijs = parseFloat(prijsStr) || null; // "24 EUR" -> 24
+            // Voeg toe per baan zodat je alle beschikbare banen ziet
+            slots.push({
+              tijd,
+              duur: 60,
+              vrij: true,
+              prijs,
+              baan: baan.resource_id ? baan.resource_id.substring(0, 8) : "?"
+            });
+          }
         });
       }
     });
   }
+  // Sorteer op tijd
+  slots.sort((a, b) => a.tijd.localeCompare(b.tijd));
   return slots;
 }
 
