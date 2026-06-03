@@ -3,495 +3,249 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PadelSpot Haarlem — Alle banen, één plek</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<title>PadelSpot — Vind een baan in de regio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --green: #1DB954;
-    --green-light: #E8F9EE;
-    --green-mid: #C2EFD0;
-    --green-dark: #148A3D;
-    --accent: #FF5C35;
-    --bg: #F7F9F7;
-    --white: #FFFFFF;
-    --card: #FFFFFF;
-    --border: #E4EAE4;
-    --border-strong: #C8D8C8;
-    --text: #111811;
-    --muted: #7A8F7A;
-    --muted-light: #B0C0B0;
-    --font-display: 'Syne', sans-serif;
-    --font-body: 'DM Sans', sans-serif;
-    --amber: #F59E0B;
-    --red: #EF4444;
-  }
+:root {
+  --green: #1DB954;
+  --green-light: #E8F9EE;
+  --green-mid: #B6E8C8;
+  --green-dark: #148A3D;
+  --bg: #F4F6F4;
+  --white: #FFFFFF;
+  --border: #E2E8E2;
+  --text: #111811;
+  --muted: #6B7F6B;
+  --muted-light: #A8BBA8;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
 
-  /* NAV */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    height: 60px;
-    border-bottom: 1px solid var(--border);
-    background: var(--white);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+/* NAV */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 58px;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 28px; height: 28px; background: var(--green); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.logo span { color: var(--green); }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.btn-ghost { font-family: var(--font-body); font-size: 0.83rem; color: var(--muted); background: none; border: 1px solid var(--border); padding: 6px 14px; border-radius: 99px; cursor: pointer; transition: all 0.15s; }
+.btn-ghost:hover { border-color: var(--green); color: var(--green); }
+.btn-primary { font-family: var(--font-body); font-size: 0.83rem; font-weight: 500; background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; transition: background 0.15s; }
+.btn-primary:hover { background: var(--green-dark); }
 
-  .logo {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.25rem;
-    letter-spacing: -0.5px;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+/* HERO SEARCH */
+.search-hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 2rem 1.75rem;
+}
+.search-hero-inner { max-width: 860px; margin: 0 auto; }
+.search-hero h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: -1px; margin-bottom: 1.25rem; line-height: 1.1;
+}
+.search-hero h1 em { font-style: normal; color: var(--green); }
 
-  .logo-icon {
-    width: 30px; height: 30px;
-    background: var(--green);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+/* SEARCH BOX */
+.search-box {
+  display: flex; gap: 0;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.search-box:focus-within { border-color: var(--green); }
 
-  .logo span { color: var(--green); }
+.search-field {
+  display: flex; flex-direction: column;
+  padding: 12px 16px;
+  flex: 1;
+  border-right: 1px solid var(--border);
+  min-width: 0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.search-field:last-of-type { border-right: none; }
+.search-field:hover { background: var(--bg); }
 
-  .nav-right { display: flex; align-items: center; gap: 10px; }
+.search-field label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 3px;
+  display: flex; align-items: center; gap: 4px;
+}
 
-  .btn-ghost {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    color: var(--muted);
-    background: none;
-    border: 1px solid var(--border);
-    padding: 7px 16px;
-    border-radius: 99px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+.search-field input,
+.search-field select {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 500;
+  border: none; outline: none;
+  background: transparent;
+  color: var(--text);
+  width: 100%;
+  appearance: none; -webkit-appearance: none;
+  cursor: pointer;
+}
+.search-field select option { color: var(--text); }
 
-  .btn-primary {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 500;
-    background: var(--green);
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 99px;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-  }
-  .btn-primary:hover { background: var(--green-dark); }
-  .btn-primary:active { transform: scale(0.97); }
+.search-btn {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  padding: 0 24px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex; align-items: center; gap: 8px;
+  transition: background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.search-btn:hover { background: var(--green-dark); }
+.search-btn svg { transition: transform 0.2s; }
+.search-btn:hover svg { transform: scale(1.1); }
 
-  /* HERO */
-  .hero {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    padding: 3rem 2rem 2.5rem;
-  }
+/* RESULTS BAR */
+.results-bar {
+  max-width: 860px; margin: 1.25rem auto 0.75rem; padding: 0 2rem;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.results-count { font-size: 0.85rem; color: var(--muted); }
+.results-count strong { color: var(--text); font-weight: 600; }
 
-  .hero-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    align-items: flex-end;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
+.sort-select {
+  margin-left: auto;
+  padding: 6px 28px 6px 12px;
+  border-radius: 99px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7F6B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  color: var(--text); font-family: var(--font-body); font-size: 0.82rem;
+  cursor: pointer; outline: none; appearance: none; -webkit-appearance: none;
+}
 
-  .hero-text { flex: 1; min-width: 260px; }
+.filter-chip {
+  padding: 5px 12px; border-radius: 99px;
+  border: 1.5px solid var(--green-mid);
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-size: 0.75rem; font-weight: 500;
+  display: flex; align-items: center; gap: 5px;
+  cursor: pointer;
+}
+.filter-chip:hover { border-color: var(--green); }
 
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.72rem;
-    font-weight: 500;
-    color: var(--green-dark);
-    background: var(--green-light);
-    border: 1px solid var(--green-mid);
-    padding: 4px 12px;
-    border-radius: 99px;
-    margin-bottom: 1rem;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
+/* CLUBS */
+.clubs-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 4rem; display: flex; flex-direction: column; gap: 12px; }
 
-  .dot-live {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: pulse 1.5s infinite;
-  }
+.club-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.club-card:hover { border-color: var(--green-mid); box-shadow: 0 2px 16px rgba(29,185,84,0.07); }
 
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.club-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
 
-  .hero h1 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    line-height: 1.05;
-    letter-spacing: -1.5px;
-    color: var(--text);
-    margin-bottom: 0.75rem;
-  }
+.club-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+  flex-shrink: 0;
+}
 
-  .hero h1 em { font-style: normal; color: var(--green); }
+.club-info { flex: 1; min-width: 0; }
+.club-name { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 3px; }
+.club-meta { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.club-meta-item { display: flex; align-items: center; gap: 3px; }
 
-  .hero p {
-    font-size: 0.95rem;
-    color: var(--muted);
-    line-height: 1.7;
-    max-width: 420px;
-  }
+.club-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
 
-  .hero-stats {
-    display: flex;
-    gap: 1.5rem;
-    flex-shrink: 0;
-  }
+.distance-badge {
+  font-size: 0.72rem; font-weight: 600;
+  background: var(--bg); color: var(--muted);
+  padding: 3px 9px; border-radius: 99px;
+  border: 1px solid var(--border);
+}
 
-  .hero-stat { text-align: center; }
-  .hero-stat-num {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--green);
-    line-height: 1;
-  }
-  .hero-stat-label {
-    font-size: 0.72rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 3px;
-  }
+.badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.badge.vrij { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
+.badge.weinig { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+.badge.vol { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
 
-  /* TOOLBAR */
-  .toolbar {
-    max-width: 900px;
-    margin: 1.5rem auto 1rem;
-    padding: 0 2rem;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
+.site-link { font-size: 0.73rem; color: var(--muted-light); text-decoration: none; display: flex; align-items: center; gap: 3px; transition: color 0.15s; }
+.site-link:hover { color: var(--green); }
 
-  .date-scroll {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .date-scroll::-webkit-scrollbar { display: none; }
+/* SLOTS */
+.slots-wrap { padding: 14px 18px; display: flex; gap: 7px; flex-wrap: wrap; }
 
-  .date-chip {
-    flex-shrink: 0;
-    padding: 7px 16px;
-    border-radius: 99px;
-    border: 1.5px solid var(--border);
-    background: var(--white);
-    color: var(--muted);
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .date-chip:hover { border-color: var(--green); color: var(--green-dark); }
-  .date-chip.active { background: var(--green); color: #fff; border-color: var(--green); font-weight: 500; }
+.slot {
+  border-radius: 10px; padding: 9px 11px; min-width: 82px;
+  text-align: center; border: 1.5px solid transparent; transition: all 0.15s;
+}
+.slot.vrij { background: var(--green-light); border-color: var(--green-mid); cursor: pointer; }
+.slot.vrij:hover { background: var(--green-mid); border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(29,185,84,0.15); }
+.slot.vol { background: var(--bg); border-color: var(--border); opacity: 0.55; }
+.slot.vol .slot-time { color: var(--muted); }
+.slot.searched { border: 2px solid var(--green) !important; box-shadow: 0 0 0 2px rgba(29,185,84,0.15); }
 
-  .filter-select {
-    padding: 7px 28px 7px 12px;
-    border-radius: 99px;
-    border: 1.5px solid var(--border);
-    background: var(--white);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A8F7A' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    cursor: pointer;
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-  }
-  .filter-select:focus { border-color: var(--green); }
+.slot-time { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; display: block; color: var(--text); }
+.slot.vol .slot-time { color: var(--muted); }
+.slot-sub { font-size: 0.67rem; color: var(--muted); display: block; margin-top: 1px; }
+.slot-price { font-size: 0.72rem; font-weight: 600; display: block; margin-top: 4px; color: var(--green-dark); }
+.book-pill { display: inline-block; margin-top: 5px; font-size: 0.67rem; font-weight: 600; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 99px; text-decoration: none; }
+.book-pill:hover { background: var(--green-dark); }
 
-  .refresh-btn {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    border-radius: 99px;
-    border: 1.5px solid var(--border);
-    background: var(--white);
-    color: var(--muted);
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .refresh-btn:hover { border-color: var(--green); color: var(--green); }
-  .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* LOADING */
+.loading-wrap { padding: 24px 18px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.82rem; }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  /* FREEMIUM */
-  .freemium-bar {
-    max-width: 900px;
-    margin: 0 auto 1.25rem;
-    padding: 0 2rem;
-  }
+.empty-state { text-align: center; padding: 3rem 2rem; color: var(--muted); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.empty-state p { font-size: 0.9rem; line-height: 1.6; }
 
-  .freemium-inner {
-    background: var(--green-light);
-    border: 1px solid var(--green-mid);
-    border-radius: 12px;
-    padding: 12px 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.83rem;
-    color: var(--green-dark);
-  }
+/* NO RESULTS */
+.no-results { max-width: 860px; margin: 2rem auto; padding: 0 2rem; text-align: center; color: var(--muted); }
 
-  .freemium-inner span { flex: 1; }
-  .freemium-inner strong { color: var(--green-dark); font-weight: 600; }
+footer { border-top: 1px solid var(--border); background: var(--white); padding: 1.25rem 2rem; text-align: center; font-size: 0.77rem; color: var(--muted); }
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--green); }
 
-  /* CLUBS */
-  .clubs-grid {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 2rem 4rem;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .club-card {
-    background: var(--white);
-    border: 1.5px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .club-card:hover {
-    border-color: var(--green-mid);
-    box-shadow: 0 2px 16px rgba(29,185,84,0.08);
-  }
-
-  .club-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .club-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-  }
-
-  .club-name {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 2px;
-  }
-
-  .club-addr {
-    font-size: 0.75rem;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-
-  .club-badges { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-
-  .badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 99px;
-    letter-spacing: 0.2px;
-  }
-  .badge.vrij { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
-  .badge.weinig { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
-  .badge.vol { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
-
-  .site-link {
-    font-size: 0.75rem;
-    color: var(--muted-light);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    transition: color 0.15s;
-    white-space: nowrap;
-  }
-  .site-link:hover { color: var(--green); }
-
-  /* SLOTS */
-  .slots-wrap {
-    padding: 14px 18px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .slot {
-    border-radius: 10px;
-    padding: 10px 11px;
-    min-width: 84px;
-    text-align: center;
-    border: 1.5px solid transparent;
-    transition: all 0.15s;
-  }
-
-  .slot.vrij {
-    background: var(--green-light);
-    border-color: var(--green-mid);
-    cursor: pointer;
-  }
-  .slot.vrij:hover {
-    background: var(--green-mid);
-    border-color: var(--green);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(29,185,84,0.15);
-  }
-
-  .slot.vol {
-    background: var(--bg);
-    border-color: var(--border);
-    opacity: 0.6;
-  }
-
-  .slot-time {
-    font-family: var(--font-display);
-    font-size: 0.92rem;
-    font-weight: 600;
-    display: block;
-    color: var(--text);
-  }
-  .slot.vol .slot-time { color: var(--muted); }
-
-  .slot-sub {
-    font-size: 0.68rem;
-    color: var(--muted);
-    display: block;
-    margin-top: 1px;
-  }
-
-  .slot-price {
-    font-size: 0.72rem;
-    font-weight: 600;
-    display: block;
-    margin-top: 4px;
-    color: var(--green-dark);
-  }
-
-  .book-pill {
-    display: inline-block;
-    margin-top: 5px;
-    font-size: 0.67rem;
-    font-weight: 600;
-    background: var(--green);
-    color: #fff;
-    padding: 3px 8px;
-    border-radius: 99px;
-    text-decoration: none;
-    transition: background 0.15s;
-  }
-  .book-pill:hover { background: var(--green-dark); }
-
-  /* LOADING */
-  .loading-wrap {
-    padding: 28px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: var(--muted);
-    font-size: 0.83rem;
-  }
-
-  .spinner {
-    width: 20px; height: 20px;
-    border: 2px solid var(--border);
-    border-top-color: var(--green);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    flex-shrink: 0;
-  }
-
-  .empty {
-    padding: 2.5rem;
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-
-  .error-box {
-    margin: 10px 18px 16px;
-    padding: 10px 14px;
-    background: #FEF2F2;
-    border: 1px solid #FECACA;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    color: #DC2626;
-  }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    background: var(--white);
-    padding: 1.5rem 2rem;
-    text-align: center;
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
-
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--green); }
-
-  @media (max-width: 600px) {
-    .hero { padding: 2rem 1rem; }
-    .hero-stats { display: none; }
-    .toolbar, .clubs-grid, .freemium-bar { padding-left: 1rem; padding-right: 1rem; }
-    nav { padding: 0 1rem; }
-    .hero h1 { font-size: 2rem; letter-spacing: -1px; }
-  }
+@media (max-width: 680px) {
+  .search-box { flex-direction: column; border-radius: 12px; }
+  .search-field { border-right: none; border-bottom: 1px solid var(--border); }
+  .search-field:last-of-type { border-bottom: none; }
+  .search-btn { padding: 14px; justify-content: center; border-radius: 0; }
+  nav { padding: 0 1rem; }
+  .search-hero, .results-bar, .clubs-wrap { padding-left: 1rem; padding-right: 1rem; }
+  .club-head { flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
@@ -499,242 +253,579 @@
 <nav>
   <div class="logo">
     <div class="logo-icon">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
     </div>
     Padel<span>Spot</span>
   </div>
   <div class="nav-right">
-    <button class="btn-ghost" onclick="alert('Login komt binnenkort!')">Inloggen</button>
-    <button class="btn-primary" onclick="alert('Account aanmaken komt binnenkort!')">Gratis account</button>
+    <button class="btn-ghost">Inloggen</button>
+    <button class="btn-primary">Gratis account</button>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <div class="hero-tag"><div class="dot-live"></div> Live beschikbaarheid</div>
-      <h1>Alle Haarlemse<br>padelcourts.<br><em>Één overzicht.</em></h1>
-      <p>Nooit meer 5 sites langs. Zie direct welke banen vrij zijn bij alle clubs in Haarlem en omgeving.</p>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num" id="h-vrij">—</div>
-        <div class="hero-stat-label">Vrije slots</div>
+<div class="search-hero">
+  <div class="search-hero-inner">
+    <h1>Vind een vrije padelcourt<br><em>in jouw omgeving</em></h1>
+
+    <div class="search-box">
+
+      <!-- LOCATIE -->
+      <div class="search-field" style="max-width:210px; position:relative;">
+        <label>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Locatie
+        </label>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <input type="text" id="s-locatie" placeholder="Stad of adres..." value="Haarlem"
+            style="font-family:var(--font-body);font-size:0.92rem;font-weight:500;border:none;outline:none;background:transparent;color:var(--text);width:100%;"
+            oninput="onLocatieInput()" onkeydown="if(event.key==='Enter'){hideSuggestions();doSearch();}"
+          >
+          <button onclick="useGPS()" title="Gebruik mijn locatie"
+            style="background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0;padding:2px;display:flex;align-items:center;"
+            id="gps-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
+          </button>
+        </div>
+        <!-- Suggestions dropdown -->
+        <div id="loc-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);border:1.5px solid var(--green);border-top:none;border-radius:0 0 10px 10px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num" style="color:var(--text)" id="h-clubs">6</div>
-        <div class="hero-stat-label">Clubs</div>
+
+      <!-- DATUM -->
+      <div class="search-field" style="max-width:160px">
+        <label>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Datum
+        </label>
+        <input type="date" id="s-datum">
       </div>
+
+      <!-- TIJD -->
+      <div class="search-field" style="max-width:130px">
+        <label>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Starttijd
+        </label>
+        <select id="s-tijd">
+          <option value="">Elke tijd</option>
+          <option value="07:00">07:00</option>
+          <option value="07:30">07:30</option>
+          <option value="08:00">08:00</option>
+          <option value="08:30">08:30</option>
+          <option value="09:00">09:00</option>
+          <option value="09:30">09:30</option>
+          <option value="10:00">10:00</option>
+          <option value="10:30">10:30</option>
+          <option value="11:00">11:00</option>
+          <option value="11:30">11:30</option>
+          <option value="12:00">12:00</option>
+          <option value="12:30">12:30</option>
+          <option value="13:00">13:00</option>
+          <option value="13:30">13:30</option>
+          <option value="14:00">14:00</option>
+          <option value="14:30">14:30</option>
+          <option value="15:00">15:00</option>
+          <option value="15:30">15:30</option>
+          <option value="16:00">16:00</option>
+          <option value="16:30">16:30</option>
+          <option value="17:00">17:00</option>
+          <option value="17:30">17:30</option>
+          <option value="18:00">18:00</option>
+          <option value="18:30">18:30</option>
+          <option value="19:00">19:00</option>
+          <option value="19:30">19:30</option>
+          <option value="20:00">20:00</option>
+          <option value="20:30">20:30</option>
+          <option value="21:00">21:00</option>
+          <option value="21:30">21:30</option>
+        </select>
+      </div>
+
+      <!-- DUUR -->
+      <div class="search-field" style="max-width:120px">
+        <label>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg>
+          Duur
+        </label>
+        <select id="s-duur">
+          <option value="30">30 min</option>
+          <option value="60" selected>60 min</option>
+          <option value="90">90 min</option>
+          <option value="120">120 min</option>
+        </select>
+      </div>
+
+      <!-- AFSTAND -->
+      <div class="search-field" style="max-width:140px">
+        <label>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Afstand
+        </label>
+        <select id="s-afstand">
+          <option value="5">Binnen 5 km</option>
+          <option value="10" selected>Binnen 10 km</option>
+          <option value="20">Binnen 20 km</option>
+          <option value="50">Binnen 50 km</option>
+        </select>
+      </div>
+
+      <button class="search-btn" onclick="doSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Zoeken
+      </button>
     </div>
   </div>
 </div>
 
-<div class="toolbar">
-  <div class="date-scroll" id="date-tabs"></div>
-  <select class="filter-select" id="filter-tijd" onchange="renderAll()">
-    <option value="">Alle tijden</option>
-    <option value="ochtend">Ochtend</option>
-    <option value="middag">Middag</option>
-    <option value="avond">Avond</option>
+<div id="results-bar" class="results-bar" style="display:none">
+  <span class="results-count" id="results-count"></span>
+  <div id="active-filters" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+  <select class="sort-select" id="sort-select" onchange="sortAndRender()">
+    <option value="vrij">Vrij + dichtstbij (standaard)</option>
+    <option value="afstand">Dichtstbijzijnde eerst</option>
+    <option value="naam">Naam A–Z</option>
   </select>
-  <button class="refresh-btn" id="refresh-btn" onclick="fetchAll()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-    Vernieuwen
-  </button>
 </div>
 
-<div class="freemium-bar">
-  <div class="freemium-inner">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-    <span>Je hebt nog <strong id="credits-left">5</strong> gratis checks over deze maand.</span>
-    <button class="btn-primary" style="font-size:0.78rem; padding:5px 14px;" onclick="alert('Binnenkort beschikbaar!')">Maak gratis account →</button>
-  </div>
-</div>
-
-<div class="clubs-grid" id="clubs-grid"></div>
+<div id="clubs-wrap" class="clubs-wrap"></div>
 
 <footer>
-  PadelSpot Haarlem &nbsp;·&nbsp; Altijd de beste baan &nbsp;·&nbsp;
-  <a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Contact</a>
+  PadelSpot &nbsp;·&nbsp; Altijd de beste baan &nbsp;·&nbsp;
+  <a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Contact</a> &nbsp;·&nbsp;
+  <a href="#">Club aanmelden</a>
 </footer>
 
 <script>
-const CLUBS = [
-  { id:"padelhaarlem", name:"Padel Haarlem", adres:"Sportlaan 12, Haarlem", banen:4, kleur:"#1DB954", bg:"#E8F9EE", site:"https://www.padelhaarlem.nl", bookUrl:"https://www.padelhaarlem.nl/boeken" },
-  { id:"hpv", name:"Haarlem Padel & Tennis", adres:"Waarderhaven 3, Haarlem", banen:6, kleur:"#0284C7", bg:"#E0F2FE", site:"https://www.haarlempadel.nl", bookUrl:"https://www.haarlempadel.nl/reserveren" },
-  { id:"padelpark", name:"Padelpark Schalkwijk", adres:"Schalkwijkerstraat 55, Haarlem", banen:3, kleur:"#F59E0B", bg:"#FEF3C7", site:"https://www.padelpark-haarlem.nl", bookUrl:"https://www.padelpark-haarlem.nl/baan-boeken" },
-  { id:"sportclub", name:"Sport & Padelclub Noord", adres:"Europaweg 88, Haarlem", banen:4, kleur:"#EF4444", bg:"#FEE2E2", site:"https://www.sportclubhaarlem.nl", bookUrl:"https://www.sportclubhaarlem.nl/padel" },
-  { id:"racket", name:"Racketclub De Hout", adres:"Bosch en Vaartlaan 20, Haarlem", banen:5, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://www.racketclub-dehout.nl", bookUrl:"https://www.racketclub-dehout.nl/boeken" },
-  { id:"heemstede", name:"Padelclub Heemstede", adres:"Cruquiusweg 10, Heemstede", banen:3, kleur:"#DB2777", bg:"#FCE7F3", site:"https://www.padelheemstede.nl", bookUrl:"https://www.padelheemstede.nl/reserveer" },
+// ── DATA ────────────────────────────────────────────────────────
+const ALL_CLUBS = [
+  { id:"ph",   name:"Padel Haarlem",               stad:"haarlem",    adres:"Sportlaan 12",          km:1.2, banen:4, kleur:"#1DB954", bg:"#E8F9EE", site:"https://padelhaarlem.nl" },
+  { id:"hpt",  name:"Haarlem Padel & Tennis",       stad:"haarlem",    adres:"Waarderhaven 3",        km:2.8, banen:6, kleur:"#0284C7", bg:"#E0F2FE", site:"https://haarlempadel.nl" },
+  { id:"ps",   name:"Padelpark Schalkwijk",          stad:"haarlem",    adres:"Schalkwijkerstraat 55", km:3.4, banen:3, kleur:"#F59E0B", bg:"#FEF3C7", site:"https://padelpark-haarlem.nl" },
+  { id:"spn",  name:"Sport & Padelclub Noord",       stad:"haarlem",    adres:"Europaweg 88",          km:4.1, banen:4, kleur:"#EF4444", bg:"#FEE2E2", site:"https://sportclubhaarlem.nl" },
+  { id:"rdh",  name:"Racketclub De Hout",            stad:"haarlem",    adres:"Bosch en Vaartlaan 20", km:2.1, banen:5, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://racketclub-dehout.nl" },
+  { id:"phe",  name:"Padelclub Heemstede",           stad:"heemstede",  adres:"Cruquiusweg 10",        km:5.3, banen:3, kleur:"#DB2777", bg:"#FCE7F3", site:"https://padelheemstede.nl" },
+  { id:"bev",  name:"Padel Beverwijk",               stad:"beverwijk",  adres:"Breestraat 40",         km:14.2,banen:4, kleur:"#059669", bg:"#D1FAE5", site:"https://padelbeverwijk.nl" },
+  { id:"hfd",  name:"Hoofddorp Padel Center",        stad:"hoofddorp",  adres:"Hoofdweg 200",          km:11.8,banen:6, kleur:"#D97706", bg:"#FEF3C7", site:"https://hoofddorppadel.nl" },
+  { id:"ams1", name:"Padel Amsterdam West",          stad:"amsterdam",  adres:"Lelylaan 88",           km:19.4,banen:8, kleur:"#DC2626", bg:"#FEE2E2", site:"https://padelamsterdam.nl" },
+  { id:"ams2", name:"Amsterdam Padel Club Noord",    stad:"amsterdam",  adres:"Buiksloterweg 12",      km:22.1,banen:5, kleur:"#2563EB", bg:"#DBEAFE", site:"https://apcnoord.nl" },
+  { id:"alk",  name:"Padel Alkmaar",                 stad:"alkmaar",    adres:"Geestersingel 4",       km:28.6,banen:4, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://padelalkmaar.nl" },
+  { id:"znd",  name:"Zandvoort Beach Padel",         stad:"haarlem",    adres:"Burg. van Fenemaplein 1",km:9.8,banen:3, kleur:"#F97316", bg:"#FFEDD5", site:"https://zandvoortpadel.nl" },
 ];
 
 const TIJDEN = ["07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00"];
 
-let selectedDate = 0;
+let currentClubs = [];
 let slotsData = {};
-let loading = {};
-let errors = {};
-let credits = 5;
+let loadingSet = new Set();
+let searchParams = {};
 
+// ── SEED RANDOM ─────────────────────────────────────────────────
 function seedRand(seed) {
   let s = seed;
   return () => { s = (s*9301+49297)%233280; return s/233280; };
 }
 
-function generateSlots(clubId, dateIdx) {
-  const rand = seedRand(clubId.split("").reduce((a,c)=>a+c.charCodeAt(0),0) + dateIdx*997 + Math.floor(Date.now()/300000));
-  const club = CLUBS.find(c=>c.id===clubId);
+function generateSlots(clubId, dateStr) {
+  const dateSeed = dateStr ? dateStr.replace(/-/g,"") : "20260603";
+  const rand = seedRand(clubId.split("").reduce((a,c)=>a+c.charCodeAt(0),0) + parseInt(dateSeed)%9999);
+  const club = ALL_CLUBS.find(c=>c.id===clubId);
   return TIJDEN.map(tijd => {
     const baan = Math.floor(rand()*club.banen)+1;
-    const vrij = rand() > 0.52;
-    const prijs = [10,11,12,12,13,14,15][Math.floor(rand()*7)];
-    return { tijd, baan, vrij, prijs };
+    const vrij = rand() > 0.50;
+    const basePrijs = [10,11,12,12,13,14,15][Math.floor(rand()*7)];
+    return { tijd, baan, vrij, basePrijs };
   });
 }
 
-async function fetchClub(club) {
-  loading[club.id] = true;
-  errors[club.id] = null;
-  renderClub(club);
-  await new Promise(r => setTimeout(r, 500 + Math.random()*1000));
-  try {
-    slotsData[club.id] = generateSlots(club.id, selectedDate);
-    loading[club.id] = false;
-    renderClub(club);
-    updateStats();
-  } catch(e) {
-    errors[club.id] = "Kon beschikbaarheid niet ophalen";
-    loading[club.id] = false;
-    renderClub(club);
-  }
-}
+// ── SEARCH ──────────────────────────────────────────────────────
+function doSearch() {
+  const stad    = document.getElementById("s-locatie").value.toLowerCase().trim();
+  const datum   = document.getElementById("s-datum").value;
+  const tijd    = document.getElementById("s-tijd").value;
+  const duur    = parseInt(document.getElementById("s-duur").value);
+  const afstand = parseInt(document.getElementById("s-afstand").value);
 
-function fetchAll() {
-  if (credits <= 0) { alert("Je gratis checks zijn op. Maak een account aan!"); return; }
-  credits = Math.max(0, credits-1);
-  document.getElementById("credits-left").textContent = credits;
-  const btn = document.getElementById("refresh-btn");
-  btn.classList.add("spinning");
-  setTimeout(()=>btn.classList.remove("spinning"), 1500);
+  searchParams = { stad, datum, tijd, duur, afstand };
+
+  // Filter clubs by distance
+  currentClubs = ALL_CLUBS.filter(c => c.km <= afstand);
+
+  // Show results bar
+  document.getElementById("results-bar").style.display = "flex";
+
+  // Active filter chips
+  const af = document.getElementById("active-filters");
+  af.innerHTML = "";
+  addChip(af, "📍 " + document.getElementById("s-locatie").value);
+  if (datum) addChip(af, "📅 " + formatDate(datum));
+  if (tijd) addChip(af, "🕐 " + tijd);
+  addChip(af, "⏱ " + duur + " min");
+  addChip(af, "📏 < " + afstand + " km");
+
+  // Reset and fetch
   slotsData = {};
-  CLUBS.forEach(c => fetchClub(c));
+  loadingSet = new Set();
+  renderAll();
+  currentClubs.forEach(c => fetchClub(c, datum));
 }
 
-function tijdMatch(tijd) {
-  const h = parseInt(tijd.split(":")[0]);
-  const f = document.getElementById("filter-tijd").value;
-  if (!f) return true;
-  if (f==="ochtend") return h<12;
-  if (f==="middag") return h>=12 && h<17;
-  if (f==="avond") return h>=17;
-  return true;
+function addChip(container, text) {
+  const chip = document.createElement("div");
+  chip.className = "filter-chip";
+  chip.textContent = text;
+  container.appendChild(chip);
 }
 
-function updateStats() {
-  let vrij = 0;
-  CLUBS.forEach(c => {
-    (slotsData[c.id]||[]).filter(s=>tijdMatch(s.tijd)&&s.vrij).forEach(()=>vrij++);
+function formatDate(d) {
+  if (!d) return "";
+  const [y,m,day] = d.split("-");
+  const months = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+  return day + " " + months[parseInt(m)-1];
+}
+
+async function fetchClub(club, datum) {
+  loadingSet.add(club.id);
+  renderClub(club);
+  await new Promise(r => setTimeout(r, 400 + Math.random()*900));
+  slotsData[club.id] = generateSlots(club.id, datum);
+  loadingSet.delete(club.id);
+  smartSort();
+  updateResultsCount();
+}
+
+// ── SORT ────────────────────────────────────────────────────────
+function smartSort() {
+  const searchTijd = searchParams.tijd;
+  const duur = searchParams.duur || 60;
+  currentClubs.sort((a,b) => {
+    // If time searched: clubs with exact slot available come first
+    if (searchTijd) {
+      const aOk = hasConsecFreeSlots(slotsData[a.id]||[], searchTijd, duur) ? 0 : 1;
+      const bOk = hasConsecFreeSlots(slotsData[b.id]||[], searchTijd, duur) ? 0 : 1;
+      if (aOk !== bOk) return aOk - bOk;
+    }
+    // Then by distance
+    return a.km - b.km;
   });
-  document.getElementById("h-vrij").textContent = vrij || "—";
+  renderAll();
+}
+
+function sortAndRender() {
+  const sort = document.getElementById("sort-select").value;
+  if (sort === "afstand") currentClubs.sort((a,b) => a.km - b.km);
+  else if (sort === "vrij") smartSort();
+  else if (sort === "naam") currentClubs.sort((a,b) => a.name.localeCompare(b.name));
+  renderAll();
+}
+
+// ── RENDER ──────────────────────────────────────────────────────
+function updateResultsCount() {
+  let totalVrij = 0;
+  currentClubs.forEach(c => {
+    (slotsData[c.id]||[]).forEach(s => { if(s.vrij) totalVrij++; });
+  });
+  document.getElementById("results-count").innerHTML =
+    `<strong>${currentClubs.length} clubs</strong> gevonden &nbsp;·&nbsp; <strong style="color:var(--green)">${totalVrij} vrije slots</strong>`;
+}
+
+function renderAll() {
+  const wrap = document.getElementById("clubs-wrap");
+  wrap.innerHTML = "";
+  if (currentClubs.length === 0) {
+    wrap.innerHTML = `<div class="no-results"><div class="empty-icon">🎾</div><p>Geen clubs gevonden binnen deze afstand.<br>Probeer een groter zoekgebied.</p></div>`;
+    return;
+  }
+  currentClubs.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "club-card";
+    card.id = "club-"+c.id;
+    card.innerHTML = buildCardHTML(c);
+    wrap.appendChild(card);
+  });
+  updateResultsCount();
 }
 
 function renderClub(club) {
-  const container = document.getElementById("club-"+club.id);
-  if (!container) return;
-  const slots = (slotsData[club.id]||[]).filter(s=>tijdMatch(s.tijd));
-  const vrijSlots = slots.filter(s=>s.vrij);
-  const isLoading = loading[club.id];
-  const err = errors[club.id];
+  const card = document.getElementById("club-"+club.id);
+  if (!card) return;
+  card.innerHTML = buildCardHTML(club);
+}
+
+function tijdToMins(t) { const [h,m] = t.split(":").map(Number); return h*60+m; }
+
+function hasConsecFreeSlots(slots, startTijd, duurMins) {
+  // Check if all required consecutive slots starting at startTijd are free
+  const slotsNeeded = duurMins / 30;
+  const startMins = tijdToMins(startTijd);
+  for (let i = 0; i < slotsNeeded; i++) {
+    const needed = startMins + i*30;
+    const slot = slots.find(s => tijdToMins(s.tijd) === needed);
+    if (!slot || !slot.vrij) return false;
+  }
+  return true;
+}
+
+function buildCardHTML(club) {
+  const isLoading = loadingSet.has(club.id);
+  const slots = slotsData[club.id] || [];
+  const searchTijd = searchParams.tijd;
+  const duur = searchParams.duur || 60;
+  const prijsFactor = duur / 60;
+
+  // If specific time searched: show window around it, sort exact match first
+  let displaySlots = slots;
+  let highlighted = null;
+  if (searchTijd && slots.length > 0) {
+    const searchMins = tijdToMins(searchTijd);
+    displaySlots = slots.filter(s => {
+      const diff = tijdToMins(s.tijd) - searchMins;
+      return diff >= 0 && diff <= 120; // only show from search time onwards
+    });
+    highlighted = searchTijd;
+    // Sort: exact match first, then chronological
+    displaySlots.sort((a,b) => {
+      const aExact = a.tijd === searchTijd ? 0 : 1;
+      const bExact = b.tijd === searchTijd ? 0 : 1;
+      if (aExact !== bExact) return aExact - bExact;
+      return tijdToMins(a.tijd) - tijdToMins(b.tijd);
+    });
+  }
+
+  // Check if the exact searched time+duur is available
+  const exactAvailable = searchTijd ? hasConsecFreeSlots(slots, searchTijd, duur) : null;
+
+  const vrijSlots = displaySlots.filter(s=>s.vrij);
   const initials = club.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
   let badgeHtml = "";
   if (!isLoading && slots.length > 0) {
-    if (vrijSlots.length > 4) badgeHtml = `<span class="badge vrij">${vrijSlots.length} vrij</span>`;
-    else if (vrijSlots.length > 0) badgeHtml = `<span class="badge weinig">${vrijSlots.length} vrij</span>`;
-    else badgeHtml = `<span class="badge vol">Vol</span>`;
+    if (exactAvailable === true) {
+      badgeHtml = `<span class="badge vrij">✓ Beschikbaar</span>`;
+    } else if (exactAvailable === false) {
+      badgeHtml = `<span class="badge vol">Niet beschikbaar</span>`;
+    } else if (vrijSlots.length > 4) {
+      badgeHtml = `<span class="badge vrij">${vrijSlots.length} vrij</span>`;
+    } else if (vrijSlots.length > 0) {
+      badgeHtml = `<span class="badge weinig">${vrijSlots.length} vrij</span>`;
+    } else {
+      badgeHtml = `<span class="badge vol">Vol</span>`;
+    }
   }
 
   let bodyHtml = "";
   if (isLoading) {
     bodyHtml = `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen...</div>`;
-  } else if (err) {
-    bodyHtml = `<div class="error-box">⚠ ${err} — <a href="${club.site}" target="_blank" style="color:#DC2626">Ga naar site</a></div>`;
   } else if (slots.length === 0) {
-    bodyHtml = `<div class="empty">Klik op Vernieuwen om beschikbaarheid op te halen.</div>`;
+    bodyHtml = `<div class="loading-wrap"><div class="spinner"></div>Laden...</div>`;
+  } else if (displaySlots.length === 0) {
+    bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted)">Geen slots gevonden rondom ${searchTijd} — <button onclick="clearTimeFilter()" style="background:none;border:none;color:var(--green);cursor:pointer;font-size:0.82rem;text-decoration:underline;">toon alle tijden</button></div>`;
   } else {
-    const show = slots.slice(0,22);
     bodyHtml = `<div class="slots-wrap">
-      ${show.map(s=>`<div class="slot ${s.vrij?"vrij":"vol"}">
-        <span class="slot-time">${s.tijd}</span>
-        <span class="slot-sub">Baan ${s.baan}</span>
-        ${s.vrij
-          ? `<span class="slot-price">€${s.prijs}</span><a href="${club.bookUrl}" target="_blank" class="book-pill">Boek →</a>`
-          : `<span class="slot-sub" style="margin-top:4px">bezet</span>`}
-      </div>`).join("")}
-      ${slots.length>22?`<div class="slot vol" style="display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:var(--muted)">+${slots.length-22} meer</div>`:""}
+      ${displaySlots.map(s => {
+        const isSearched = highlighted && s.tijd === highlighted;
+        const totalPrijs = Math.round(s.basePrijs * prijsFactor);
+        const canBook = s.vrij && hasConsecFreeSlots(slots, s.tijd, duur);
+        const slotClass = canBook ? "vrij" : "vol";
+        const searchedClass = isSearched ? " searched" : "";
+        return `<div class="slot ${slotClass}${searchedClass}">
+          <span class="slot-time">${s.tijd}</span>
+          <span class="slot-sub">Baan ${s.baan}</span>
+          ${canBook
+            ? `<span class="slot-price">€${totalPrijs}</span><a href="${club.site}" target="_blank" class="book-pill">Boek →</a>`
+            : `<span class="slot-sub" style="margin-top:3px">bezet</span>`}
+        </div>`;
+      }).join("")}
     </div>`;
   }
 
-  container.querySelector(".club-badges").innerHTML = badgeHtml;
-  container.querySelector(".club-body").innerHTML = bodyHtml;
-}
-
-function renderAll() {
-  updateStats();
-  CLUBS.forEach(c=>renderClub(c));
-}
-
-function buildUI() {
-  const days = ["zo","ma","di","wo","do","vr","za"];
-  const months = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
-  const today = new Date();
-  const tabs = document.getElementById("date-tabs");
-  for (let i=0; i<7; i++) {
-    const d = new Date(today); d.setDate(today.getDate()+i);
-    const label = i===0?"Vandaag":i===1?"Morgen":days[d.getDay()]+" "+d.getDate()+" "+months[d.getMonth()];
-    const btn = document.createElement("button");
-    btn.className = "date-chip"+(i===0?" active":"");
-    btn.textContent = label;
-    btn.onclick = () => {
-      selectedDate = i;
-      document.querySelectorAll(".date-chip").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      slotsData = {};
-      fetchAll();
-    };
-    tabs.appendChild(btn);
-  }
-
-  const grid = document.getElementById("clubs-grid");
-  CLUBS.forEach(club => {
-    const initials = club.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
-    const card = document.createElement("div");
-    card.className = "club-card";
-    card.id = "club-"+club.id;
-    card.innerHTML = `
-      <div class="club-head">
-        <div class="club-icon" style="background:${club.bg};color:${club.kleur}">${initials}</div>
-        <div style="flex:1">
-          <div class="club-name">${club.name}</div>
-          <div class="club-addr">
+  return `
+    <div class="club-head">
+      <div class="club-icon" style="background:${club.bg};color:${club.kleur}">${initials}</div>
+      <div class="club-info">
+        <div class="club-name">${club.name}</div>
+        <div class="club-meta">
+          <span class="club-meta-item">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            ${club.adres} · ${club.banen} banen
-          </div>
+            ${club.adres}
+          </span>
+          <span class="club-meta-item">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            ${club.banen} banen
+          </span>
         </div>
-        <div class="club-badges"></div>
+      </div>
+      <div class="club-right">
+        <span class="distance-badge">📍 ${club.km} km</span>
+        ${badgeHtml}
         <a href="${club.site}" target="_blank" class="site-link">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           Website
         </a>
       </div>
-      <div class="club-body"></div>
-    `;
-    grid.appendChild(card);
-  });
+    </div>
+    <div class="club-body">${bodyHtml}</div>
+  `;
 }
 
-buildUI();
-fetchAll();
+function clearTimeFilter() {
+  document.getElementById("s-tijd").value = "";
+  searchParams.tijd = "";
+  currentClubs.forEach(c => renderClub(c));
+}
+
+// ── LOCATIE / GPS ───────────────────────────────────────────────
+const SUGGESTIONS = [
+  "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
+  "Zandvoort","Bloemendaal","Velsen-Zuid","Velserbroek","Spaarndam",
+  "Halfweg","Zwanenburg","Badhoevedorp","Diemen","Zaandam","Purmerend"
+];
+
+function onLocatieInput() {
+  const val = document.getElementById("s-locatie").value.toLowerCase();
+  const box = document.getElementById("loc-suggestions");
+  if (val.length < 1) { box.style.display = "none"; return; }
+  const matches = SUGGESTIONS.filter(s => s.toLowerCase().startsWith(val));
+  if (!matches.length) { box.style.display = "none"; return; }
+  box.innerHTML = matches.slice(0,5).map(m =>
+    `<div onclick="pickSuggestion('${m}')"
+      style="padding:9px 14px;font-size:0.85rem;cursor:pointer;border-bottom:1px solid var(--border);"
+      onmouseover="this.style.background='var(--green-light)'"
+      onmouseout="this.style.background=''">${m}</div>`
+  ).join("");
+  box.style.display = "block";
+}
+
+function pickSuggestion(val) {
+  document.getElementById("s-locatie").value = val;
+  hideSuggestions();
+}
+
+function hideSuggestions() {
+  document.getElementById("loc-suggestions").style.display = "none";
+}
+
+document.addEventListener("click", e => {
+  if (!e.target.closest("#loc-suggestions") && e.target.id !== "s-locatie") hideSuggestions();
+});
+
+function useGPS() {
+  const btn = document.getElementById("gps-btn");
+  const input = document.getElementById("s-locatie");
+  if (!navigator.geolocation) { alert("GPS wordt niet ondersteund door je browser."); return; }
+  btn.style.color = "var(--green)";
+  input.value = "Locatie ophalen...";
+  input.style.color = "var(--muted)";
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      // Reverse geocode via nominatim
+      fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`)
+        .then(r => r.json())
+        .then(data => {
+          const place = data.address.city || data.address.town || data.address.village || data.address.suburb || "Jouw locatie";
+          input.value = place;
+          input.style.color = "var(--text)";
+          btn.style.color = "var(--green)";
+          // Store coords for distance sorting
+          window.userLat = pos.coords.latitude;
+          window.userLon = pos.coords.longitude;
+          doSearch();
+        })
+        .catch(() => {
+          input.value = "Haarlem";
+          input.style.color = "var(--text)";
+          btn.style.color = "var(--muted)";
+        });
+    },
+    () => {
+      input.value = "Haarlem";
+      input.style.color = "var(--text)";
+      btn.style.color = "var(--muted)";
+      alert("Kon je locatie niet ophalen. Vul een stad in.");
+    }
+  );
+}
+
+// ── LOCATIE / GPS ───────────────────────────────────────────────
+const SUGGESTIONS = [
+  "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
+  "Zandvoort","Bloemendaal","Velsen-Zuid","Velserbroek","Spaarndam",
+  "Halfweg","Zwanenburg","Badhoevedorp","Diemen","Zaandam","Purmerend"
+];
+
+function onLocatieInput() {
+  const val = document.getElementById("s-locatie").value.toLowerCase();
+  const box = document.getElementById("loc-suggestions");
+  if (val.length < 1) { box.style.display = "none"; return; }
+  const matches = SUGGESTIONS.filter(s => s.toLowerCase().startsWith(val));
+  if (!matches.length) { box.style.display = "none"; return; }
+  box.innerHTML = matches.slice(0,5).map(m =>
+    `<div onclick="pickSuggestion('${m}')"
+      style="padding:9px 14px;font-size:0.85rem;cursor:pointer;border-bottom:1px solid var(--border);"
+      onmouseover="this.style.background='var(--green-light)'"
+      onmouseout="this.style.background=''">${m}</div>`
+  ).join("");
+  box.style.display = "block";
+}
+
+function pickSuggestion(val) {
+  document.getElementById("s-locatie").value = val;
+  hideSuggestions();
+}
+
+function hideSuggestions() {
+  document.getElementById("loc-suggestions").style.display = "none";
+}
+
+document.addEventListener("click", e => {
+  if (!e.target.closest("#loc-suggestions") && e.target.id !== "s-locatie") hideSuggestions();
+});
+
+function useGPS() {
+  const btn = document.getElementById("gps-btn");
+  const input = document.getElementById("s-locatie");
+  if (!navigator.geolocation) { alert("GPS wordt niet ondersteund door je browser."); return; }
+  btn.style.color = "var(--green)";
+  input.value = "Locatie ophalen...";
+  input.style.color = "var(--muted)";
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      fetch("https://nominatim.openstreetmap.org/reverse?lat=" + pos.coords.latitude + "&lon=" + pos.coords.longitude + "&format=json")
+        .then(r => r.json())
+        .then(data => {
+          const place = data.address.city || data.address.town || data.address.village || data.address.suburb || "Jouw locatie";
+          input.value = place;
+          input.style.color = "var(--text)";
+          btn.style.color = "var(--green)";
+          doSearch();
+        })
+        .catch(() => {
+          input.value = "Haarlem";
+          input.style.color = "var(--text)";
+          btn.style.color = "var(--muted)";
+        });
+    },
+    () => {
+      input.value = "Haarlem";
+      input.style.color = "var(--text)";
+      btn.style.color = "var(--muted)";
+      alert("Kon je locatie niet ophalen. Vul een stad in.");
+    }
+  );
+}
+
+// ── INIT ────────────────────────────────────────────────────────
+function init() {
+  // Set today's date as default
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = String(today.getMonth()+1).padStart(2,"0");
+  const d = String(today.getDate()).padStart(2,"0");
+  document.getElementById("s-datum").value = `${y}-${m}-${d}`;
+
+  // Auto search on load
+  doSearch();
+}
+
+init();
 </script>
 </body>
 </html>
