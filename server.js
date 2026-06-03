@@ -86,9 +86,27 @@ async function fetchPlaytomic(tenantId, datum) {
       }
     });
   }
-  // Sorteer op tijd
-  slots.sort((a, b) => a.tijd.localeCompare(b.tijd));
-  return slots;
+  // Alle mogelijke tijden van 07:00 tot 22:00 per 30 min
+  const alleTijden = [];
+  for (let h = 7; h <= 21; h++) {
+    alleTijden.push(`${String(h).padStart(2,"0")}:00`);
+    alleTijden.push(`${String(h).padStart(2,"0")}:30`);
+  }
+  alleTijden.push("22:00");
+
+  // Bouw compleet overzicht: vrije slots van Playtomic + bezette tijden
+  const compleet = alleTijden.map(tijd => {
+    const vrijSlots = slots.filter(s => s.tijd === tijd);
+    if (vrijSlots.length > 0) {
+      // Minstens één baan vrij op dit tijdstip
+      return { tijd, duur: 60, vrij: true, prijs: vrijSlots[0].prijs, aantalVrij: vrijSlots.length };
+    } else {
+      // Geen baan vrij = bezet
+      return { tijd, duur: 60, vrij: false, prijs: null, aantalVrij: 0 };
+    }
+  });
+
+  return compleet;
 }
 
 // ── API: /api/availability?datum=YYYY-MM-DD ───────────────────────

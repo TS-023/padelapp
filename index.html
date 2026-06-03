@@ -466,20 +466,23 @@ function maakKaartHTML(club) {
     }
     if (displaySlots.length === 0) {
       bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted);">
-        Geen vrije slots gevonden${tijd ? " rondom " + tijd : ""}.
+        Geen slots gevonden${tijd ? " rondom " + tijd : ""}.
         <a href="${club.site}" target="_blank" style="color:var(--green);">Bekijk alle tijden →</a>
       </div>`;
     } else {
       const prijsFactor = duur / 60;
       bodyHtml = `<div class="slots-wrap">
-        ${displaySlots.slice(0,20).map(s => {
+        ${displaySlots.map(s => {
           const isGezocht = tijd && s.tijd === tijd;
-          const prijs = s.prijs ? Math.round(s.prijs * prijsFactor) : null;
-          return `<div class="slot vrij${isGezocht ? " gezocht" : ""}">
+          const prijs = s.vrij && s.prijs ? Math.round(s.prijs * prijsFactor) : null;
+          const klasse = s.vrij ? "vrij" : "bezet";
+          return `<div class="slot ${klasse}${isGezocht ? " gezocht" : ""}">
             <span class="slot-time">${s.tijd}</span>
-            <span class="slot-sub">${s.duur} min</span>
-            ${prijs ? `<span class="slot-price">€${prijs}</span>` : ""}
-            <a href="${club.site}" target="_blank" class="book-pill">Boek →</a>
+            ${s.vrij
+              ? `<span class="slot-sub">${s.aantalVrij > 1 ? s.aantalVrij + " banen vrij" : "1 baan vrij"}</span>`
+              : `<span class="slot-sub">bezet</span>`}
+            ${s.vrij && prijs ? `<span class="slot-price">€${prijs}</span>` : ""}
+            ${s.vrij ? `<a href="${club.site}" target="_blank" class="book-pill">Boek →</a>` : ""}
           </div>`;
         }).join("")}
       </div>`;
