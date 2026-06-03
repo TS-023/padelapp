@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PadelSpot — Vind een baan in de regio</title>
+<title>PadelSpot — Vind een vrije padelbaan</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -12,106 +14,172 @@
   --bg: #F4F6F4; --white: #FFFFFF; --border: #E2E8E2;
   --text: #111811; --muted: #6B7F6B; --muted-light: #A8BBA8;
   --font-display: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
+  --nav-h: 56px;
+  --search-h: 130px;
 }
-body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); display: flex; flex-direction: column; }
 
-nav { display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 58px; border-bottom: 1px solid var(--border); background: var(--white); position: sticky; top: 0; z-index: 100; }
-.logo { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+/* ── NAV ── */
+nav {
+  height: var(--nav-h); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem;
+  background: var(--white); border-bottom: 1px solid var(--border);
+  z-index: 200; position: relative;
+}
+.logo { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
 .logo-icon { width: 28px; height: 28px; background: var(--green); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
 .logo span { color: var(--green); }
 .nav-right { display: flex; align-items: center; gap: 8px; }
-.btn-ghost { font-family: var(--font-body); font-size: 0.83rem; color: var(--muted); background: none; border: 1px solid var(--border); padding: 6px 14px; border-radius: 99px; cursor: pointer; transition: all 0.15s; }
+.btn-ghost { font-family: var(--font-body); font-size: 0.82rem; color: var(--muted); background: none; border: 1px solid var(--border); padding: 6px 14px; border-radius: 99px; cursor: pointer; transition: all 0.15s; }
 .btn-ghost:hover { border-color: var(--green); color: var(--green); }
-.btn-primary { font-family: var(--font-body); font-size: 0.83rem; font-weight: 500; background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; }
+.btn-primary { font-family: var(--font-body); font-size: 0.82rem; font-weight: 500; background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; transition: background 0.15s; }
 .btn-primary:hover { background: var(--green-dark); }
 
-.search-hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 2rem 2rem 1.75rem; }
-.search-hero-inner { max-width: 860px; margin: 0 auto; }
-.search-hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.4rem); letter-spacing: -1px; margin-bottom: 1.25rem; line-height: 1.1; }
-.search-hero h1 em { font-style: normal; color: var(--green); }
-
-.search-box { display: flex; background: var(--white); border: 2px solid var(--border); border-radius: 14px; overflow: visible; transition: border-color 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+/* ── SEARCH BAR ── */
+.search-bar {
+  flex-shrink: 0;
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  z-index: 150;
+}
+.search-box {
+  display: flex; gap: 0; max-width: 100%;
+  background: var(--white);
+  border: 2px solid var(--border); border-radius: 12px;
+  overflow: visible; transition: border-color 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 .search-box:focus-within { border-color: var(--green); }
-.search-field { display: flex; flex-direction: column; padding: 12px 16px; flex: 1; border-right: 1px solid var(--border); min-width: 0; position: relative; transition: background 0.15s; }
+.search-field {
+  display: flex; flex-direction: column; padding: 8px 14px; flex: 1;
+  border-right: 1px solid var(--border); min-width: 0; position: relative; transition: background 0.15s;
+}
 .search-field:hover { background: var(--bg); }
-.search-field label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 3px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-.search-field input, .search-field select { font-family: var(--font-body); font-size: 0.92rem; font-weight: 500; border: none; outline: none; background: transparent; color: var(--text); width: 100%; appearance: none; -webkit-appearance: none; cursor: pointer; }
-.search-btn { background: var(--green); color: #fff; border: none; padding: 0 24px; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; border-radius: 0 12px 12px 0; transition: background 0.15s; }
+.search-field label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 2px; display: flex; align-items: center; gap: 3px; white-space: nowrap; }
+.search-field input, .search-field select { font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; border: none; outline: none; background: transparent; color: var(--text); width: 100%; appearance: none; -webkit-appearance: none; cursor: pointer; }
+.search-btn { background: var(--green); color: #fff; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 7px; white-space: nowrap; flex-shrink: 0; border-radius: 0 10px 10px 0; transition: background 0.15s; }
 .search-btn:hover { background: var(--green-dark); }
 
-.results-bar { max-width: 860px; margin: 1.25rem auto 0.75rem; padding: 0 2rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.results-count { font-size: 0.85rem; color: var(--muted); }
-.results-count strong { color: var(--text); font-weight: 600; }
-.sort-select { margin-left: auto; padding: 6px 28px 6px 12px; border-radius: 99px; border: 1.5px solid var(--border); background: var(--white); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7F6B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; color: var(--text); font-family: var(--font-body); font-size: 0.82rem; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; }
-.filter-chip { padding: 4px 11px; border-radius: 99px; border: 1.5px solid var(--green-mid); background: var(--green-light); color: var(--green-dark); font-size: 0.73rem; font-weight: 500; }
+/* ── MAIN SPLIT VIEW ── */
+.main-split {
+  flex: 1; display: flex; overflow: hidden; min-height: 0;
+}
 
-.clubs-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 4rem; display: flex; flex-direction: column; gap: 12px; }
-.club-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
-.club-card:hover { border-color: var(--green-mid); box-shadow: 0 2px 16px rgba(29,185,84,0.07); }
-.club-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
-.club-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; flex-shrink: 0; }
+/* ── MAP PANEL ── */
+.map-panel {
+  flex: 0 0 45%; position: relative;
+  border-right: 1px solid var(--border);
+}
+#map { width: 100%; height: 100%; }
+
+/* Leaflet popup aanpassingen */
+.leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: none; }
+.leaflet-popup-content { margin: 12px 16px; font-family: var(--font-body); }
+.map-popup-name { font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; color: var(--text); margin-bottom: 4px; }
+.map-popup-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
+.map-popup-badge { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 99px; margin-bottom: 8px; }
+.map-popup-badge.groen { background: var(--green-light); color: var(--green-dark); }
+.map-popup-badge.rood { background: #FEE2E2; color: #991B1B; }
+.map-popup-badge.grijs { background: #F3F4F6; color: #6B7280; }
+.map-popup-btn { display: block; text-align: center; background: var(--green); color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: none; width: 100%; font-family: var(--font-body); }
+.map-popup-btn:hover { background: var(--green-dark); }
+
+/* Custom marker */
+.marker-icon { width: 36px; height: 36px; border-radius: 50%; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.7rem; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.25); cursor: pointer; transition: transform 0.15s; }
+.marker-icon:hover { transform: scale(1.15); }
+.marker-icon.active { transform: scale(1.2); box-shadow: 0 0 0 3px var(--green), 0 2px 8px rgba(0,0,0,0.25); }
+
+/* ── LIST PANEL ── */
+.list-panel {
+  flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+}
+
+.list-header {
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--white); position: sticky; top: 0; z-index: 10;
+}
+.results-count { font-size: 0.82rem; color: var(--muted); flex: 1; }
+.results-count strong { color: var(--text); font-weight: 600; }
+.sort-select { padding: 5px 24px 5px 10px; border-radius: 99px; border: 1.5px solid var(--border); background: var(--white); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236B7F6B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; color: var(--text); font-family: var(--font-body); font-size: 0.78rem; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; }
+
+.clubs-list { padding: 0.75rem; display: flex; flex-direction: column; gap: 8px; }
+
+/* ── CLUB CARD ── */
+.club-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; cursor: pointer; }
+.club-card:hover { border-color: var(--green-mid); box-shadow: 0 2px 12px rgba(29,185,84,0.08); }
+.club-card.selected { border-color: var(--green); box-shadow: 0 0 0 2px rgba(29,185,84,0.2); }
+.club-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.club-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
 .club-info { flex: 1; min-width: 0; }
-.club-name { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 3px; }
-.club-meta { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.club-meta-item { display: flex; align-items: center; gap: 3px; }
-.club-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-.distance-badge { font-size: 0.72rem; font-weight: 600; background: var(--bg); color: var(--muted); padding: 3px 9px; border-radius: 99px; border: 1px solid var(--border); }
-.badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.club-name { font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.club-meta { font-size: 0.7rem; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.club-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.distance-badge { font-size: 0.68rem; font-weight: 600; background: var(--bg); color: var(--muted); padding: 2px 8px; border-radius: 99px; border: 1px solid var(--border); }
+.badge { font-size: 0.67rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
 .badge.groen { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
 .badge.oranje { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
 .badge.rood { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
 .badge.grijs { background: #F3F4F6; color: #6B7280; border: 1px solid #E5E7EB; }
-.site-link { font-size: 0.73rem; color: var(--muted-light); text-decoration: none; display: flex; align-items: center; gap: 3px; transition: color 0.15s; }
+.site-link { font-size: 0.68rem; color: var(--muted-light); text-decoration: none; display: flex; align-items: center; gap: 2px; transition: color 0.15s; }
 .site-link:hover { color: var(--green); }
 
-.slots-wrap { padding: 14px 18px; display: flex; gap: 7px; flex-wrap: wrap; }
-.slot { border-radius: 10px; padding: 9px 11px; min-width: 82px; text-align: center; border: 1.5px solid transparent; transition: all 0.15s; }
+/* SLOTS */
+.slots-wrap { padding: 10px 14px; display: flex; gap: 6px; flex-wrap: wrap; }
+.slot { border-radius: 8px; padding: 7px 9px; min-width: 72px; text-align: center; border: 1.5px solid transparent; transition: all 0.15s; }
 .slot.vrij { background: var(--green-light); border-color: var(--green-mid); cursor: pointer; }
-.slot.vrij:hover { background: var(--green-mid); border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(29,185,84,0.15); }
+.slot.vrij:hover { background: var(--green-mid); border-color: var(--green); transform: translateY(-1px); }
 .slot.bezet { background: #F0F0F0; border-color: #DCDCDC; }
 .slot.gezocht { border: 2px solid var(--green) !important; box-shadow: 0 0 0 2px rgba(29,185,84,0.2) !important; }
-.slot-time { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; display: block; color: var(--text); }
+.slot-time { font-family: var(--font-display); font-size: 0.82rem; font-weight: 700; display: block; color: var(--text); }
 .slot.bezet .slot-time { color: #999; }
-.slot-sub { font-size: 0.67rem; color: var(--muted); display: block; margin-top: 1px; }
-.slot-price { font-size: 0.72rem; font-weight: 600; display: block; margin-top: 4px; color: var(--green-dark); }
-.book-pill { display: inline-block; margin-top: 5px; font-size: 0.67rem; font-weight: 600; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 99px; text-decoration: none; }
+.slot-sub { font-size: 0.62rem; color: var(--muted); display: block; margin-top: 1px; }
+.slot-price { font-size: 0.67rem; font-weight: 600; display: block; margin-top: 3px; color: var(--green-dark); }
+.book-pill { display: inline-block; margin-top: 4px; font-size: 0.62rem; font-weight: 600; background: var(--green); color: #fff; padding: 2px 7px; border-radius: 99px; text-decoration: none; }
 .book-pill:hover { background: var(--green-dark); }
-
-.no-data-wrap { padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.no-data-wrap p { font-size: 0.83rem; color: var(--muted); }
-.boek-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 600; background: var(--green); color: #fff; padding: 7px 16px; border-radius: 99px; text-decoration: none; white-space: nowrap; }
+.no-data-wrap { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.no-data-wrap p { font-size: 0.78rem; color: var(--muted); }
+.boek-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 600; background: var(--green); color: #fff; padding: 6px 14px; border-radius: 99px; text-decoration: none; white-space: nowrap; }
 .boek-link:hover { background: var(--green-dark); }
-
-.loading-wrap { padding: 24px 18px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.82rem; }
-.spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+.loading-wrap { padding: 18px 14px; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.78rem; }
+.spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; animation: pulse 1.5s infinite; }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 3px; animation: pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-.cors-banner { max-width: 860px; margin: 1rem auto 0; padding: 0 2rem; display: none; }
-.cors-banner-inner { background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 12px; padding: 12px 16px; font-size: 0.83rem; color: #92400E; display: flex; align-items: center; gap: 10px; }
-
+/* LOC SUGGESTIONS */
 .loc-suggestions { display: none; position: absolute; top: calc(100% + 2px); left: -2px; right: -2px; background: var(--white); border: 1.5px solid var(--green); border-top: none; border-radius: 0 0 10px 10px; z-index: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; }
-.loc-suggestion-item { padding: 9px 14px; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid var(--border); }
+.loc-suggestion-item { padding: 8px 14px; font-size: 0.82rem; cursor: pointer; border-bottom: 1px solid var(--border); }
 .loc-suggestion-item:last-child { border-bottom: none; }
 .loc-suggestion-item:hover { background: var(--green-light); }
-.no-results { max-width: 860px; margin: 2rem auto; padding: 2rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
 
-footer { border-top: 1px solid var(--border); background: var(--white); padding: 1.25rem 2rem; text-align: center; font-size: 0.77rem; color: var(--muted); }
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--green); }
+/* MOBILE TOGGLE */
+.mobile-toggle { display: none; }
 
-@media (max-width: 700px) {
-  .search-box { flex-direction: column; border-radius: 12px; overflow: hidden; }
-  .search-field { border-right: none; border-bottom: 1px solid var(--border); }
-  .search-btn { padding: 14px; justify-content: center; border-radius: 0 0 12px 12px; }
-  nav { padding: 0 1rem; }
-  .search-hero, .results-bar, .clubs-wrap, .cors-banner { padding-left: 1rem; padding-right: 1rem; }
+/* MOBILE */
+@media (max-width: 768px) {
+  html, body { overflow: auto; }
+  .main-split { flex-direction: column; overflow: visible; height: auto; }
+  .map-panel { flex: none; height: 280px; border-right: none; border-bottom: 1px solid var(--border); display: none; }
+  .map-panel.mobile-visible { display: block; }
+  .list-panel { overflow: visible; }
+  .search-box { flex-wrap: wrap; border-radius: 12px; }
+  .search-field { border-right: none; border-bottom: 1px solid var(--border); min-width: 45%; }
+  .search-btn { width: 100%; justify-content: center; border-radius: 0 0 10px 10px; padding: 12px; }
+  .mobile-toggle { display: flex; gap: 8px; margin-top: 0.5rem; }
+  .toggle-btn { flex: 1; padding: 7px; border: 1.5px solid var(--border); border-radius: 99px; background: var(--white); font-family: var(--font-body); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all 0.15s; }
+  .toggle-btn.active { border-color: var(--green); background: var(--green-light); color: var(--green-dark); font-weight: 600; }
 }
+
+.no-results { padding: 3rem 1.5rem; text-align: center; color: var(--muted); font-size: 0.88rem; }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="logo">
     <div class="logo-icon">
@@ -125,167 +193,250 @@ footer a:hover { color: var(--green); }
   </div>
 </nav>
 
-<div class="search-hero">
-  <div class="search-hero-inner">
-    <h1>Vind een vrije padelcourt<br><em>in jouw omgeving</em></h1>
-    <div class="search-box">
-
-      <div class="search-field" style="max-width:210px;">
-        <label>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-          Locatie
-        </label>
-        <div style="display:flex;align-items:center;gap:4px;">
-          <input type="text" id="s-locatie" placeholder="Stad of adres..." value="Haarlem" autocomplete="off"
-            oninput="onLocatieInput()" onkeydown="if(event.key==='Enter'){hideSuggestions();doSearch();}">
-          <button id="gps-btn" onclick="useGPS()" title="Gebruik mijn locatie"
-            style="background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0;padding:2px;display:flex;align-items:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
-          </button>
-        </div>
-        <div id="loc-suggestions" class="loc-suggestions"></div>
+<!-- SEARCH BAR -->
+<div class="search-bar">
+  <div class="search-box">
+    <!-- LOCATIE -->
+    <div class="search-field" style="max-width:200px;">
+      <label>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        Locatie
+      </label>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <input type="text" id="s-locatie" placeholder="Stad of adres..." value="Haarlem" autocomplete="off"
+          oninput="onLocatieInput()" onkeydown="if(event.key==='Enter'){hideSuggestions();doSearch();}">
+        <button id="gps-btn" onclick="useGPS()" title="Mijn locatie"
+          style="background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0;padding:2px;display:flex;align-items:center;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
+        </button>
       </div>
+      <div id="loc-suggestions" class="loc-suggestions"></div>
+    </div>
+    <!-- DATUM -->
+    <div class="search-field" style="max-width:150px;">
+      <label>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Datum
+      </label>
+      <input type="date" id="s-datum">
+    </div>
+    <!-- STARTTIJD -->
+    <div class="search-field" style="max-width:120px;">
+      <label>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Starttijd
+      </label>
+      <select id="s-tijd">
+        <option value="">Elke tijd</option>
+        <option value="07:00">07:00</option><option value="07:30">07:30</option>
+        <option value="08:00">08:00</option><option value="08:30">08:30</option>
+        <option value="09:00">09:00</option><option value="09:30">09:30</option>
+        <option value="10:00">10:00</option><option value="10:30">10:30</option>
+        <option value="11:00">11:00</option><option value="11:30">11:30</option>
+        <option value="12:00">12:00</option><option value="12:30">12:30</option>
+        <option value="13:00">13:00</option><option value="13:30">13:30</option>
+        <option value="14:00">14:00</option><option value="14:30">14:30</option>
+        <option value="15:00">15:00</option><option value="15:30">15:30</option>
+        <option value="16:00">16:00</option><option value="16:30">16:30</option>
+        <option value="17:00">17:00</option><option value="17:30">17:30</option>
+        <option value="18:00">18:00</option><option value="18:30">18:30</option>
+        <option value="19:00">19:00</option><option value="19:30">19:30</option>
+        <option value="20:00">20:00</option><option value="20:30">20:30</option>
+        <option value="21:00">21:00</option><option value="21:30">21:30</option>
+      </select>
+    </div>
+    <!-- DUUR -->
+    <div class="search-field" style="max-width:110px;">
+      <label>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg>
+        Duur
+      </label>
+      <select id="s-duur">
+        <option value="30">30 min</option>
+        <option value="60" selected>60 min</option>
+        <option value="90">90 min</option>
+        <option value="120">120 min</option>
+      </select>
+    </div>
+    <!-- AFSTAND -->
+    <div class="search-field" style="max-width:130px;">
+      <label>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Afstand
+      </label>
+      <select id="s-afstand">
+        <option value="5">Binnen 5 km</option>
+        <option value="10" selected>Binnen 10 km</option>
+        <option value="20">Binnen 20 km</option>
+        <option value="50">Binnen 50 km</option>
+      </select>
+    </div>
+    <button class="search-btn" onclick="doSearch()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Zoeken
+    </button>
+  </div>
+  <!-- Mobile toggle -->
+  <div class="mobile-toggle">
+    <button class="toggle-btn" id="toggle-lijst" onclick="showView('lijst')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Lijst
+    </button>
+    <button class="toggle-btn active" id="toggle-kaart" onclick="showView('kaart')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      Kaart
+    </button>
+  </div>
+</div>
 
-      <div class="search-field" style="max-width:160px;">
-        <label>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-          Datum
-        </label>
-        <input type="date" id="s-datum">
+<!-- MAIN SPLIT -->
+<div class="main-split">
+  <!-- KAART -->
+  <div class="map-panel mobile-visible" id="map-panel">
+    <div id="map"></div>
+  </div>
+
+  <!-- LIJST -->
+  <div class="list-panel" id="list-panel">
+    <div class="list-header">
+      <span class="results-count" id="results-count">Zoek een locatie om te beginnen</span>
+      <select class="sort-select" id="sort-select" onchange="sortAndRender()">
+        <option value="beschikbaar">Beschikbaar + dichtstbij</option>
+        <option value="afstand">Dichtstbijzijnde</option>
+        <option value="naam">Naam A–Z</option>
+      </select>
+    </div>
+    <div class="clubs-list" id="clubs-list">
+      <div class="no-results">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">🎾</div>
+        Voer een locatie in en klik op Zoeken om beschikbare padelbanen te vinden.
       </div>
-
-      <div class="search-field" style="max-width:130px;">
-        <label>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          Starttijd
-        </label>
-        <select id="s-tijd">
-          <option value="">Elke tijd</option>
-          <option value="07:00">07:00</option><option value="07:30">07:30</option>
-          <option value="08:00">08:00</option><option value="08:30">08:30</option>
-          <option value="09:00">09:00</option><option value="09:30">09:30</option>
-          <option value="10:00">10:00</option><option value="10:30">10:30</option>
-          <option value="11:00">11:00</option><option value="11:30">11:30</option>
-          <option value="12:00">12:00</option><option value="12:30">12:30</option>
-          <option value="13:00">13:00</option><option value="13:30">13:30</option>
-          <option value="14:00">14:00</option><option value="14:30">14:30</option>
-          <option value="15:00">15:00</option><option value="15:30">15:30</option>
-          <option value="16:00">16:00</option><option value="16:30">16:30</option>
-          <option value="17:00">17:00</option><option value="17:30">17:30</option>
-          <option value="18:00">18:00</option><option value="18:30">18:30</option>
-          <option value="19:00">19:00</option><option value="19:30">19:30</option>
-          <option value="20:00">20:00</option><option value="20:30">20:30</option>
-          <option value="21:00">21:00</option><option value="21:30">21:30</option>
-        </select>
-      </div>
-
-      <div class="search-field" style="max-width:120px;">
-        <label>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg>
-          Duur
-        </label>
-        <select id="s-duur">
-          <option value="30">30 min</option>
-          <option value="60" selected>60 min</option>
-          <option value="90">90 min</option>
-          <option value="120">120 min</option>
-        </select>
-      </div>
-
-      <div class="search-field" style="max-width:140px;">
-        <label>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          Afstand
-        </label>
-        <select id="s-afstand">
-          <option value="5">Binnen 5 km</option>
-          <option value="10" selected>Binnen 10 km</option>
-          <option value="20">Binnen 20 km</option>
-          <option value="50">Binnen 50 km</option>
-        </select>
-      </div>
-
-      <button class="search-btn" onclick="doSearch()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        Zoeken
-      </button>
     </div>
   </div>
 </div>
 
-<!-- Wordt getoond als Playtomic CORS blokkeert -->
-<div class="cors-banner" id="cors-banner">
-  <div class="cors-banner-inner">
-    ⚠️ Live data van Playtomic kon niet geladen worden (CORS blokkering). Clubs worden getoond met een directe boeklink.
-    De volgende stap is een eigen server toevoegen om dit op te lossen.
-  </div>
-</div>
-
-<div id="results-bar" class="results-bar" style="display:none">
-  <span class="results-count" id="results-count"></span>
-  <div id="active-filters" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-  <select class="sort-select" id="sort-select" onchange="sortAndRender()">
-    <option value="beschikbaar">Beschikbaar + dichtstbij</option>
-    <option value="afstand">Dichtstbijzijnde</option>
-    <option value="naam">Naam A–Z</option>
-  </select>
-</div>
-
-<div id="clubs-wrap" class="clubs-wrap"></div>
-
-<footer>
-  PadelSpot &nbsp;·&nbsp; Altijd de beste baan &nbsp;·&nbsp;
-  <a href="#">Privacy</a> &nbsp;·&nbsp;
-  <a href="#">Contact</a> &nbsp;·&nbsp;
-  <a href="#">Club aanmelden</a>
-</footer>
-
 <script>
-// ── CLUBS ─────────────────────────────────────────────────────────
-const CLUBS = [
-  {
-    id: "wepadel", name: "WePadel Haarlem", adres: "Reinaldapad 10, Haarlem",
-    km: 1.8, banen: 8, kleur: "#1DB954", bg: "#E8F9EE",
-    playtomic_id: "dd28050e-35c4-4bd0-ab58-b2f88111846d",
-    site: "https://playtomic.io/wepadel-haarlem/dd28050e-35c4-4bd0-ab58-b2f88111846d"
-  },
-  {
-    id: "padel25", name: "Padel25 Haarlem", adres: "A. Hofmanweg 16, Haarlem",
-    km: 2.3, banen: 6, kleur: "#0284C7", bg: "#E0F2FE",
-    playtomic_id: null, site: "https://padel25.nl/reserveren"
-  },
-  {
-    id: "overhout", name: "Padel Club Overhout", adres: "Tennispad 1, Haarlem",
-    km: 3.1, banen: 5, kleur: "#F59E0B", bg: "#FEF3C7",
-    playtomic_id: null, site: "https://www.padel-overhout.nl/reserveren"
-  },
-  {
-    id: "pimmulier", name: "TPV Pim Mulier", adres: "Jaap Edenlaan 9, Haarlem",
-    km: 2.9, banen: 8, kleur: "#7C3AED", bg: "#EDE9FE",
-    playtomic_id: null, site: "https://www.tvpimmulier.nl/padel"
-  },
-  {
-    id: "peakz", name: "Peakz Padel Haarlem", adres: "Haarlemmerstroom, Haarlem",
-    km: 4.2, banen: 4, kleur: "#EF4444", bg: "#FEE2E2",
-    playtomic_id: null, site: "https://www.peakzpadel.nl/reserveren"
-  },
-  {
-    id: "schoten", name: "Schoten Tennis & Padel", adres: "Schoterbos, Haarlem",
-    km: 3.8, banen: 3, kleur: "#DB2777", bg: "#FCE7F3",
-    playtomic_id: null, site: "https://www.schotentennis.nl/padel"
-  },
-];
+// ── COORDINATEN PER CLUB ───────────────────────────────────────
+const CLUB_COORDS = {
+  "wepadel":    [52.3820, 4.6274],
+  "padel25":    [52.3748, 4.6391],
+  "pimmulier":  [52.4012, 4.6201],
+  "overhout":   [52.3831, 4.6398],
+  "schoten":    [52.3953, 4.6587],
+  "peakz":      [52.3771, 4.6342],
+  "padelpoints":[52.3017, 4.6856],
+  "padelclubhfd":[52.3064, 4.6712],
+  "clubhouse":  [52.4782, 4.6601],
+};
+
+const CLUB_COLORS = {
+  "wepadel": "#1DB954", "padel25": "#0284C7", "pimmulier": "#7C3AED",
+  "overhout": "#F59E0B", "schoten": "#DB2777", "peakz": "#EF4444",
+  "padelpoints": "#059669", "padelclubhfd": "#D97706", "clubhouse": "#2563EB",
+};
 
 const STEDEN = [
   "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
   "Zandvoort","Bloemendaal","Velsen-Zuid","Halfweg","Zwanenburg","Zaandam"
 ];
 
-let clubData   = [];
+let clubData = [];
 let zoekParams = { duur: 60 };
-let corsBlocked = false;
+let kaartMarkers = {};
+let geselecteerdeClub = null;
+let kaart = null;
 
-// ── HULPFUNCTIES ──────────────────────────────────────────────────
+// ── KAART INITIALISEREN ─────────────────────────────────────────
+function initKaart() {
+  kaart = L.map('map', { zoomControl: true, attributionControl: false }).setView([52.387, 4.646], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+  }).addTo(kaart);
+  // Kleine attributie
+  L.control.attribution({ prefix: '© <a href="https://openstreetmap.org">OSM</a>' }).addTo(kaart);
+}
+
+function plaatsMarkers(clubs) {
+  // Verwijder oude markers
+  Object.values(kaartMarkers).forEach(m => kaart.removeLayer(m));
+  kaartMarkers = {};
+
+  clubs.forEach(club => {
+    const coords = CLUB_COORDS[club.id];
+    if (!coords) return;
+
+    const kleur = CLUB_COLORS[club.id] || '#1DB954';
+    const initials = club.name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
+
+    // Custom HTML marker
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="marker-icon" style="background:${kleur};" title="${club.name}">${initials}</div>`,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
+      popupAnchor: [0, -20],
+    });
+
+    const marker = L.marker(coords, { icon }).addTo(kaart);
+
+    // Popup inhoud
+    const vrijSlots = (club.slots || []).filter(s => s.vrij).length;
+    const badgeKlasse = club.bron === 'playtomic'
+      ? (vrijSlots > 0 ? 'groen' : 'rood')
+      : 'grijs';
+    const badgeTekst = club.bron === 'playtomic'
+      ? (vrijSlots > 0 ? `${vrijSlots} vrij` : 'Vol')
+      : 'Bekijk site';
+
+    marker.bindPopup(`
+      <div class="map-popup-name">${club.name}</div>
+      <div class="map-popup-meta">📍 ${club.adres} &nbsp;·&nbsp; ${club.km} km</div>
+      <span class="map-popup-badge ${badgeKlasse}">${badgeTekst}</span><br>
+      <button class="map-popup-btn" onclick="scrollNaarClub('${club.id}')">Bekijk beschikbaarheid</button>
+    `, { maxWidth: 220 });
+
+    marker.on('click', () => {
+      selecteerClub(club.id);
+      scrollNaarClub(club.id);
+    });
+
+    kaartMarkers[club.id] = marker;
+  });
+
+  // Zoom kaart naar alle markers
+  if (clubs.length > 0) {
+    const coords = clubs.map(c => CLUB_COORDS[c.id]).filter(Boolean);
+    if (coords.length > 0) {
+      kaart.fitBounds(coords, { padding: [40, 40], maxZoom: 13 });
+    }
+  }
+}
+
+function selecteerClub(id) {
+  // Reset vorige selectie
+  if (geselecteerdeClub) {
+    const oudeCard = document.getElementById('card-' + geselecteerdeClub);
+    if (oudeCard) oudeCard.classList.remove('selected');
+    const oudeMarker = kaartMarkers[geselecteerdeClub];
+    if (oudeMarker) oudeMarker.getElement()?.querySelector('.marker-icon')?.classList.remove('active');
+  }
+  geselecteerdeClub = id;
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('selected');
+  const marker = kaartMarkers[id];
+  if (marker) {
+    marker.getElement()?.querySelector('.marker-icon')?.classList.add('active');
+    marker.openPopup();
+  }
+}
+
+function scrollNaarClub(id) {
+  selecteerClub(id);
+  const card = document.getElementById('card-' + id);
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── TIJDHULPFUNCTIES ───────────────────────────────────────────
 function tijdToMins(t) { const p = t.split(":"); return parseInt(p[0])*60+parseInt(p[1]); }
 
 function isAaneengesloten(slots, startTijd, duurMins) {
@@ -298,10 +449,7 @@ function isAaneengesloten(slots, startTijd, duurMins) {
   return true;
 }
 
-// ── PLAYTOMIC API ─────────────────────────────────────────────────
-// Data wordt opgehaald via eigen backend /api/availability
-
-// ── ZOEKEN ────────────────────────────────────────────────────────
+// ── ZOEKEN ─────────────────────────────────────────────────────
 async function doSearch() {
   hideSuggestions();
   const datum   = document.getElementById("s-datum").value;
@@ -312,58 +460,41 @@ async function doSearch() {
 
   zoekParams = { locatie, datum, tijd, duur, afstand };
 
-  document.getElementById("results-bar").style.display = "flex";
-
-  const af = document.getElementById("active-filters");
-  af.innerHTML = "";
-  addChip(af, "📍 " + locatie);
-  if (datum) addChip(af, "📅 " + formatDate(datum));
-  if (tijd)  addChip(af, "🕐 " + tijd);
-  addChip(af, "⏱ " + duur + " min");
-  addChip(af, "📏 < " + afstand + " km");
-
-  // Laadscherm
-  document.getElementById("clubs-wrap").innerHTML =
-    `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen bij alle clubs...</div>`;
+  document.getElementById("clubs-list").innerHTML =
+    `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen...</div>`;
   document.getElementById("results-count").innerHTML = "Laden...";
 
   try {
     const resp = await fetch(`/api/availability?datum=${datum}`);
     if (!resp.ok) throw new Error("Server fout");
     const data = await resp.json();
-
-    // Filter op afstand
     clubData = data.filter(c => c.km <= afstand);
     smartSort();
     updateCount();
+    plaatsMarkers(clubData);
   } catch(e) {
-    document.getElementById("clubs-wrap").innerHTML =
-      `<div class="no-results">⚠️ Kon de server niet bereiken: ${e.message}</div>`;
+    document.getElementById("clubs-list").innerHTML =
+      `<div class="no-results">⚠️ Kon de server niet bereiken.</div>`;
   }
 }
 
-function addChip(container, text) {
-  const el = document.createElement("div");
-  el.className = "filter-chip";
-  el.textContent = text;
-  container.appendChild(el);
+function updateCount() {
+  let vrij = 0;
+  clubData.forEach(c => { (c.slots||[]).forEach(s => { if(s.vrij) vrij++; }); });
+  const live = clubData.filter(c => c.bron === 'playtomic').length;
+  document.getElementById("results-count").innerHTML =
+    `<strong>${clubData.length} clubs</strong> &nbsp;·&nbsp; <strong style="color:var(--green)">${vrij} vrije slots</strong>` +
+    (live > 0 ? ` &nbsp;·&nbsp; ${live} live` : "");
 }
 
-function formatDate(d) {
-  if (!d) return "";
-  const p = d.split("-");
-  const m = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
-  return p[2] + " " + m[parseInt(p[1])-1];
-}
-
-// ── SORTEREN ──────────────────────────────────────────────────────
+// ── SORTEREN ───────────────────────────────────────────────────
 function smartSort() {
   const { tijd, duur = 60 } = zoekParams;
   clubData.sort((a, b) => {
     if (tijd) {
       const score = c => {
-        if (c.bron === "playtomic" && isAaneengesloten(c.slots, tijd, duur)) return 0;
-        if (c.bron === "link" || c.bron === "fout") return 2;
+        if (c.bron === 'playtomic' && isAaneengesloten(c.slots||[], tijd, duur)) return 0;
+        if (c.bron === 'link') return 2;
         return 1;
       };
       const diff = score(a) - score(b);
@@ -381,40 +512,32 @@ function sortAndRender() {
   else if (k === "naam")    { clubData.sort((a,b) => a.name.localeCompare(b.name)); renderAll(); }
 }
 
-// ── RENDEREN ──────────────────────────────────────────────────────
-function updateCount() {
-  let vrij = 0;
-  clubData.forEach(c => { (c.slots||[]).forEach(s => { if(s.vrij) vrij++; }); });
-  const live = clubData.filter(c => c.bron === "playtomic").length;
-  document.getElementById("results-count").innerHTML =
-    `<strong>${clubData.length} clubs</strong> gevonden &nbsp;·&nbsp; `
-    + `<strong style="color:var(--green)">${vrij} vrije slots</strong>`
-    + (live > 0 ? ` &nbsp;·&nbsp; ${live} met live data` : "");
-}
-
-function buildSkeletons() {
-  const wrap = document.getElementById("clubs-wrap");
-  wrap.innerHTML = "";
-  clubData.forEach(c => {
-    const card = document.createElement("div");
-    card.className = "club-card";
-    card.id = "card-" + c.id;
-    card.innerHTML = maakKaartHTML(c);
-    wrap.appendChild(card);
-  });
-}
-
+// ── RENDEREN ───────────────────────────────────────────────────
 function renderAll() {
-  const wrap = document.getElementById("clubs-wrap");
+  const wrap = document.getElementById("clubs-list");
+  if (!clubData.length) {
+    wrap.innerHTML = `<div class="no-results">🎾 Geen clubs gevonden binnen deze afstand.</div>`;
+    return;
+  }
+  // Herorden bestaande kaarten of maak nieuwe
   clubData.forEach(c => {
     let card = document.getElementById("card-" + c.id);
     if (!card) {
       card = document.createElement("div");
       card.className = "club-card";
       card.id = "card-" + c.id;
+      card.onclick = () => {
+        selecteerClub(c.id);
+        const coords = CLUB_COORDS[c.id];
+        if (coords) kaart.setView(coords, 14, { animate: true });
+      };
     }
     card.innerHTML = maakKaartHTML(c);
     wrap.appendChild(card);
+  });
+  // Verwijder kaarten die niet meer in de lijst staan
+  document.querySelectorAll('.club-card').forEach(el => {
+    if (!clubData.find(c => 'card-'+c.id === el.id)) el.remove();
   });
 }
 
@@ -422,12 +545,11 @@ function maakKaartHTML(club) {
   const { tijd, duur = 60 } = zoekParams;
   const slots = club.slots || [];
   const initials = club.name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
+  const kleur = CLUB_COLORS[club.id] || '#1DB954';
 
   // Badge
   let badge = "";
-  if (club.bron === "laden") {
-    badge = `<span class="badge grijs">Laden...</span>`;
-  } else if (club.bron === "playtomic") {
+  if (club.bron === "playtomic") {
     if (tijd) {
       const ok = isAaneengesloten(slots, tijd, duur);
       badge = ok ? `<span class="badge groen">✓ Beschikbaar</span>`
@@ -438,24 +560,17 @@ function maakKaartHTML(club) {
             : v > 0 ? `<span class="badge oranje">${v} vrij</span>`
             :          `<span class="badge rood">Vol</span>`;
     }
-  } else if (club.bron === "fout") {
-    badge = `<span class="badge grijs">Niet beschikbaar</span>`;
   } else {
-    badge = `<span class="badge grijs">Geen live data</span>`;
+    badge = `<span class="badge grijs">Externe site</span>`;
   }
 
-  // Live indicator
   const liveHtml = club.bron === "playtomic"
-    ? `<span style="font-size:0.7rem;color:var(--green);display:flex;align-items:center;gap:3px;"><span class="live-dot"></span>Live</span>`
-    : club.bron === "laden"
-    ? `<span style="font-size:0.7rem;color:var(--muted);">Laden...</span>`
-    : `<span style="font-size:0.7rem;color:var(--muted);">Externe site</span>`;
+    ? `<span style="font-size:0.68rem;color:var(--green);display:flex;align-items:center;"><span class="live-dot"></span>Live</span>`
+    : `<span style="font-size:0.68rem;color:var(--muted);">Doorlink</span>`;
 
-  // Body
+  // Slots body
   let bodyHtml = "";
-  if (club.bron === "laden") {
-    bodyHtml = `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen...</div>`;
-  } else if (club.bron === "playtomic") {
+  if (club.bron === "playtomic") {
     let displaySlots = slots;
     if (tijd && slots.length > 0) {
       const zoekMins = tijdToMins(tijd);
@@ -465,33 +580,32 @@ function maakKaartHTML(club) {
       });
     }
     if (displaySlots.length === 0) {
-      bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted);">
-        Geen slots gevonden${tijd ? " rondom " + tijd : ""}.
-        <a href="${club.site}" target="_blank" style="color:var(--green);">Bekijk alle tijden →</a>
+      bodyHtml = `<div style="padding:10px 14px;font-size:0.78rem;color:var(--muted);">
+        Geen slots ${tijd ? "rondom " + tijd : ""}.
+        <a href="${club.site}" target="_blank" style="color:var(--green);">Alle tijden →</a>
       </div>`;
     } else {
-      const prijsFactor = duur / 60;
+      const pf = duur / 60;
       bodyHtml = `<div class="slots-wrap">
         ${displaySlots.map(s => {
           const isGezocht = tijd && s.tijd === tijd;
-          const prijs = s.vrij && s.prijs ? Math.round(s.prijs * prijsFactor) : null;
-          const klasse = s.vrij ? "vrij" : "bezet";
-          return `<div class="slot ${klasse}${isGezocht ? " gezocht" : ""}">
+          const prijs = s.vrij && s.prijs ? Math.round(s.prijs * pf) : null;
+          return `<div class="slot ${s.vrij?'vrij':'bezet'}${isGezocht?' gezocht':''}">
             <span class="slot-time">${s.tijd}</span>
             ${s.vrij
-              ? `<span class="slot-sub">${s.aantalVrij > 1 ? s.aantalVrij + " banen vrij" : "1 baan vrij"}</span>`
+              ? `${s.aantalVrij > 1 ? `<span class="slot-sub">${s.aantalVrij} banen</span>` : `<span class="slot-sub">1 baan</span>`}
+                 ${prijs ? `<span class="slot-price">€${prijs}</span>` : ""}
+                 <a href="${club.site}" target="_blank" class="book-pill">Boek →</a>`
               : `<span class="slot-sub">bezet</span>`}
-            ${s.vrij && prijs ? `<span class="slot-price">€${prijs}</span>` : ""}
-            ${s.vrij ? `<a href="${club.site}" target="_blank" class="book-pill">Boek →</a>` : ""}
           </div>`;
         }).join("")}
       </div>`;
     }
   } else {
     bodyHtml = `<div class="no-data-wrap">
-      <p>Deze club gebruikt een eigen boekingssysteem. Klik om beschikbaarheid te zien en direct te boeken.</p>
+      <p>Boek direct via de website van de club.</p>
       <a href="${club.site}" target="_blank" class="boek-link">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Bekijk beschikbaarheid
       </a>
     </div>`;
@@ -499,27 +613,23 @@ function maakKaartHTML(club) {
 
   return `
     <div class="club-head">
-      <div class="club-icon" style="background:${club.bg};color:${club.kleur};">${initials}</div>
+      <div class="club-icon" style="background:${kleur}20;color:${kleur};">${initials}</div>
       <div class="club-info">
         <div class="club-name">${club.name}</div>
         <div class="club-meta">
-          <span class="club-meta-item">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            ${club.adres}
-          </span>
-          <span class="club-meta-item">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-            ${club.banen} banen
-          </span>
+          <span>${club.adres}</span>
+          <span>·</span>
+          <span>${club.banen} banen</span>
+          <span>·</span>
           ${liveHtml}
         </div>
       </div>
       <div class="club-right">
         <span class="distance-badge">📍 ${club.km} km</span>
         ${badge}
-        <a href="${club.site}" target="_blank" class="site-link">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Website
+        <a href="${club.site}" target="_blank" class="site-link" onclick="event.stopPropagation()">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Site
         </a>
       </div>
     </div>
@@ -527,20 +637,23 @@ function maakKaartHTML(club) {
   `;
 }
 
-// ── LOCATIE ───────────────────────────────────────────────────────
+// ── LOCATIE AUTOCOMPLETE ───────────────────────────────────────
 function onLocatieInput() {
   const val = document.getElementById("s-locatie").value.toLowerCase();
   const box = document.getElementById("loc-suggestions");
   if (val.length < 1) { hideSuggestions(); return; }
   const matches = STEDEN.filter(s => s.toLowerCase().startsWith(val)).slice(0,5);
   if (!matches.length) { hideSuggestions(); return; }
-  box.innerHTML = matches.map(m => `<div class="loc-suggestion-item" onclick="pickSuggestion('${m}')">${m}</div>`).join("");
+  box.innerHTML = matches.map(m =>
+    `<div class="loc-suggestion-item" onclick="pickSuggestion('${m}')">${m}</div>`
+  ).join("");
   box.style.display = "block";
 }
 function pickSuggestion(val) { document.getElementById("s-locatie").value = val; hideSuggestions(); }
 function hideSuggestions() { document.getElementById("loc-suggestions").style.display = "none"; }
 document.addEventListener("click", e => { if (!e.target.closest(".search-field")) hideSuggestions(); });
 
+// ── GPS ────────────────────────────────────────────────────────
 function useGPS() {
   const btn = document.getElementById("gps-btn");
   const input = document.getElementById("s-locatie");
@@ -556,17 +669,36 @@ function useGPS() {
           doSearch();
         }).catch(()=>{ input.value="Haarlem"; btn.style.color="var(--muted)"; });
     },
-    ()=>{ input.value="Haarlem"; btn.style.color="var(--muted)"; alert("Kon locatie niet ophalen."); }
+    ()=>{ input.value="Haarlem"; btn.style.color="var(--muted)"; }
   );
 }
 
-// ── INIT ──────────────────────────────────────────────────────────
+// ── MOBIELE TOGGLE ─────────────────────────────────────────────
+function showView(view) {
+  const mapPanel = document.getElementById("map-panel");
+  const togKaart = document.getElementById("toggle-kaart");
+  const togLijst = document.getElementById("toggle-lijst");
+  if (view === 'kaart') {
+    mapPanel.classList.add("mobile-visible");
+    togKaart.classList.add("active");
+    togLijst.classList.remove("active");
+    setTimeout(() => kaart && kaart.invalidateSize(), 100);
+  } else {
+    mapPanel.classList.remove("mobile-visible");
+    togLijst.classList.add("active");
+    togKaart.classList.remove("active");
+  }
+}
+
+// ── INIT ───────────────────────────────────────────────────────
 function init() {
   const t = new Date();
   document.getElementById("s-datum").value =
     `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
+  initKaart();
   doSearch();
 }
+
 init();
 </script>
 </body>
