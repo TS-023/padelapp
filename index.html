@@ -7,123 +7,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --green: #1DB954;
-  --green-light: #E8F9EE;
-  --green-mid: #B6E8C8;
-  --green-dark: #148A3D;
-  --bg: #F4F6F4;
-  --white: #FFFFFF;
-  --border: #E2E8E2;
-  --text: #111811;
-  --muted: #6B7F6B;
-  --muted-light: #A8BBA8;
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
+  --green: #1DB954; --green-light: #E8F9EE; --green-mid: #B6E8C8; --green-dark: #148A3D;
+  --bg: #F4F6F4; --white: #FFFFFF; --border: #E2E8E2;
+  --text: #111811; --muted: #6B7F6B; --muted-light: #A8BBA8;
+  --font-display: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
 }
-
 body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
 
-/* NAV */
-nav {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem; height: 58px;
-  border-bottom: 1px solid var(--border);
-  background: var(--white);
-  position: sticky; top: 0; z-index: 100;
-}
+nav { display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 58px; border-bottom: 1px solid var(--border); background: var(--white); position: sticky; top: 0; z-index: 100; }
 .logo { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
 .logo-icon { width: 28px; height: 28px; background: var(--green); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
 .logo span { color: var(--green); }
 .nav-right { display: flex; align-items: center; gap: 8px; }
 .btn-ghost { font-family: var(--font-body); font-size: 0.83rem; color: var(--muted); background: none; border: 1px solid var(--border); padding: 6px 14px; border-radius: 99px; cursor: pointer; transition: all 0.15s; }
 .btn-ghost:hover { border-color: var(--green); color: var(--green); }
-.btn-primary { font-family: var(--font-body); font-size: 0.83rem; font-weight: 500; background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; transition: background 0.15s; }
+.btn-primary { font-family: var(--font-body); font-size: 0.83rem; font-weight: 500; background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; }
 .btn-primary:hover { background: var(--green-dark); }
 
-/* SEARCH HERO */
 .search-hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 2rem 2rem 1.75rem; }
 .search-hero-inner { max-width: 860px; margin: 0 auto; }
 .search-hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.4rem); letter-spacing: -1px; margin-bottom: 1.25rem; line-height: 1.1; }
 .search-hero h1 em { font-style: normal; color: var(--green); }
 
-/* SEARCH BOX */
-.search-box {
-  display: flex;
-  background: var(--white);
-  border: 2px solid var(--border);
-  border-radius: 14px;
-  overflow: visible;
-  transition: border-color 0.2s;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
+.search-box { display: flex; background: var(--white); border: 2px solid var(--border); border-radius: 14px; overflow: visible; transition: border-color 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
 .search-box:focus-within { border-color: var(--green); }
-
-.search-field {
-  display: flex; flex-direction: column;
-  padding: 12px 16px;
-  flex: 1;
-  border-right: 1px solid var(--border);
-  min-width: 0;
-  position: relative;
-  transition: background 0.15s;
-}
+.search-field { display: flex; flex-direction: column; padding: 12px 16px; flex: 1; border-right: 1px solid var(--border); min-width: 0; position: relative; transition: background 0.15s; }
 .search-field:hover { background: var(--bg); }
-
-.search-field label {
-  font-size: 0.68rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.5px;
-  color: var(--muted); margin-bottom: 3px;
-  display: flex; align-items: center; gap: 4px;
-  white-space: nowrap;
-}
-
-.search-field input,
-.search-field select {
-  font-family: var(--font-body); font-size: 0.92rem; font-weight: 500;
-  border: none; outline: none; background: transparent;
-  color: var(--text); width: 100%;
-  appearance: none; -webkit-appearance: none; cursor: pointer;
-}
-.search-field select option { color: var(--text); }
-
-.search-btn {
-  background: var(--green); color: #fff; border: none;
-  padding: 0 24px; cursor: pointer;
-  font-family: var(--font-display); font-weight: 700; font-size: 0.9rem;
-  display: flex; align-items: center; gap: 8px;
-  transition: background 0.15s; white-space: nowrap; flex-shrink: 0;
-  border-radius: 0 12px 12px 0;
-}
+.search-field label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 3px; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.search-field input, .search-field select { font-family: var(--font-body); font-size: 0.92rem; font-weight: 500; border: none; outline: none; background: transparent; color: var(--text); width: 100%; appearance: none; -webkit-appearance: none; cursor: pointer; }
+.search-btn { background: var(--green); color: #fff; border: none; padding: 0 24px; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; border-radius: 0 12px 12px 0; transition: background 0.15s; }
 .search-btn:hover { background: var(--green-dark); }
 
-/* RESULTS BAR */
 .results-bar { max-width: 860px; margin: 1.25rem auto 0.75rem; padding: 0 2rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .results-count { font-size: 0.85rem; color: var(--muted); }
 .results-count strong { color: var(--text); font-weight: 600; }
+.sort-select { margin-left: auto; padding: 6px 28px 6px 12px; border-radius: 99px; border: 1.5px solid var(--border); background: var(--white); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7F6B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; color: var(--text); font-family: var(--font-body); font-size: 0.82rem; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; }
+.filter-chip { padding: 4px 11px; border-radius: 99px; border: 1.5px solid var(--green-mid); background: var(--green-light); color: var(--green-dark); font-size: 0.73rem; font-weight: 500; }
 
-.sort-select {
-  margin-left: auto; padding: 6px 28px 6px 12px; border-radius: 99px;
-  border: 1.5px solid var(--border); background: var(--white);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7F6B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 10px center;
-  color: var(--text); font-family: var(--font-body); font-size: 0.82rem;
-  cursor: pointer; outline: none; appearance: none; -webkit-appearance: none;
-}
-
-.filter-chip {
-  padding: 4px 11px; border-radius: 99px;
-  border: 1.5px solid var(--green-mid); background: var(--green-light);
-  color: var(--green-dark); font-size: 0.73rem; font-weight: 500;
-}
-
-/* CLUBS */
 .clubs-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 4rem; display: flex; flex-direction: column; gap: 12px; }
-
 .club-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
 .club-card:hover { border-color: var(--green-mid); box-shadow: 0 2px 16px rgba(29,185,84,0.07); }
-
 .club-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
 .club-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; flex-shrink: 0; }
 .club-info { flex: 1; min-width: 0; }
@@ -131,53 +55,47 @@ nav {
 .club-meta { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .club-meta-item { display: flex; align-items: center; gap: 3px; }
 .club-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-
 .distance-badge { font-size: 0.72rem; font-weight: 600; background: var(--bg); color: var(--muted); padding: 3px 9px; border-radius: 99px; border: 1px solid var(--border); }
-
 .badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
 .badge.groen { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
 .badge.oranje { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
 .badge.rood { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
-
+.badge.grijs { background: #F3F4F6; color: #6B7280; border: 1px solid #E5E7EB; }
 .site-link { font-size: 0.73rem; color: var(--muted-light); text-decoration: none; display: flex; align-items: center; gap: 3px; transition: color 0.15s; }
 .site-link:hover { color: var(--green); }
 
-/* SLOTS */
 .slots-wrap { padding: 14px 18px; display: flex; gap: 7px; flex-wrap: wrap; }
-
 .slot { border-radius: 10px; padding: 9px 11px; min-width: 82px; text-align: center; border: 1.5px solid transparent; transition: all 0.15s; }
-
-/* Vrij = lichtgroen */
 .slot.vrij { background: var(--green-light); border-color: var(--green-mid); cursor: pointer; }
 .slot.vrij:hover { background: var(--green-mid); border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(29,185,84,0.15); }
-
-/* Bezet = grijs */
-.slot.bezet { background: #F0F0F0; border-color: #DCDCDC; cursor: default; }
-
-/* Gezochte tijd = groene rand, overschrijft andere stijlen */
+.slot.bezet { background: #F0F0F0; border-color: #DCDCDC; }
 .slot.gezocht { border: 2px solid var(--green) !important; box-shadow: 0 0 0 2px rgba(29,185,84,0.2) !important; }
-.slot.bezet.gezocht { opacity: 1; }
-
 .slot-time { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; display: block; color: var(--text); }
 .slot.bezet .slot-time { color: #999; }
 .slot-sub { font-size: 0.67rem; color: var(--muted); display: block; margin-top: 1px; }
-.slot.bezet .slot-sub { color: #AAA; }
 .slot-price { font-size: 0.72rem; font-weight: 600; display: block; margin-top: 4px; color: var(--green-dark); }
 .book-pill { display: inline-block; margin-top: 5px; font-size: 0.67rem; font-weight: 600; background: var(--green); color: #fff; padding: 3px 8px; border-radius: 99px; text-decoration: none; }
 .book-pill:hover { background: var(--green-dark); }
 
-/* LOADING */
+.no-data-wrap { padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.no-data-wrap p { font-size: 0.83rem; color: var(--muted); }
+.boek-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 600; background: var(--green); color: #fff; padding: 7px 16px; border-radius: 99px; text-decoration: none; white-space: nowrap; }
+.boek-link:hover { background: var(--green-dark); }
+
 .loading-wrap { padding: 24px 18px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.82rem; }
 .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-.no-results { max-width: 860px; margin: 2rem auto; padding: 2rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
+.cors-banner { max-width: 860px; margin: 1rem auto 0; padding: 0 2rem; display: none; }
+.cors-banner-inner { background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 12px; padding: 12px 16px; font-size: 0.83rem; color: #92400E; display: flex; align-items: center; gap: 10px; }
 
-/* SUGGESTIONS DROPDOWN */
 .loc-suggestions { display: none; position: absolute; top: calc(100% + 2px); left: -2px; right: -2px; background: var(--white); border: 1.5px solid var(--green); border-top: none; border-radius: 0 0 10px 10px; z-index: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; }
 .loc-suggestion-item { padding: 9px 14px; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid var(--border); }
 .loc-suggestion-item:last-child { border-bottom: none; }
 .loc-suggestion-item:hover { background: var(--green-light); }
+.no-results { max-width: 860px; margin: 2rem auto; padding: 2rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
 
 footer { border-top: 1px solid var(--border); background: var(--white); padding: 1.25rem 2rem; text-align: center; font-size: 0.77rem; color: var(--muted); }
 footer a { color: var(--muted); text-decoration: none; }
@@ -188,9 +106,7 @@ footer a:hover { color: var(--green); }
   .search-field { border-right: none; border-bottom: 1px solid var(--border); }
   .search-btn { padding: 14px; justify-content: center; border-radius: 0 0 12px 12px; }
   nav { padding: 0 1rem; }
-  .search-hero, .results-bar, .clubs-wrap { padding-left: 1rem; padding-right: 1rem; }
-  .club-head { flex-wrap: wrap; }
-  .club-right { flex-direction: row; flex-wrap: wrap; justify-content: flex-end; }
+  .search-hero, .results-bar, .clubs-wrap, .cors-banner { padding-left: 1rem; padding-right: 1rem; }
 }
 </style>
 </head>
@@ -214,18 +130,14 @@ footer a:hover { color: var(--green); }
     <h1>Vind een vrije padelcourt<br><em>in jouw omgeving</em></h1>
     <div class="search-box">
 
-      <!-- LOCATIE -->
       <div class="search-field" style="max-width:210px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
           Locatie
         </label>
         <div style="display:flex;align-items:center;gap:4px;">
-          <input type="text" id="s-locatie" placeholder="Stad of adres..." value="Haarlem"
-            autocomplete="off"
-            oninput="onLocatieInput()"
-            onkeydown="if(event.key==='Enter'){hideSuggestions();doSearch();}"
-          >
+          <input type="text" id="s-locatie" placeholder="Stad of adres..." value="Haarlem" autocomplete="off"
+            oninput="onLocatieInput()" onkeydown="if(event.key==='Enter'){hideSuggestions();doSearch();}">
           <button id="gps-btn" onclick="useGPS()" title="Gebruik mijn locatie"
             style="background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0;padding:2px;display:flex;align-items:center;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
@@ -234,7 +146,6 @@ footer a:hover { color: var(--green); }
         <div id="loc-suggestions" class="loc-suggestions"></div>
       </div>
 
-      <!-- DATUM -->
       <div class="search-field" style="max-width:160px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
@@ -243,7 +154,6 @@ footer a:hover { color: var(--green); }
         <input type="date" id="s-datum">
       </div>
 
-      <!-- STARTTIJD -->
       <div class="search-field" style="max-width:130px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -269,7 +179,6 @@ footer a:hover { color: var(--green); }
         </select>
       </div>
 
-      <!-- DUUR -->
       <div class="search-field" style="max-width:120px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg>
@@ -283,7 +192,6 @@ footer a:hover { color: var(--green); }
         </select>
       </div>
 
-      <!-- AFSTAND -->
       <div class="search-field" style="max-width:140px;">
         <label>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
@@ -302,6 +210,14 @@ footer a:hover { color: var(--green); }
         Zoeken
       </button>
     </div>
+  </div>
+</div>
+
+<!-- Wordt getoond als Playtomic CORS blokkeert -->
+<div class="cors-banner" id="cors-banner">
+  <div class="cors-banner-inner">
+    ⚠️ Live data van Playtomic kon niet geladen worden (CORS blokkering). Clubs worden getoond met een directe boeklink.
+    De volgende stap is een eigen server toevoegen om dit op te lossen.
   </div>
 </div>
 
@@ -325,94 +241,105 @@ footer a:hover { color: var(--green); }
 </footer>
 
 <script>
-// ── DATA ─────────────────────────────────────────────────────────
-const ALL_CLUBS = [
-  { id:"ph",   name:"Padel Haarlem",            adres:"Sportlaan 12",           km:1.2,  banen:4, kleur:"#1DB954", bg:"#E8F9EE", site:"https://padelhaarlem.nl" },
-  { id:"rdh",  name:"Racketclub De Hout",        adres:"Bosch en Vaartlaan 20",  km:2.1,  banen:5, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://racketclub-dehout.nl" },
-  { id:"hpt",  name:"Haarlem Padel & Tennis",    adres:"Waarderhaven 3",         km:2.8,  banen:6, kleur:"#0284C7", bg:"#E0F2FE", site:"https://haarlempadel.nl" },
-  { id:"ps",   name:"Padelpark Schalkwijk",       adres:"Schalkwijkerstraat 55",  km:3.4,  banen:3, kleur:"#F59E0B", bg:"#FEF3C7", site:"https://padelpark-haarlem.nl" },
-  { id:"spn",  name:"Sport & Padelclub Noord",    adres:"Europaweg 88",           km:4.1,  banen:4, kleur:"#EF4444", bg:"#FEE2E2", site:"https://sportclubhaarlem.nl" },
-  { id:"phe",  name:"Padelclub Heemstede",        adres:"Cruquiusweg 10",         km:5.3,  banen:3, kleur:"#DB2777", bg:"#FCE7F3", site:"https://padelheemstede.nl" },
-  { id:"znd",  name:"Zandvoort Beach Padel",      adres:"Burg. v. Fenemaplein 1", km:9.8,  banen:3, kleur:"#F97316", bg:"#FFEDD5", site:"https://zandvoortpadel.nl" },
-  { id:"hfd",  name:"Hoofddorp Padel Center",     adres:"Hoofdweg 200",           km:11.8, banen:6, kleur:"#D97706", bg:"#FEF3C7", site:"https://hoofddorppadel.nl" },
-  { id:"bev",  name:"Padel Beverwijk",            adres:"Breestraat 40",          km:14.2, banen:4, kleur:"#059669", bg:"#D1FAE5", site:"https://padelbeverwijk.nl" },
-  { id:"ams1", name:"Padel Amsterdam West",       adres:"Lelylaan 88",            km:19.4, banen:8, kleur:"#DC2626", bg:"#FEE2E2", site:"https://padelamsterdam.nl" },
-  { id:"ams2", name:"Amsterdam Padel Club Noord", adres:"Buiksloterweg 12",       km:22.1, banen:5, kleur:"#2563EB", bg:"#DBEAFE", site:"https://apcnoord.nl" },
-  { id:"alk",  name:"Padel Alkmaar",              adres:"Geestersingel 4",        km:28.6, banen:4, kleur:"#7C3AED", bg:"#EDE9FE", site:"https://padelalkmaar.nl" },
-];
-
-const TIJDEN = [
-  "07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30",
-  "11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30",
-  "15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30",
-  "19:00","19:30","20:00","20:30","21:00","21:30","22:00"
+// ── CLUBS ─────────────────────────────────────────────────────────
+const CLUBS = [
+  {
+    id: "wepadel", name: "WePadel Haarlem", adres: "Reinaldapad 10, Haarlem",
+    km: 1.8, banen: 8, kleur: "#1DB954", bg: "#E8F9EE",
+    playtomic_id: "dd28050e-35c4-4bd0-ab58-b2f88111846d",
+    site: "https://playtomic.io/wepadel-haarlem/dd28050e-35c4-4bd0-ab58-b2f88111846d"
+  },
+  {
+    id: "padel25", name: "Padel25 Haarlem", adres: "A. Hofmanweg 16, Haarlem",
+    km: 2.3, banen: 6, kleur: "#0284C7", bg: "#E0F2FE",
+    playtomic_id: null, site: "https://padel25.nl/reserveren"
+  },
+  {
+    id: "overhout", name: "Padel Club Overhout", adres: "Tennispad 1, Haarlem",
+    km: 3.1, banen: 5, kleur: "#F59E0B", bg: "#FEF3C7",
+    playtomic_id: null, site: "https://www.padel-overhout.nl/reserveren"
+  },
+  {
+    id: "pimmulier", name: "TPV Pim Mulier", adres: "Jaap Edenlaan 9, Haarlem",
+    km: 2.9, banen: 8, kleur: "#7C3AED", bg: "#EDE9FE",
+    playtomic_id: null, site: "https://www.tvpimmulier.nl/padel"
+  },
+  {
+    id: "peakz", name: "Peakz Padel Haarlem", adres: "Haarlemmerstroom, Haarlem",
+    km: 4.2, banen: 4, kleur: "#EF4444", bg: "#FEE2E2",
+    playtomic_id: null, site: "https://www.peakzpadel.nl/reserveren"
+  },
+  {
+    id: "schoten", name: "Schoten Tennis & Padel", adres: "Schoterbos, Haarlem",
+    km: 3.8, banen: 3, kleur: "#DB2777", bg: "#FCE7F3",
+    playtomic_id: null, site: "https://www.schotentennis.nl/padel"
+  },
 ];
 
 const STEDEN = [
   "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
-  "Zandvoort","Bloemendaal","Velsen-Zuid","Velserbroek","Spaarndam",
-  "Halfweg","Zwanenburg","Badhoevedorp","Diemen","Zaandam","Purmerend"
+  "Zandvoort","Bloemendaal","Velsen-Zuid","Halfweg","Zwanenburg","Zaandam"
 ];
 
-let currentClubs = [];
-let slotsData    = {};
-let loadingSet   = new Set();
-let searchParams = { duur: 60 };
+let clubData   = [];
+let zoekParams = { duur: 60 };
+let corsBlocked = false;
 
 // ── HULPFUNCTIES ──────────────────────────────────────────────────
-function tijdToMins(t) {
-  const parts = t.split(":");
-  return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-}
+function tijdToMins(t) { const p = t.split(":"); return parseInt(p[0])*60+parseInt(p[1]); }
 
-function seedRand(seed) {
-  let s = seed;
-  return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
-}
-
-function generateSlots(clubId, dateStr) {
-  const dateSeed = dateStr ? dateStr.replace(/-/g, "") : "20260603";
-  const rand = seedRand(
-    clubId.split("").reduce((a, c) => a + c.charCodeAt(0), 0) + parseInt(dateSeed) % 9999
-  );
-  const club = ALL_CLUBS.find(c => c.id === clubId);
-  return TIJDEN.map(tijd => {
-    const baan      = Math.floor(rand() * club.banen) + 1;
-    const vrij      = rand() > 0.50;
-    const basePrijs = [10, 11, 12, 12, 13, 14, 15][Math.floor(rand() * 7)];
-    return { tijd, baan, vrij, basePrijs };
-  });
-}
-
-// Controleer of de gezochte tijd + duur aaneengesloten vrij is
 function isAaneengesloten(slots, startTijd, duurMins) {
-  const aantalSlots = duurMins / 30;
-  const startMins   = tijdToMins(startTijd);
-  for (let i = 0; i < aantalSlots; i++) {
-    const nodig = startMins + i * 30;
-    const slot  = slots.find(s => tijdToMins(s.tijd) === nodig);
-    if (!slot || !slot.vrij) return false;
+  const nodig = duurMins / 30;
+  const start = tijdToMins(startTijd);
+  for (let i = 0; i < nodig; i++) {
+    const s = slots.find(sl => tijdToMins(sl.tijd) === start + i*30);
+    if (!s || !s.vrij) return false;
   }
   return true;
 }
 
+// ── PLAYTOMIC API ─────────────────────────────────────────────────
+async function fetchPlaytomic(tenantId, datum) {
+  const startMin = `${datum}T00:00:00`;
+  const startMax = `${datum}T23:59:59`;
+  const url = `https://api.playtomic.io/v1/availability?sport_id=PADEL&start_min=${encodeURIComponent(startMin)}&start_max=${encodeURIComponent(startMax)}&tenant_id=${tenantId}`;
+
+  const resp = await fetch(url, {
+    headers: { "Accept": "application/json" }
+  });
+
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  const data = await resp.json();
+
+  // Verwerk Playtomic response naar onze slot-structuur
+  const slots = [];
+  if (Array.isArray(data)) {
+    data.forEach(item => {
+      if (item.start_time) {
+        const tijd = item.start_time.substring(11, 16);
+        const duurMin = item.duration ? Math.round(item.duration / 60) : 60;
+        const prijs = item.price ? Math.round(item.price / 100) : null;
+        slots.push({ tijd, duur: duurMin, vrij: true, prijs });
+      }
+    });
+  }
+  return slots;
+}
+
 // ── ZOEKEN ────────────────────────────────────────────────────────
-function doSearch() {
+async function doSearch() {
   hideSuggestions();
-  const locatie = document.getElementById("s-locatie").value.trim();
   const datum   = document.getElementById("s-datum").value;
   const tijd    = document.getElementById("s-tijd").value;
   const duur    = parseInt(document.getElementById("s-duur").value);
   const afstand = parseInt(document.getElementById("s-afstand").value);
+  const locatie = document.getElementById("s-locatie").value.trim();
 
-  searchParams = { locatie, datum, tijd, duur, afstand };
+  zoekParams = { locatie, datum, tijd, duur, afstand };
 
-  currentClubs = ALL_CLUBS.filter(c => c.km <= afstand);
-
-  // Resultaten-balk tonen
   document.getElementById("results-bar").style.display = "flex";
+  document.getElementById("cors-banner").style.display = "none";
 
-  // Filter-chips
   const af = document.getElementById("active-filters");
   af.innerHTML = "";
   addChip(af, "📍 " + locatie);
@@ -421,11 +348,39 @@ function doSearch() {
   addChip(af, "⏱ " + duur + " min");
   addChip(af, "📏 < " + afstand + " km");
 
-  // Skeletten bouwen en daarna data ophalen
+  // Filter op afstand, bouw skeletons
+  clubData = CLUBS.filter(c => c.km <= afstand).map(c => ({
+    ...c, slots: [], bron: c.playtomic_id ? "laden" : "link"
+  }));
+
   buildSkeletons();
-  slotsData  = {};
-  loadingSet = new Set(currentClubs.map(c => c.id));
-  currentClubs.forEach(c => fetchClub(c, datum));
+  document.getElementById("results-count").innerHTML = "Laden...";
+
+  // Haal Playtomic data op voor clubs die het ondersteunen
+  const playtomic = clubData.filter(c => c.playtomic_id);
+  let corsError = false;
+
+  await Promise.all(playtomic.map(async club => {
+    try {
+      const slots = await fetchPlaytomic(club.playtomic_id, datum);
+      club.slots = slots;
+      club.bron  = "playtomic";
+    } catch(e) {
+      console.warn(`${club.name} Playtomic fout:`, e.message);
+      club.bron  = "fout";
+      club.slots = [];
+      if (e.message.includes("Failed to fetch") || e.message.includes("NetworkError")) {
+        corsError = true;
+      }
+    }
+  }));
+
+  if (corsError) {
+    document.getElementById("cors-banner").style.display = "block";
+  }
+
+  smartSort();
+  updateCount();
 }
 
 function addChip(container, text) {
@@ -437,29 +392,23 @@ function addChip(container, text) {
 
 function formatDate(d) {
   if (!d) return "";
-  const parts  = d.split("-");
-  const months = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
-  return parts[2] + " " + months[parseInt(parts[1]) - 1];
-}
-
-// ── OPHALEN ───────────────────────────────────────────────────────
-async function fetchClub(club, datum) {
-  await new Promise(r => setTimeout(r, 300 + Math.random() * 900));
-  slotsData[club.id] = generateSlots(club.id, datum);
-  loadingSet.delete(club.id);
-  // Hersorteren en opnieuw renderen zodra data er is
-  smartSort();
-  updateCount();
+  const p = d.split("-");
+  const m = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+  return p[2] + " " + m[parseInt(p[1])-1];
 }
 
 // ── SORTEREN ──────────────────────────────────────────────────────
 function smartSort() {
-  const { tijd, duur = 60 } = searchParams;
-  currentClubs.sort((a, b) => {
+  const { tijd, duur = 60 } = zoekParams;
+  clubData.sort((a, b) => {
     if (tijd) {
-      const aOk = slotsData[a.id] ? (isAaneengesloten(slotsData[a.id], tijd, duur) ? 0 : 1) : 2;
-      const bOk = slotsData[b.id] ? (isAaneengesloten(slotsData[b.id], tijd, duur) ? 0 : 1) : 2;
-      if (aOk !== bOk) return aOk - bOk;
+      const score = c => {
+        if (c.bron === "playtomic" && isAaneengesloten(c.slots, tijd, duur)) return 0;
+        if (c.bron === "link" || c.bron === "fout") return 2;
+        return 1;
+      };
+      const diff = score(a) - score(b);
+      if (diff !== 0) return diff;
     }
     return a.km - b.km;
   });
@@ -467,34 +416,30 @@ function smartSort() {
 }
 
 function sortAndRender() {
-  const keuze = document.getElementById("sort-select").value;
-  if (keuze === "beschikbaar") smartSort();
-  else if (keuze === "afstand") { currentClubs.sort((a, b) => a.km - b.km); renderAll(); }
-  else if (keuze === "naam")    { currentClubs.sort((a, b) => a.name.localeCompare(b.name)); renderAll(); }
+  const k = document.getElementById("sort-select").value;
+  if (k === "beschikbaar") smartSort();
+  else if (k === "afstand") { clubData.sort((a,b) => a.km - b.km); renderAll(); }
+  else if (k === "naam")    { clubData.sort((a,b) => a.name.localeCompare(b.name)); renderAll(); }
 }
 
 // ── RENDEREN ──────────────────────────────────────────────────────
 function updateCount() {
-  let totalVrij = 0;
-  currentClubs.forEach(c => {
-    (slotsData[c.id] || []).forEach(s => { if (s.vrij) totalVrij++; });
-  });
+  let vrij = 0;
+  clubData.forEach(c => { (c.slots||[]).forEach(s => { if(s.vrij) vrij++; }); });
+  const live = clubData.filter(c => c.bron === "playtomic").length;
   document.getElementById("results-count").innerHTML =
-    `<strong>${currentClubs.length} clubs</strong> gevonden &nbsp;·&nbsp; <strong style="color:var(--green)">${totalVrij} vrije slots</strong>`;
+    `<strong>${clubData.length} clubs</strong> gevonden &nbsp;·&nbsp; `
+    + `<strong style="color:var(--green)">${vrij} vrije slots</strong>`
+    + (live > 0 ? ` &nbsp;·&nbsp; ${live} met live data` : "");
 }
 
-// Bouw de lege kaart-skeletten meteen zodat de volgorde stabiel is tijdens het laden
 function buildSkeletons() {
   const wrap = document.getElementById("clubs-wrap");
   wrap.innerHTML = "";
-  if (currentClubs.length === 0) {
-    wrap.innerHTML = `<div class="no-results">🎾 Geen clubs gevonden binnen deze afstand. Probeer een groter bereik.</div>`;
-    return;
-  }
-  currentClubs.forEach(c => {
+  clubData.forEach(c => {
     const card = document.createElement("div");
     card.className = "club-card";
-    card.id = "club-" + c.id;
+    card.id = "card-" + c.id;
     card.innerHTML = maakKaartHTML(c);
     wrap.appendChild(card);
   });
@@ -502,77 +447,91 @@ function buildSkeletons() {
 
 function renderAll() {
   const wrap = document.getElementById("clubs-wrap");
-  // Herorden de kaarten in de DOM op basis van currentClubs volgorde
-  currentClubs.forEach(c => {
-    const card = document.getElementById("club-" + c.id);
-    if (card) {
-      card.innerHTML = maakKaartHTML(c);
-      wrap.appendChild(card); // verplaatst naar einde = nieuwe volgorde
+  clubData.forEach(c => {
+    let card = document.getElementById("card-" + c.id);
+    if (!card) {
+      card = document.createElement("div");
+      card.className = "club-card";
+      card.id = "card-" + c.id;
     }
+    card.innerHTML = maakKaartHTML(c);
+    wrap.appendChild(card);
   });
 }
 
 function maakKaartHTML(club) {
-  const isLaden     = loadingSet.has(club.id);
-  const slots       = slotsData[club.id] || [];
-  const { tijd, duur = 60 } = searchParams;
-  const prijsFactor = duur / 60;
-  const initials    = club.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+  const { tijd, duur = 60 } = zoekParams;
+  const slots = club.slots || [];
+  const initials = club.name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
 
-  // Badge bepalen
-  let badgeHtml = "";
-  if (!isLaden && slots.length > 0) {
+  // Badge
+  let badge = "";
+  if (club.bron === "laden") {
+    badge = `<span class="badge grijs">Laden...</span>`;
+  } else if (club.bron === "playtomic") {
     if (tijd) {
       const ok = isAaneengesloten(slots, tijd, duur);
-      badgeHtml = ok
-        ? `<span class="badge groen">✓ Beschikbaar</span>`
-        : `<span class="badge rood">Niet beschikbaar</span>`;
+      badge = ok ? `<span class="badge groen">✓ Beschikbaar</span>`
+                 : `<span class="badge rood">Niet beschikbaar</span>`;
     } else {
-      const aantalVrij = slots.filter(s => s.vrij).length;
-      if      (aantalVrij > 4) badgeHtml = `<span class="badge groen">${aantalVrij} vrij</span>`;
-      else if (aantalVrij > 0) badgeHtml = `<span class="badge oranje">${aantalVrij} vrij</span>`;
-      else                     badgeHtml = `<span class="badge rood">Vol</span>`;
+      const v = slots.filter(s => s.vrij).length;
+      badge = v > 4 ? `<span class="badge groen">${v} vrij</span>`
+            : v > 0 ? `<span class="badge oranje">${v} vrij</span>`
+            :          `<span class="badge rood">Vol</span>`;
     }
-  }
-
-  // Slots bepalen om te tonen
-  let displaySlots = slots;
-  if (tijd && slots.length > 0) {
-    const zoekMins = tijdToMins(tijd);
-    displaySlots = slots.filter(s => {
-      const diff = tijdToMins(s.tijd) - zoekMins;
-      return diff >= 0 && diff <= 120;
-    });
-  }
-
-  // Body HTML
-  let bodyHtml = "";
-  if (isLaden) {
-    bodyHtml = `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen...</div>`;
-  } else if (displaySlots.length === 0 && tijd) {
-    bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted);">
-      Geen slots rondom ${tijd} —
-      <button onclick="clearTijdFilter()" style="background:none;border:none;color:var(--green);cursor:pointer;font-size:0.82rem;text-decoration:underline;">toon alle tijden</button>
-    </div>`;
-  } else if (displaySlots.length === 0) {
-    bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted);">Geen slots beschikbaar.</div>`;
+  } else if (club.bron === "fout") {
+    badge = `<span class="badge grijs">Niet beschikbaar</span>`;
   } else {
-    bodyHtml = `<div class="slots-wrap">
-      ${displaySlots.map(s => {
-        const isGezocht  = tijd && s.tijd === tijd;
-        const kanBoeken  = s.vrij && isAaneengesloten(slots, s.tijd, duur);
-        const totalPrijs = Math.round(s.basePrijs * prijsFactor);
-        const klasse     = kanBoeken ? "vrij" : "bezet";
-        const gezochtKl  = isGezocht ? " gezocht" : "";
-        return `<div class="slot ${klasse}${gezochtKl}">
-          <span class="slot-time">${s.tijd}</span>
-          <span class="slot-sub">Baan ${s.baan}</span>
-          ${kanBoeken
-            ? `<span class="slot-price">€${totalPrijs}</span><a href="${club.site}" target="_blank" class="book-pill">Boek →</a>`
-            : `<span class="slot-sub" style="margin-top:3px;">bezet</span>`
-          }
-        </div>`;
-      }).join("")}
+    badge = `<span class="badge grijs">Geen live data</span>`;
+  }
+
+  // Live indicator
+  const liveHtml = club.bron === "playtomic"
+    ? `<span style="font-size:0.7rem;color:var(--green);display:flex;align-items:center;gap:3px;"><span class="live-dot"></span>Live</span>`
+    : club.bron === "laden"
+    ? `<span style="font-size:0.7rem;color:var(--muted);">Laden...</span>`
+    : `<span style="font-size:0.7rem;color:var(--muted);">Externe site</span>`;
+
+  // Body
+  let bodyHtml = "";
+  if (club.bron === "laden") {
+    bodyHtml = `<div class="loading-wrap"><div class="spinner"></div>Beschikbaarheid ophalen...</div>`;
+  } else if (club.bron === "playtomic") {
+    let displaySlots = slots;
+    if (tijd && slots.length > 0) {
+      const zoekMins = tijdToMins(tijd);
+      displaySlots = slots.filter(s => {
+        const diff = tijdToMins(s.tijd) - zoekMins;
+        return diff >= 0 && diff <= 120;
+      });
+    }
+    if (displaySlots.length === 0) {
+      bodyHtml = `<div style="padding:14px 18px;font-size:0.82rem;color:var(--muted);">
+        Geen vrije slots gevonden${tijd ? " rondom " + tijd : ""}.
+        <a href="${club.site}" target="_blank" style="color:var(--green);">Bekijk alle tijden →</a>
+      </div>`;
+    } else {
+      const prijsFactor = duur / 60;
+      bodyHtml = `<div class="slots-wrap">
+        ${displaySlots.slice(0,20).map(s => {
+          const isGezocht = tijd && s.tijd === tijd;
+          const prijs = s.prijs ? Math.round(s.prijs * prijsFactor) : null;
+          return `<div class="slot vrij${isGezocht ? " gezocht" : ""}">
+            <span class="slot-time">${s.tijd}</span>
+            <span class="slot-sub">${s.duur} min</span>
+            ${prijs ? `<span class="slot-price">€${prijs}</span>` : ""}
+            <a href="${club.site}" target="_blank" class="book-pill">Boek →</a>
+          </div>`;
+        }).join("")}
+      </div>`;
+    }
+  } else {
+    bodyHtml = `<div class="no-data-wrap">
+      <p>Deze club gebruikt een eigen boekingssysteem. Klik om beschikbaarheid te zien en direct te boeken.</p>
+      <a href="${club.site}" target="_blank" class="boek-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Bekijk beschikbaarheid
+      </a>
     </div>`;
   }
 
@@ -590,11 +549,12 @@ function maakKaartHTML(club) {
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             ${club.banen} banen
           </span>
+          ${liveHtml}
         </div>
       </div>
       <div class="club-right">
         <span class="distance-badge">📍 ${club.km} km</span>
-        ${badgeHtml}
+        ${badge}
         <a href="${club.site}" target="_blank" class="site-link">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           Website
@@ -605,82 +565,46 @@ function maakKaartHTML(club) {
   `;
 }
 
-function clearTijdFilter() {
-  document.getElementById("s-tijd").value = "";
-  searchParams.tijd = "";
-  renderAll();
-}
-
-// ── LOCATIE AUTOCOMPLETE ──────────────────────────────────────────
+// ── LOCATIE ───────────────────────────────────────────────────────
 function onLocatieInput() {
   const val = document.getElementById("s-locatie").value.toLowerCase();
   const box = document.getElementById("loc-suggestions");
   if (val.length < 1) { hideSuggestions(); return; }
-  const matches = STEDEN.filter(s => s.toLowerCase().startsWith(val)).slice(0, 5);
+  const matches = STEDEN.filter(s => s.toLowerCase().startsWith(val)).slice(0,5);
   if (!matches.length) { hideSuggestions(); return; }
-  box.innerHTML = matches.map(m =>
-    `<div class="loc-suggestion-item" onclick="pickSuggestion('${m}')">${m}</div>`
-  ).join("");
+  box.innerHTML = matches.map(m => `<div class="loc-suggestion-item" onclick="pickSuggestion('${m}')">${m}</div>`).join("");
   box.style.display = "block";
 }
+function pickSuggestion(val) { document.getElementById("s-locatie").value = val; hideSuggestions(); }
+function hideSuggestions() { document.getElementById("loc-suggestions").style.display = "none"; }
+document.addEventListener("click", e => { if (!e.target.closest(".search-field")) hideSuggestions(); });
 
-function pickSuggestion(val) {
-  document.getElementById("s-locatie").value = val;
-  hideSuggestions();
-}
-
-function hideSuggestions() {
-  document.getElementById("loc-suggestions").style.display = "none";
-}
-
-document.addEventListener("click", e => {
-  if (!e.target.closest(".search-field")) hideSuggestions();
-});
-
-// ── GPS ───────────────────────────────────────────────────────────
 function useGPS() {
-  const btn   = document.getElementById("gps-btn");
+  const btn = document.getElementById("gps-btn");
   const input = document.getElementById("s-locatie");
-  if (!navigator.geolocation) { alert("GPS wordt niet ondersteund door je browser."); return; }
-  btn.style.color  = "var(--green)";
-  input.value      = "Locatie ophalen...";
-  input.style.color = "var(--muted)";
+  if (!navigator.geolocation) { alert("GPS niet beschikbaar."); return; }
+  btn.style.color = "var(--green)";
+  input.value = "Locatie ophalen...";
   navigator.geolocation.getCurrentPosition(
     pos => {
-      fetch("https://nominatim.openstreetmap.org/reverse?lat=" + pos.coords.latitude + "&lon=" + pos.coords.longitude + "&format=json")
-        .then(r => r.json())
-        .then(data => {
-          const place = data.address.city || data.address.town || data.address.village || data.address.suburb || "Jouw locatie";
-          input.value       = place;
-          input.style.color = "var(--text)";
-          btn.style.color   = "var(--green)";
+      fetch("https://nominatim.openstreetmap.org/reverse?lat="+pos.coords.latitude+"&lon="+pos.coords.longitude+"&format=json")
+        .then(r=>r.json()).then(d=>{
+          input.value = d.address.city||d.address.town||d.address.village||"Jouw locatie";
+          btn.style.color = "var(--green)";
           doSearch();
-        })
-        .catch(() => {
-          input.value       = "Haarlem";
-          input.style.color = "var(--text)";
-          btn.style.color   = "var(--muted)";
-        });
+        }).catch(()=>{ input.value="Haarlem"; btn.style.color="var(--muted)"; });
     },
-    () => {
-      input.value       = "Haarlem";
-      input.style.color = "var(--text)";
-      btn.style.color   = "var(--muted)";
-      alert("Kon je locatie niet ophalen. Vul een stad in.");
-    }
+    ()=>{ input.value="Haarlem"; btn.style.color="var(--muted)"; alert("Kon locatie niet ophalen."); }
   );
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
 function init() {
-  const today = new Date();
-  const y = today.getFullYear();
-  const m = String(today.getMonth() + 1).padStart(2, "0");
-  const d = String(today.getDate()).padStart(2, "0");
-  document.getElementById("s-datum").value = `${y}-${m}-${d}`;
+  const t = new Date();
+  document.getElementById("s-datum").value =
+    `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
   doSearch();
 }
-
 init();
 </script>
 </body>
