@@ -267,8 +267,8 @@ nav {
       </label>
       <select id="s-afstand">
         <option value="5">Binnen 5 km</option>
-        <option value="10" selected>Binnen 10 km</option>
-        <option value="20">Binnen 20 km</option>
+        <option value="10">Binnen 10 km</option>
+        <option value="20" selected>Binnen 20 km</option>
         <option value="50">Binnen 50 km</option>
       </select>
     </div>
@@ -319,21 +319,67 @@ nav {
 <script>
 // ── COORDINATEN PER CLUB ───────────────────────────────────────
 const CLUB_COORDS = {
-  "wepadel":    [52.3820, 4.6274],
-  "padel25":    [52.3748, 4.6391],
-  "pimmulier":  [52.4012, 4.6201],
-  "overhout":   [52.3831, 4.6398],
-  "schoten":    [52.3953, 4.6587],
-  "peakz":      [52.3771, 4.6342],
-  "padelpoints":[52.3017, 4.6856],
-  "padelclubhfd":[52.3064, 4.6712],
-  "clubhouse":  [52.4782, 4.6601],
+  // Haarlem
+  "wepadel":      [52.3820, 4.6274], "padel25":     [52.3748, 4.6391],
+  "pimmulier":    [52.4012, 4.6201], "overhout":    [52.3831, 4.6398],
+  "schoten":      [52.3953, 4.6587], "peakz":       [52.3771, 4.6342],
+  // Omgeving Haarlem
+  "overveen":     [52.3922, 4.5812], "bennebroek":  [52.3312, 4.5998],
+  "santpoort":    [52.4301, 4.6198], "velserbroek": [52.4198, 4.6312],
+  "heemstede":    [52.3512, 4.6198], "cruquius":    [52.3412, 4.6512],
+  "ijmuiden":     [52.4612, 4.6012],
+  // Hoofddorp / Badhoevedorp
+  "padelpoints":  [52.3017, 4.6856], "padelclubhfd":[52.3064, 4.6712],
+  "badhoevedorp": [52.3312, 4.7712], "nieuwvennep":  [52.2712, 4.6398],
+  // Beverwijk / Heemskerk / Castricum
+  "clubhouse":    [52.4782, 4.6601], "heemskerk":   [52.5012, 4.6812],
+  "castricum":    [52.5512, 4.6598], "uitgeest":    [52.5312, 4.7012],
+  // Zaandam / Purmerend
+  "zaandam":      [52.4712, 4.8201], "krommenie":   [52.4912, 4.7698],
+  "purmerend":    [52.5012, 4.9512],
+  // Amstelveen / Amsterdam
+  "padelmate":    [52.3008, 4.8652], "bamsterdam":  [52.3469, 4.8370],
+  "padeldam":     [52.3612, 4.8340], "plazapadel":  [52.3402, 4.8952],
+  "xnrgy":        [52.3728, 4.9012], "ndsm":        [52.4012, 4.8932],
+  // Alkmaar regio
+  "alkmaar":      [52.6312, 4.7498], "heiloo":      [52.6012, 4.7012],
+  "heerhugowaard":[52.6512, 4.8312], "hoorn":       [52.6412, 5.0612],
+  // Noordwijk / Leiden / Katwijk
+  "vinkenveld":   [52.2401, 4.4512], "degevers":    [52.2298, 4.4623],
+  "katwijk":      [52.2012, 4.4012], "rijnsburg":   [52.1912, 4.4498],
+  "lisse":        [52.2512, 4.5512], "sassenheim":  [52.2312, 4.5212],
+  "hillegom":     [52.2912, 4.5812], "dekker":      [52.1872, 4.5312],
+  "leiden":       [52.1601, 4.4970], "wassenaar":   [52.1512, 4.3998],
+  // Hilversum regio
+  "hilversum":    [52.2298, 5.1798], "huizen":      [52.2998, 5.2498],
+  "bussum":       [52.2712, 5.1612],
+  // Den Haag regio
+  "denhaag":      [52.0705, 4.3007], "rijswijk":    [52.0412, 4.3212],
+  "delft":        [52.0116, 4.3571], "zoetermeer":  [52.0512, 4.4912],
+  // Utrecht regio
+  "utrecht":      [52.1326, 5.1690], "alphen":      [52.1298, 4.6598],
+  "gouda":        [52.0112, 4.7098],
+  // Extra clubs
+  "edam":         [52.5098, 5.0512],
+  "volendam":     [52.4998, 5.0712],
+  "uithoorn":     [52.2298, 4.8298],
+  "laren":        [52.2598, 5.2198],
+  "zandvoort":    [52.3712, 4.5312],
 };
 
 const CLUB_COLORS = {
-  "wepadel": "#1DB954", "padel25": "#0284C7", "pimmulier": "#7C3AED",
-  "overhout": "#F59E0B", "schoten": "#DB2777", "peakz": "#EF4444",
-  "padelpoints": "#059669", "padelclubhfd": "#D97706", "clubhouse": "#2563EB",
+  "wepadel":"#1DB954","padel25":"#0284C7","pimmulier":"#7C3AED","overhout":"#F59E0B","schoten":"#DB2777","peakz":"#EF4444",
+  "overveen":"#0EA5E9","bennebroek":"#65A30D","santpoort":"#B45309","velserbroek":"#7C3AED","heemstede":"#0891B2","cruquius":"#C2410C","ijmuiden":"#1D4ED8",
+  "padelpoints":"#059669","padelclubhfd":"#D97706","badhoevedorp":"#BE185D","nieuwvennep":"#15803D",
+  "clubhouse":"#2563EB","heemskerk":"#9333EA","castricum":"#0F766E","uitgeest":"#A16207",
+  "zaandam":"#0891B2","krommenie":"#7C3AED","purmerend":"#DC2626",
+  "padelmate":"#E11D48","bamsterdam":"#0EA5E9","padeldam":"#F97316","plazapadel":"#8B5CF6","xnrgy":"#10B981","ndsm":"#6366F1",
+  "alkmaar":"#7C3AED","heiloo":"#0369A1","heerhugowaard":"#B45309","hoorn":"#15803D",
+  "vinkenveld":"#0369A1","degevers":"#15803D","katwijk":"#C2410C","rijnsburg":"#9333EA","lisse":"#BE185D","sassenheim":"#0F766E","hillegom":"#A16207","dekker":"#BE185D","leiden":"#DC2626","wassenaar":"#6366F1",
+  "hilversum":"#7C3AED","huizen":"#0891B2","bussum":"#059669",
+  "denhaag":"#F97316","rijswijk":"#E11D48","delft":"#2563EB","zoetermeer":"#D97706",
+  "utrecht":"#DC2626","alphen":"#15803D","gouda":"#A16207",
+  "edam":"#0891B2","volendam":"#F97316","uithoorn":"#8B5CF6","laren":"#15803D","zandvoort":"#C2410C",
 };
 
 const STEDEN = [
