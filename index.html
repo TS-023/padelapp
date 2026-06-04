@@ -134,7 +134,9 @@ nav {
 .slot.vrij { background: var(--green-light); border-color: var(--green-mid); cursor: pointer; }
 .slot.vrij:hover { background: var(--green-mid); border-color: var(--green); transform: translateY(-1px); }
 .slot.bezet { background: #F0F0F0; border-color: #DCDCDC; }
-.slot.gezocht { border: 2px solid var(--green) !important; box-shadow: 0 0 0 2px rgba(29,185,84,0.2) !important; }
+.slot.vrij.gezocht { border: 2px solid var(--green) !important; box-shadow: 0 0 0 2px rgba(29,185,84,0.2) !important; }
+.slot.bezet.gezocht { border: 2px solid #999 !important; box-shadow: 0 0 0 2px rgba(153,153,153,0.2) !important; }
+.slot { min-height: 88px; display: flex; flex-direction: column; justify-content: center; }
 .slot-time { font-family: var(--font-display); font-size: 0.82rem; font-weight: 700; display: block; color: var(--text); }
 .slot.bezet .slot-time { color: #999; }
 .slot-sub { font-size: 0.62rem; color: var(--muted); display: block; margin-top: 1px; }
@@ -302,6 +304,9 @@ nav {
   <div class="list-panel" id="list-panel">
     <div class="list-header">
       <span class="results-count" id="results-count">Zoek een locatie om te beginnen</span>
+      <input type="text" id="club-zoek" placeholder="Zoek club..." oninput="filterClubs()"
+        style="padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);font-family:var(--font-body);font-size:0.78rem;width:140px;outline:none;background:var(--white);color:var(--text);transition:border-color 0.15s;"
+        onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'">
       <select class="sort-select" id="sort-select" onchange="sortAndRender()">
         <option value="beschikbaar">Beschikbaar + dichtstbij</option>
         <option value="afstand">Dichtstbijzijnde</option>
@@ -584,7 +589,7 @@ function smartSort() {
   clubData.sort((a, b) => {
     if (tijd) {
       const score = c => {
-        if (c.bron === 'playtomic' && isAaneengesloten(c.slots||[], tijd, duur)) return 0;
+        if (c.bron === 'playtomic' && (c.slots||[]).find(s => s.tijd === tijd && s.vrij)) return 0;
         if (c.bron === 'link') return 2;
         return 1;
       };
@@ -596,11 +601,50 @@ function smartSort() {
   renderAll();
 }
 
+function filterClubs() {
+  const zoek = document.getElementById("club-zoek").value.toLowerCase().trim();
+  if (!zoek) {
+    smartSort();
+    return;
+  }
+  clubData.sort((a, b) => {
+    const aMatch = a.name.toLowerCase().includes(zoek) || a.stad.toLowerCase().includes(zoek) ? 0 : 1;
+    const bMatch = b.name.toLowerCase().includes(zoek) || b.stad.toLowerCase().includes(zoek) ? 0 : 1;
+    if (aMatch !== bMatch) return aMatch - bMatch;
+    return a.km - b.km;
+  });
+  renderAll();
+  plaatsMarkers(clubData.filter(c => c.name.toLowerCase().includes(zoek) || c.stad.toLowerCase().includes(zoek)));
+}
+
 function sortAndRender() {
   const k = document.getElementById("sort-select").value;
   if (k === "beschikbaar") smartSort();
+  else if (k === "prijs") {
+    clubData.sort((a, b) => {
+      const prijsA = laagstePrijs(a);
+      const prijsB = laagstePrijs(b);
+      if (prijsA === null && prijsB === null) return a.km - b.km;
+      if (prijsA === null) return 1;
+      if (prijsB === null) return -1;
+      return prijsA - prijsB;
+    });
+    renderAll();
+  }
   else if (k === "afstand") { clubData.sort((a,b) => a.km - b.km); renderAll(); }
   else if (k === "naam")    { clubData.sort((a,b) => a.name.localeCompare(b.name)); renderAll(); }
+}
+
+function laagstePrijs(club) {
+  const { tijd, duur = 60 } = zoekParams;
+  const pf = duur / 60;
+  const slots = (club.slots || []).filter(s => s.vrij && s.prijs);
+  if (tijd) {
+    const exact = slots.find(s => s.tijd === tijd);
+    if (exact) return Math.round(exact.prijs * pf);
+  }
+  if (slots.length === 0) return null;
+  return Math.round(Math.min(...slots.map(s => s.prijs)) * pf);
 }
 
 // ── RENDEREN ───────────────────────────────────────────────────
@@ -642,9 +686,12 @@ function maakKaartHTML(club) {
   let badge = "";
   if (club.bron === "playtomic") {
     if (tijd) {
-      const ok = isAaneengesloten(slots, tijd, duur);
-      badge = ok ? `<span class="badge groen">✓ Beschikbaar</span>`
-                 : `<span class="badge rood">Niet beschikbaar</span>`;
+      const gezochteSlot = slots.find(s => s.tijd === tijd);
+      if (gezochteSlot && gezochteSlot.vrij) {
+        badge = `<span class="badge groen">✓ ${tijd} vrij</span>`;
+      } else {
+        badge = `<span class="badge rood">${tijd} bezet</span>`;
+      }
     } else {
       const v = slots.filter(s => s.vrij).length;
       badge = v > 4 ? `<span class="badge groen">${v} vrij</span>`
@@ -680,14 +727,16 @@ function maakKaartHTML(club) {
       bodyHtml = `<div class="slots-wrap">
         ${displaySlots.map(s => {
           const isGezocht = tijd && s.tijd === tijd;
-          const prijs = s.vrij && s.prijs ? Math.round(s.prijs * pf) : null;
-          return `<div class="slot ${s.vrij?'vrij':'bezet'}${isGezocht?' gezocht':''}">
+          const prijs = s.prijs ? Math.round(s.prijs * pf) : null;
+          const klasse = s.vrij ? 'vrij' : 'bezet';
+          const gezochtKl = isGezocht ? ' gezocht' : '';
+          return `<div class="slot ${klasse}${gezochtKl}">
             <span class="slot-time">${s.tijd}</span>
             ${s.vrij
-              ? `${s.aantalVrij > 1 ? `<span class="slot-sub">${s.aantalVrij} banen</span>` : `<span class="slot-sub">1 baan</span>`}
-                 ${prijs ? `<span class="slot-price">€${prijs}</span>` : ""}
-                 <a href="${club.site}" target="_blank" class="book-pill">Boek →</a>`
+              ? `<span class="slot-sub">${s.aantalVrij > 1 ? s.aantalVrij + ' banen vrij' : '1 baan vrij'}</span>`
               : `<span class="slot-sub">bezet</span>`}
+            ${prijs ? `<span class="slot-price" style="${s.vrij ? '' : 'color:#999;'}">€${prijs}</span>` : ''}
+            ${s.vrij ? `<a href="${club.site}" target="_blank" class="book-pill">Boek →</a>` : ''}
           </div>`;
         }).join("")}
       </div>`;
