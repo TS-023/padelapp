@@ -65,14 +65,40 @@ nav {
 /* ── MAIN SPLIT VIEW ── */
 .main-split {
   flex: 1; display: flex; overflow: hidden; min-height: 0;
+  position: relative;
 }
 
 /* ── MAP PANEL ── */
 .map-panel {
-  flex: 0 0 45%; position: relative;
-  border-right: 1px solid var(--border);
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 42%; z-index: 300;
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  background: var(--white);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.08);
 }
+.map-panel.open { transform: translateX(0); }
 #map { width: 100%; height: 100%; }
+.map-close {
+  position: absolute; top: 12px; left: 12px; z-index: 400;
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--white); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: border-color 0.15s;
+}
+.map-close:hover { border-color: var(--green); }
+.map-toggle-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 99px;
+  border: 1.5px solid var(--border); background: var(--white);
+  color: var(--muted); font-family: var(--font-body);
+  font-size: 0.78rem; cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
+}
+.map-toggle-btn:hover { border-color: var(--green); color: var(--green); }
+.map-toggle-btn.active { border-color: var(--green); background: var(--green-light); color: var(--green-dark); font-weight: 500; }
 
 /* Leaflet popup aanpassingen */
 .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); border: none; background: #fff; }
@@ -95,7 +121,9 @@ nav {
 /* ── LIST PANEL ── */
 .list-panel {
   flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+  transition: margin-right 0.3s ease;
 }
+.list-panel.map-open { margin-right: 42%; }
 
 .list-header {
   padding: 0.75rem 1.25rem;
@@ -166,15 +194,13 @@ nav {
 @media (max-width: 768px) {
   html, body { overflow: auto; }
   .main-split { flex-direction: column; overflow: visible; height: auto; }
-  .map-panel { flex: none; height: 280px; border-right: none; border-bottom: 1px solid var(--border); display: none; }
-  .map-panel.mobile-visible { display: block; }
+  .map-panel { width: 100%; height: 70vh; }
+  .map-panel.open { transform: translateX(0); }
   .list-panel { overflow: visible; }
+  .list-panel.map-open { margin-right: 0; }
   .search-box { flex-wrap: wrap; border-radius: 12px; }
   .search-field { border-right: none; border-bottom: 1px solid var(--border); min-width: 45%; }
   .search-btn { width: 100%; justify-content: center; border-radius: 0 0 10px 10px; padding: 12px; }
-  .mobile-toggle { display: flex; gap: 8px; margin-top: 0.5rem; }
-  .toggle-btn { flex: 1; padding: 7px; border: 1.5px solid var(--border); border-radius: 99px; background: var(--white); font-family: var(--font-body); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all 0.15s; }
-  .toggle-btn.active { border-color: var(--green); background: var(--green-light); color: var(--green-dark); font-weight: 600; }
 }
 
 .no-results { padding: 3rem 1.5rem; text-align: center; color: var(--muted); font-size: 0.88rem; }
@@ -280,23 +306,16 @@ nav {
       Zoeken
     </button>
   </div>
-  <!-- Mobile toggle -->
-  <div class="mobile-toggle">
-    <button class="toggle-btn" id="toggle-lijst" onclick="showView('lijst')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      Lijst
-    </button>
-    <button class="toggle-btn active" id="toggle-kaart" onclick="showView('kaart')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-      Kaart
-    </button>
-  </div>
+
 </div>
 
 <!-- MAIN SPLIT -->
 <div class="main-split">
   <!-- KAART -->
-  <div class="map-panel mobile-visible" id="map-panel">
+  <div class="map-panel" id="map-panel">
+    <button class="map-close" onclick="toggleKaart()" title="Kaart sluiten">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
     <div id="map"></div>
   </div>
 
@@ -307,8 +326,13 @@ nav {
       <input type="text" id="club-zoek" placeholder="Zoek club..." oninput="filterClubs()"
         style="padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);font-family:var(--font-body);font-size:0.78rem;width:140px;outline:none;background:var(--white);color:var(--text);transition:border-color 0.15s;"
         onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'">
+      <button class="map-toggle-btn" id="map-toggle" onclick="toggleKaart()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        Kaart
+      </button>
       <select class="sort-select" id="sort-select" onchange="sortAndRender()">
         <option value="beschikbaar">Beschikbaar + dichtstbij</option>
+        <option value="prijs">Laagste prijs</option>
         <option value="afstand">Dichtstbijzijnde</option>
         <option value="naam">Naam A–Z</option>
       </select>
@@ -324,107 +348,9 @@ nav {
 
 <script>
 // ── COORDINATEN PER CLUB ───────────────────────────────────────
-const CLUB_COORDS = {
-  "overhout": [52.3831, 4.6398],
-  "peakz_haarlem": [52.3771, 4.6342],
-  "wepadel": [52.382, 4.6274],
-  "padel25": [52.3748, 4.6391],
-  "schoten": [52.3953, 4.6587],
-  "pimmulier": [52.4012, 4.6201],
-  "heemstede": [52.3512, 4.6198],
-  "bloemendaal": [52.3922, 4.5812],
-  "velserbroek": [52.4198, 4.6312],
-  "cruquius": [52.3412, 4.6512],
-  "zwaanshoek": [52.3312, 4.6312],
-  "santpoort": [52.4301, 4.6198],
-  "bennebroek": [52.3312, 4.5998],
-  "zandvoort": [52.3712, 4.5312],
-  "padelclubhfd": [52.3064, 4.6712],
-  "ijmuiden": [52.4612, 4.6012],
-  "padelpoints": [52.3017, 4.6856],
-  "hillegom": [52.2912, 4.5812],
-  "badhoevedorp": [52.3312, 4.7712],
-  "clubhouse": [52.4782, 4.6601],
-  "nieuwvennep": [52.2712, 4.6398],
-  "padeldam": [52.3612, 4.834],
-  "heemskerk": [52.5012, 4.6812],
-  "bamsterdam": [52.3469, 4.837],
-  "rijsenhout": [52.2612, 4.7212],
-  "lisse": [52.258, 4.545],
-  "krommenie": [52.4912, 4.7698],
-  "zaandam": [52.4712, 4.8201],
-  "noordwijkerhout": [52.2612, 4.4912],
-  "uitgeest": [52.5312, 4.7012],
-  "ndsm": [52.4012, 4.8932],
-  "wijdewormer": [52.4812, 4.8412],
-  "oostzaan": [52.4398, 4.8798],
-  "padelmate": [52.3008, 4.8652],
-  "xnrgy": [52.3728, 4.9012],
-  "plazapadel": [52.3402, 4.8952],
-  "sassenheim": [52.228, 4.5212],
-  "castricum": [52.5512, 4.6598],
-  "vinkenveld": [52.2401, 4.4512],
-  "degevers": [52.2298, 4.4623],
-  "rijpwetering": [52.1998, 4.5612],
-  "duivendrecht": [52.3298, 4.9398],
-  "uithoorn": [52.2298, 4.8298],
-  "dekker": [52.1872, 4.5312],
-  "rijnsburg": [52.1912, 4.4498],
-  "heiloo": [52.6012, 4.7012],
-  "derijp": [52.5612, 4.8598],
-  "purmerend": [52.5012, 4.9512],
-  "egmond": [52.6098, 4.6312],
-  "leiderdorp": [52.1612, 4.5298],
-  "katwijk": [52.2012, 4.4012],
-  "leiden": [52.1601, 4.497],
-  "middenbeemster": [52.5512, 4.9098],
-  "alphen": [52.1298, 4.6598],
-  "alkmaar": [52.6312, 4.7498],
-  "zoeterwoude": [52.1298, 4.4998],
-  "oudorp": [52.6412, 4.7212],
-  "wassenaar": [52.1512, 4.3998],
-  "voorschoten": [52.1278, 4.4498],
-  "edam": [52.5098, 5.0512],
-  "volendam": [52.4998, 5.0712],
-  "zuidsch": [52.6512, 4.8098],
-  "muiderberg": [52.3398, 5.1212],
-  "boskoop": [52.0812, 4.6598],
-  "bodegraven": [52.0812, 4.7498],
-  "heerhugowaard": [52.6712, 4.8312],
-  "warmenhuizen": [52.6898, 4.7298],
-  "sgraveland": [52.2398, 5.1098],
-  "loosdrecht": [52.2012, 5.0898],
-  "bussum": [52.2712, 5.1612],
-  "waddinxveen": [52.0412, 4.6498],
-  "zoetermeer": [52.0512, 4.4912],
-  "hilversum": [52.2298, 5.1798],
-  "hoorn": [52.6412, 5.0612],
-  "denhaag": [52.0705, 4.3007],
-  "gouda": [52.0112, 4.7098],
-  "bleiswijk": [52.0112, 4.5312],
-  "laren": [52.2598, 5.2198],
-  "huizen": [52.2998, 5.2498],
-  "wognum": [52.6912, 5.0112],
-  "zwaag": [52.6612, 5.0712],
-  "blaricum": [52.2712, 5.2412],
-  "rijswijk": [52.0412, 4.3212],
-  "delft": [52.0116, 4.3571],
-  "utrecht": [52.1326, 5.169],
-  "schagen": [52.7912, 4.7998],
-  "hem": [52.6912, 5.1412],
-  "hoogkarspel": [52.6912, 5.1712],
-  "capelle": [51.9298, 4.5798],
-  "krimpen": [51.9198, 4.6012],
-  "wervershoof": [52.7212, 5.1598],
-  "rotterdam": [51.9225, 4.4792],
-  "schiedam": [51.9198, 4.3898],
-  "vlaardingen": [51.9112, 4.3412],
-  "enkhuizen": [52.7012, 5.2912],
-};
+let CLUB_COORDS = {}; // Wordt gevuld via /api/coords
 
-const CLUB_COLORS = {
-  "overhout":"#F59E0B","peakz_haarlem":"#EF4444","wepadel":"#1DB954","padel25":"#0284C7","schoten":"#DB2777","pimmulier":"#7C3AED","heemstede":"#0891B2","bloemendaal":"#0EA5E9","velserbroek":"#7C3AED","cruquius":"#C2410C","zwaanshoek":"#A16207","santpoort":"#B45309","bennebroek":"#65A30D","zandvoort":"#C2410C","padelclubhfd":"#D97706","ijmuiden":"#1D4ED8","padelpoints":"#059669","hillegom":"#A16207","badhoevedorp":"#BE185D","clubhouse":"#2563EB","nieuwvennep":"#15803D","padeldam":"#F97316","heemskerk":"#9333EA","bamsterdam":"#0EA5E9","rijsenhout":"#B45309","lisse":"#BE185D","krommenie":"#7C3AED","zaandam":"#0891B2","noordwijkerhout":"#9333EA","uitgeest":"#A16207","ndsm":"#6366F1","wijdewormer":"#DC2626","oostzaan":"#6366F1","padelmate":"#E11D48","xnrgy":"#10B981","plazapadel":"#8B5CF6","sassenheim":"#0F766E","castricum":"#0F766E","vinkenveld":"#0369A1","degevers":"#15803D","rijpwetering":"#15803D","duivendrecht":"#B45309","uithoorn":"#8B5CF6","dekker":"#BE185D","rijnsburg":"#9333EA","heiloo":"#0369A1","derijp":"#15803D","purmerend":"#DC2626","egmond":"#059669","leiderdorp":"#0891B2","katwijk":"#C2410C","leiden":"#DC2626","middenbeemster":"#0369A1","alphen":"#15803D","alkmaar":"#7C3AED","zoeterwoude":"#0EA5E9","oudorp":"#D97706","wassenaar":"#6366F1","voorschoten":"#F97316","edam":"#0891B2","volendam":"#F97316","zuidsch":"#0F766E","muiderberg":"#6366F1","boskoop":"#059669","bodegraven":"#0891B2","heerhugowaard":"#B45309","warmenhuizen":"#6366F1","sgraveland":"#B45309","loosdrecht":"#F97316","bussum":"#059669","waddinxveen":"#D97706","zoetermeer":"#D97706","hilversum":"#7C3AED","hoorn":"#15803D","denhaag":"#F97316","gouda":"#A16207","bleiswijk":"#E11D48","laren":"#15803D","huizen":"#0891B2","wognum":"#0EA5E9","zwaag":"#059669","blaricum":"#DC2626","rijswijk":"#E11D48","delft":"#2563EB","utrecht":"#DC2626","schagen":"#B45309","hem":"#E11D48","hoogkarspel":"#A16207","capelle":"#8B5CF6","krimpen":"#0F766E","wervershoof":"#F97316","rotterdam":"#DC2626","schiedam":"#0369A1","vlaardingen":"#F97316","enkhuizen":"#DC2626"
-};
+let CLUB_COLORS = {}; // Wordt gevuld vanuit club data
 
 const STEDEN = [
   "Haarlem","Heemstede","Beverwijk","Hoofddorp","Amsterdam","Alkmaar",
@@ -453,10 +379,10 @@ function plaatsMarkers(clubs) {
   kaartMarkers = {};
 
   clubs.forEach(club => {
-    const coords = CLUB_COORDS[club.id];
+    const coords = CLUB_COORDS[club.id] || (club.lat && club.lon ? [club.lat, club.lon] : null);
     if (!coords) return;
 
-    const kleur = CLUB_COLORS[club.id] || '#1DB954';
+    const kleur = club.kleur || CLUB_COLORS[club.id] || '#1DB954';
     const initials = club.name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
 
     // Custom HTML marker
@@ -663,7 +589,7 @@ function renderAll() {
       card.id = "card-" + c.id;
       card.onclick = () => {
         selecteerClub(c.id);
-        const coords = CLUB_COORDS[c.id];
+        const coords = CLUB_COORDS[c.id] || (c.lat && c.lon ? [c.lat, c.lon] : null);
         if (coords) kaart.setView(coords, 14, { animate: true });
       };
     }
@@ -680,7 +606,7 @@ function maakKaartHTML(club) {
   const { tijd, duur = 60 } = zoekParams;
   const slots = club.slots || [];
   const initials = club.name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
-  const kleur = CLUB_COLORS[club.id] || '#1DB954';
+  const kleur = club.kleur || CLUB_COLORS[club.id] || '#1DB954';
 
   // Badge
   let badge = "";
@@ -814,28 +740,52 @@ function useGPS() {
 }
 
 // ── MOBIELE TOGGLE ─────────────────────────────────────────────
-function showView(view) {
+let kaartOpen = false;
+
+function toggleKaart() {
+  kaartOpen = !kaartOpen;
   const mapPanel = document.getElementById("map-panel");
-  const togKaart = document.getElementById("toggle-kaart");
-  const togLijst = document.getElementById("toggle-lijst");
-  if (view === 'kaart') {
-    mapPanel.classList.add("mobile-visible");
-    togKaart.classList.add("active");
-    togLijst.classList.remove("active");
-    setTimeout(() => kaart && kaart.invalidateSize(), 100);
+  const listPanel = document.getElementById("list-panel");
+  const toggleBtn = document.getElementById("map-toggle");
+
+  if (kaartOpen) {
+    mapPanel.classList.add("open");
+    listPanel.classList.add("map-open");
+    toggleBtn.classList.add("active");
+    setTimeout(() => {
+      if (kaart) {
+        kaart.invalidateSize();
+        // Zoom naar alle zichtbare markers
+        const coords = clubData.map(c => CLUB_COORDS[c.id] || (c.lat && c.lon ? [c.lat, c.lon] : null)).filter(Boolean);
+        if (coords.length > 0) kaart.fitBounds(coords, { padding: [40, 40], maxZoom: 13 });
+      }
+    }, 350);
   } else {
-    mapPanel.classList.remove("mobile-visible");
-    togLijst.classList.add("active");
-    togKaart.classList.remove("active");
+    mapPanel.classList.remove("open");
+    listPanel.classList.remove("map-open");
+    toggleBtn.classList.remove("active");
   }
 }
 
 // ── INIT ───────────────────────────────────────────────────────
-function init() {
+async function init() {
   const t = new Date();
   document.getElementById("s-datum").value =
     `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
   initKaart();
+
+  // Haal echte coördinaten op van de server
+  try {
+    const resp = await fetch("/api/coords");
+    const coords = await resp.json();
+    for (const [id, c] of Object.entries(coords)) {
+      CLUB_COORDS[id] = [c.lat, c.lon];
+    }
+    console.log(`Coördinaten geladen: ${Object.keys(CLUB_COORDS).length} clubs`);
+  } catch(e) {
+    console.warn("Kon coördinaten niet laden, kaart markers worden niet getoond");
+  }
+
   doSearch();
 }
 

@@ -225,10 +225,13 @@ app.get("/api/availability", async (req, res) => {
   const datum = req.query.datum || new Date().toISOString().slice(0, 10);
 
   const results = await Promise.all(CLUBS.map(async club => {
+    const coords = clubCoords[club.id] || null;
     const base = {
-      id: club.id, name: club.name, adres: club.adres,
+      id: club.id, name: club.name, adres: club.adres, stad: club.stad,
       km: club.km, banen: club.banen, kleur: club.kleur,
       bg: club.bg, site: club.site,
+      lat: coords ? coords.lat : null,
+      lon: coords ? coords.lon : null,
     };
 
     if (club.type === "playtomic") {
@@ -283,6 +286,52 @@ app.get("/api/debug-peakz", (req, res) => {
   }
 });
 
+// ── GEOCODING ─────────────────────────────────────────────────
+// Bij opstarten: haal echte coördinaten op voor alle clubs via Nominatim
+const clubCoords = {};
+
+async function geocodeClubs() {
+  console.log("Geocoding starten voor alle clubs...");
+  for (const club of CLUBS) {
+    const query = encodeURIComponent(club.adres + ", Nederland");
+    try {
+      await new Promise(r => setTimeout(r, 1100)); // Nominatim rate limit: max 1 req/sec
+      const resp = await fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=nl`, {
+        headers: { "User-Agent": "PadelSpot/1.0 (padel-app-t9z0.onrender.com)" }
+      });
+      const data = await resp.json();
+      if (data && data.length > 0) {
+        clubCoords[club.id] = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+        console.log(`  ✓ ${club.name}: ${data[0].lat}, ${data[0].lon}`);
+      } else {
+        // Fallback: zoek op stadnaam
+        const resp2 = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(club.stad + ", Nederland")}&format=json&limit=1&countrycodes=nl`, {
+          headers: { "User-Agent": "PadelSpot/1.0" }
+        });
+        const data2 = await resp2.json();
+        if (data2 && data2.length > 0) {
+          clubCoords[club.id] = { lat: parseFloat(data2[0].lat), lon: parseFloat(data2[0].lon) };
+          console.log(`  ~ ${club.name}: ${data2[0].lat}, ${data2[0].lon} (stad)`);
+        } else {
+          console.log(`  ✗ ${club.name}: niet gevonden`);
+        }
+        await new Promise(r => setTimeout(r, 1100));
+      }
+    } catch(e) {
+      console.log(`  ✗ ${club.name}: fout - ${e.message}`);
+    }
+  }
+  console.log(`Geocoding klaar: ${Object.keys(clubCoords).length}/${CLUBS.length} clubs`);
+}
+
+// Endpoint voor coördinaten (frontend haalt dit op)
+app.get("/api/coords", (req, res) => {
+  res.json(clubCoords);
+});
+
 // ── START ─────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`PadelSpot draait op poort ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`PadelSpot draait op poort ${PORT}`);
+  geocodeClubs(); // Start geocoding op achtergrond
+});
