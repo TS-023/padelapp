@@ -563,11 +563,20 @@ function sortAndRender() {
 function laagstePrijs(club) {
   const { tijd, duur = 60 } = zoekParams;
   const pf = duur / 60;
-  const slots = (club.slots || []).filter(s => s.vrij && s.prijs);
-  if (tijd) {
-    const exact = slots.find(s => s.tijd === tijd);
-    if (exact) return Math.round(exact.prijs * pf);
+  let slots = (club.slots || []).filter(s => s.vrij && s.prijs);
+
+  // Als er een specifieke tijd gezocht is, kijk alleen naar slots in dat bereik
+  if (tijd && slots.length > 0) {
+    const zoekMins = tijdToMins(tijd);
+    const relevante = slots.filter(s => {
+      const diff = tijdToMins(s.tijd) - zoekMins;
+      return diff >= 0 && diff <= 120;
+    });
+    // Als er geen vrije slots zijn rondom de gezochte tijd, geen prijs
+    if (relevante.length === 0) return null;
+    slots = relevante;
   }
+
   if (slots.length === 0) return null;
   return Math.round(Math.min(...slots.map(s => s.prijs)) * pf);
 }
