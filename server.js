@@ -276,6 +276,25 @@ app.get("/api/debug", async (req, res) => {
   }
 });
 
+// ── TEST: 1 club geocoden om te testen of Nominatim werkt
+app.get("/api/test-geocode", async (req, res) => {
+  try {
+    const resp = await fetch("https://nominatim.openstreetmap.org/search?q=" + encodeURIComponent("Reinaldapad 10, Haarlem, Nederland") + "&format=json&limit=1&countrycodes=nl", {
+      headers: { "User-Agent": "PadelSpot/1.0" }
+    });
+    const status = resp.status;
+    const text = await resp.text();
+    res.json({
+      status: status,
+      response: text.substring(0, 500),
+      geocoded_so_far: Object.keys(clubCoords).length,
+      total_clubs: CLUBS.length
+    });
+  } catch(e) {
+    res.json({ error: e.message, geocoded_so_far: Object.keys(clubCoords).length });
+  }
+});
+
 // ── EENMALIG: Alle clubs geocoden ──────────────────────────────
 // Bezoek /api/geocode-all ÉÉN KEER, kopieer de output, en plak die in de code
 app.get("/api/geocode-all", async (req, res) => {
@@ -391,36 +410,6 @@ async function geocodeClubs() {
 // Endpoint voor coördinaten (frontend haalt dit op)
 app.get("/api/coords", (req, res) => {
   res.json(clubCoords);
-});
-
-// ── EENMALIG: Alle clubs geocoden ──────────────────────────────
-app.get("/api/geocode-all", async (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  const results = {};
-  for (const club of CLUBS) {
-    const query = encodeURIComponent(club.adres + ", Nederland");
-    try {
-      await new Promise(r => setTimeout(r, 1100));
-      const resp = await fetch("https://nominatim.openstreetmap.org/search?q=" + query + "&format=json&limit=1&countrycodes=nl", {
-        headers: { "User-Agent": "PadelSpot/1.0 (geocode-all)" }
-      });
-      const data = await resp.json();
-      if (data && data.length > 0) {
-        results[club.id] = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-        console.log("v " + club.id + ": " + data[0].lat + ", " + data[0].lon);
-      } else {
-        await new Promise(r => setTimeout(r, 1100));
-        const resp2 = await fetch("https://nominatim.openstreetmap.org/search?q=" + encodeURIComponent(club.stad + ", Nederland") + "&format=json&limit=1&countrycodes=nl", {
-          headers: { "User-Agent": "PadelSpot/1.0" }
-        });
-        const data2 = await resp2.json();
-        if (data2 && data2.length > 0) {
-          results[club.id] = [parseFloat(data2[0].lat), parseFloat(data2[0].lon)];
-        }
-      }
-    } catch(e) { console.log("x " + club.id); }
-  }
-  res.json(results);
 });
 
 // ── START ─────────────────────────────────────────────────────

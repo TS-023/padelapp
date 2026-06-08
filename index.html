@@ -35,7 +35,7 @@ nav {
 .nav-right { display: flex; align-items: center; gap: 8px; }
 .btn-ghost { font-family: var(--font-body); font-size: 0.82rem; color: var(--muted); background: none; border: 1px solid var(--border); padding: 6px 14px; border-radius: 99px; cursor: pointer; transition: all 0.15s; }
 .btn-ghost:hover { border-color: var(--green); color: var(--green); }
-.btn-primary { font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; background: var(--green); color: #1A1C18; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; transition: background 0.15s; }
+.btn-primary { font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 99px; cursor: pointer; transition: background 0.15s; }
 .btn-primary:hover { background: var(--green-dark); color: #fff; }
 
 /* ── SEARCH BAR ── */
@@ -60,7 +60,7 @@ nav {
 .search-field:hover { background: var(--bg); }
 .search-field label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 2px; display: flex; align-items: center; gap: 3px; white-space: nowrap; }
 .search-field input, .search-field select { font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; border: none; outline: none; background: transparent; color: var(--text); width: 100%; appearance: none; -webkit-appearance: none; cursor: pointer; }
-.search-btn { background: var(--green); color: #1A1C18; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 7px; white-space: nowrap; flex-shrink: 0; border-radius: 0 10px 10px 0; transition: background 0.15s; }
+.search-btn { background: var(--green); color: #fff; border: none; padding: 0 20px; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 7px; white-space: nowrap; flex-shrink: 0; border-radius: 0 10px 10px 0; transition: background 0.15s; }
 .search-btn:hover { background: var(--green-dark); }
 
 /* ── MAIN SPLIT VIEW ── */
@@ -111,7 +111,7 @@ nav {
 .map-popup-badge.groen { background: var(--green-light); color: var(--green-dark); }
 .map-popup-badge.rood { background: #FEE2E2; color: #991B1B; }
 .map-popup-badge.grijs { background: #F3F4F6; color: #6B7280; }
-.map-popup-btn { display: block; text-align: center; background: var(--green); color: #1A1C18; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: none; width: 100%; font-family: var(--font-body); }
+.map-popup-btn { display: block; text-align: center; background: var(--green); color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: none; width: 100%; font-family: var(--font-body); }
 .map-popup-btn:hover { background: var(--green-dark); }
 
 /* Custom marker */
@@ -150,7 +150,7 @@ nav {
 .club-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
 .distance-badge { font-size: 0.68rem; font-weight: 600; background: var(--bg); color: var(--muted); padding: 2px 8px; border-radius: 99px; border: 1px solid var(--border); }
 .badge { font-size: 0.67rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
-.badge.groen { background: var(--green-light); color: #5C7A08; border: 1px solid var(--green-mid); }
+.badge.groen { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
 .badge.oranje { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
 .badge.rood { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
 .badge.grijs { background: #F3F4F6; color: #6B7280; border: 1px solid #E5E7EB; }
@@ -170,11 +170,11 @@ nav {
 .slot.bezet .slot-time { color: #999; }
 .slot-sub { font-size: 0.62rem; color: var(--muted); display: block; margin-top: 1px; }
 .slot-price { font-size: 0.67rem; font-weight: 600; display: block; margin-top: 3px; color: var(--green-dark); }
-.book-pill { display: inline-block; margin-top: 4px; font-size: 0.62rem; font-weight: 600; background: var(--green); color: #1A1C18; padding: 2px 7px; border-radius: 99px; text-decoration: none; }
+.book-pill { display: inline-block; margin-top: 4px; font-size: 0.62rem; font-weight: 600; background: var(--green); color: #fff; padding: 2px 7px; border-radius: 99px; text-decoration: none; }
 .book-pill:hover { background: var(--green-dark); }
 .no-data-wrap { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .no-data-wrap p { font-size: 0.78rem; color: var(--muted); }
-.boek-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 600; background: var(--green); color: #1A1C18; padding: 6px 14px; border-radius: 99px; text-decoration: none; white-space: nowrap; }
+.boek-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 600; background: var(--green); color: #fff; padding: 6px 14px; border-radius: 99px; text-decoration: none; white-space: nowrap; }
 .boek-link:hover { background: var(--green-dark); }
 .loading-wrap { padding: 18px 14px; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.78rem; }
 .spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
@@ -213,7 +213,6 @@ nav {
 <nav>
   <div class="logo">
     <img src="/logo.png" alt="PadelSpot" class="logo-img">
-    <span class="logo-text">padel<em>spot</em></span>
   </div>
   <div class="nav-right">
     <button class="btn-ghost">Inloggen</button>
