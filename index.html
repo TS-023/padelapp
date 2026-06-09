@@ -346,7 +346,103 @@ nav {
 
 <script>
 // ── COORDINATEN PER CLUB ───────────────────────────────────────
-let CLUB_COORDS = {}; // Wordt gevuld via /api/coords
+const CLUB_COORDS = {
+  "alkmaar": [52.6743053, 4.7516622],
+  "alphen": [52.074801, 4.5401331],
+  "badhoevedorp": [52.3393328, 4.7806114],
+  "bamsterdam": [52.3402325, 4.8264244],
+  "bennebroek": [52.3210735, 4.6011669],
+  "bloemendaal": [52.3910738, 4.6009649],
+  "bodegraven": [52.0712809, 4.7548087],
+  "boskoop": [52.0757297, 4.6311098],
+  "bussum": [52.2779222, 5.1846751],
+  "castricum": [52.5309083, 4.6486443],
+  "clubhouse": [52.4822522, 4.6748427],
+  "cruquius": [52.3406467, 4.6507019],
+  "degevers": [52.2495431, 4.4732826],
+  "dekker": [52.2112301, 4.5094322],
+  "derijp": [52.5514666, 4.8438793],
+  "duivendrecht": [52.32443, 4.9382191],
+  "edam": [52.5123473, 5.0469413],
+  "egmond": [52.5973714, 4.6554268],
+  "heemskerk": [52.5191408, 4.6523761],
+  "heemstede": [52.3380142, 4.623571],
+  "heerhugowaard": [52.6691558, 4.8451787],
+  "heiloo": [52.5925644, 4.6896827],
+  "hillegom": [52.2948261, 4.5729713],
+  "ijmuiden": [52.4523777, 4.6123461],
+  "katwijk": [52.1964999, 4.3875004],
+  "krommenie": [52.4954557, 4.7664946],
+  "leiden": [52.1594747, 4.4908843],
+  "leiderdorp": [52.1570577, 4.5433786],
+  "lisse": [52.2576098, 4.5630329],
+  "loosdrecht": [52.2072171, 5.0764548],
+  "middenbeemster": [52.5511952, 4.9145034],
+  "muiderberg": [52.3260189, 5.1123264],
+  "ndsm": [52.4029456, 4.8937358],
+  "nieuwvennep": [52.2646243, 4.6340331],
+  "noordwijkerhout": [52.2629093, 4.490519],
+  "oostzaan": [52.4568224, 4.8698547],
+  "oudorp": [52.623897, 4.7671392],
+  "overhout": [52.3666159, 4.6389828],
+  "padel25": [52.3955356, 4.6700759],
+  "padelclubhfd": [52.3063798, 4.6946854],
+  "padeldam": [52.3822934, 4.7819161],
+  "padelmate": [52.2828479, 4.8343668],
+  "padelpoints": [52.305554, 4.6926644],
+  "peakz_haarlem": [52.3875069, 4.6521239],
+  "pimmulier": [52.4108816, 4.6345012],
+  "plazapadel": [52.3936224, 4.8616099],
+  "purmerend": [52.5133802, 4.9665835],
+  "rijnsburg": [52.200801, 4.4426434],
+  "rijpwetering": [52.1935379, 4.5818375],
+  "rijsenhout": [52.2583028, 4.7126406],
+  "santpoort": [52.4417461, 4.6389325],
+  "sassenheim": [52.2246356, 4.5199218],
+  "schoten": [52.4214005, 4.6567874],
+  "sgraveland": [52.2381874, 5.121835],
+  "uitgeest": [52.5143051, 4.7046973],
+  "uithoorn": [52.2544825, 4.8080377],
+  "velserbroek": [52.4414504, 4.6625704],
+  "vinkenveld": [52.2267358, 4.4318891],
+  "volendam": [52.493722, 5.0683321],
+  "voorschoten": [52.1252265, 4.4540445],
+  "warmenhuizen": [52.7280777, 4.7445435],
+  "wassenaar": [52.1430524, 4.3964777],
+  "wepadel": [52.3714309, 4.6608358],
+  "wijdewormer": [52.5002304, 4.8922785],
+  "xnrgy": [52.3879242, 4.834725],
+  "zaandam": [52.4647101, 4.8110001],
+  "zandvoort": [52.3755365, 4.5454351],
+  "zoeterwoude": [52.113878, 4.505185],
+  "zuidsch": [52.6931447, 4.8097206],
+  "zwaanshoek": [52.3164508, 4.6156109]
+  "waddinxveen": [52.0437, 4.65],
+  "zoetermeer": [52.057, 4.493],
+  "hilversum": [52.2232, 5.1761],
+  "hoorn": [52.642, 5.0592],
+  "denhaag": [52.0705, 4.3007],
+  "gouda": [52.0115, 4.7113],
+  "bleiswijk": [52.01, 4.532],
+  "laren": [52.2578, 5.2198],
+  "huizen": [52.2987, 5.2398],
+  "wognum": [52.6898, 5.0087],
+  "zwaag": [52.6589, 5.0678],
+  "blaricum": [52.2698, 5.2412],
+  "rijswijk": [52.0365, 4.3245],
+  "delft": [52.0116, 4.3571],
+  "utrecht": [52.0907, 5.1214],
+  "schagen": [52.7878, 4.7978],
+  "hem": [52.6912, 5.1398],
+  "hoogkarspel": [52.6912, 5.1712],
+  "capelle": [51.9298, 4.5798],
+  "krimpen": [51.9178, 4.5978],
+  "wervershoof": [52.7198, 5.1568],
+  "rotterdam": [51.9225, 4.4792],
+  "schiedam": [51.9198, 4.3898],
+  "vlaardingen": [51.9098, 4.3398],
+  "enkhuizen": [52.7078, 5.2912],
+};
 
 let CLUB_COLORS = {}; // Wordt gevuld vanuit club data
 
@@ -781,71 +877,10 @@ async function init() {
     `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
   initKaart();
 
-  // Laad gecachte coördinaten uit localStorage
-  try {
-    const cached = localStorage.getItem("padelspot_coords_v2");
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      Object.assign(CLUB_COORDS, parsed);
-      console.log(`Coords uit cache: ${Object.keys(parsed).length}`);
-    }
-  } catch(e) {}
+
 
   doSearch();
 
-  // Geocode ontbrekende clubs op de achtergrond
-  geocodeMissing();
-}
-
-async function geocodeMissing() {
-  if (!clubData.length) {
-    setTimeout(geocodeMissing, 2000);
-    return;
-  }
-
-  const missing = clubData.filter(c => !CLUB_COORDS[c.id] && !(c.lat && c.lon) && c.adres);
-  if (!missing.length) return;
-
-  console.log(`Geocoding ${missing.length} clubs op achtergrond...`);
-
-  for (const club of missing) {
-    const query = club.adres + ", Nederland";
-    try {
-      const resp = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&countrycodes=nl`,
-        { headers: { "User-Agent": "PadelSpot/1.0" } }
-      );
-      const data = await resp.json();
-      if (data && data.length > 0) {
-        CLUB_COORDS[club.id] = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-        console.log(`  ✓ ${club.name}: ${data[0].lat}, ${data[0].lon}`);
-      } else {
-        // Fallback: zoek op stad
-        const resp2 = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(club.stad + ", Nederland")}&format=json&limit=1&countrycodes=nl`,
-          { headers: { "User-Agent": "PadelSpot/1.0" } }
-        );
-        const data2 = await resp2.json();
-        if (data2 && data2.length > 0) {
-          CLUB_COORDS[club.id] = [parseFloat(data2[0].lat), parseFloat(data2[0].lon)];
-          console.log(`  ~ ${club.name}: ${data2[0].lat}, ${data2[0].lon} (stad)`);
-        }
-        await new Promise(r => setTimeout(r, 1100));
-      }
-      await new Promise(r => setTimeout(r, 1100)); // Nominatim rate limit
-    } catch(e) {
-      console.warn(`  ✗ ${club.name}: ${e.message}`);
-    }
-  }
-
-  // Sla op in localStorage voor volgende keer
-  try {
-    localStorage.setItem("padelspot_coords_v2", JSON.stringify(CLUB_COORDS));
-    console.log(`Coords opgeslagen: ${Object.keys(CLUB_COORDS).length}`);
-  } catch(e) {}
-
-  // Update de kaart als die open is
-  if (kaartOpen) plaatsMarkers(clubData);
 }
 
 init();
